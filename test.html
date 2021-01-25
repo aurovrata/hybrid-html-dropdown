@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="./css/page.css" media="all">
+    <link rel="stylesheet" href="./hybrid-select.css" media="all">
+    <script src="./hybrid-select.js" type="text/javascript" defer=""></script>
+  </head>
+  <body>
+
+<!-- Article: https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/ -->
+<h1 class="title">Custom Select: "Hybrid Select"</h1>
+<div class="card">
+  <p class="inst">Try to select an option with whatever tool you are using (e.g. mouse, touch, keyboard, etc...)<p>
+      <div class="select">
+        <span class="select-label" id="jobLabel"> Main job role</span>
+        <div class="selectWrapper">
+          <select class="select-native js-select-native" aria-labelledby="jobLabel">
+            <option value="sel" disabled="" selected=""> Select role...</span>
+            <option value="ds">UI/UX Designer</option>
+            <option value="fe">Frontend Engineer</option>
+            <option value="be">Backend Engineer</option>
+            <option value="qa">QA Engineer</option>
+            <option value="un">Unicorn</option>
+          </select>
+
+          <!-- Hide the custom select from AT (e.g. SR) using aria-hidden -->
+          <!-- <div class="selectCustom js-selectCustom" aria-hidden="true">
+            <div class="selectCustom-trigger">Select role...</div>
+            <div class="selectCustom-options">
+              <div class="selectCustom-option" data-value="ds">UI/UX Designer</div>
+              <div class="selectCustom-option" data-value="fe">Frontend Engineer</div>
+              <div class="selectCustom-option" data-value="be">Backend Engineer</div>
+              <div class="selectCustom-option" data-value="qa">QA Engineer</div>
+              <div class="selectCustom-option" data-value="un">Unicorn</div>
+            </div>
+          </div> -->
+        </div>
+      </div>
+
+</div>
+
+  <footer>
+     <script type="text/javascript">
+     (function(){
+       document.addEventListener('DOMContentLoaded', (e) => {
+         let sel= document.querySelector('.select-native');
+
+         let hs = new HybridSelect(sel,{});
+       });
+     })()
+     </script>
+  </footer>
+  </body>
+</html>
