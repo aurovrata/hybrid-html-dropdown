@@ -27,7 +27,8 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 }
 /* Add the focus states too, They matter, always! */
 .hybrid-select:focus,
-.hybrid-select-js.active .hybrid-selected {
+.hybrid-select-js.active .hybrid-selected,
+.hybrid-select-js.focus .hybrid-selected {
   outline: none;
   box-shadow: white 0 0 0 0.2rem, #ff821f 0 0 0 0.4rem;
 }
@@ -102,7 +103,6 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 
 .hybrid-option.hover {
   background-color: #1e1e1e21;
-  color: white;
 }
 
 .hybrid-option:not(:last-of-type)::after {

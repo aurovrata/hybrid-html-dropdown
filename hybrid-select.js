@@ -86,7 +86,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     //bind some events....
     //listen for 'change' on the original select.
     _.event(_.el,'add',{
-      change: _.updateFromOriginal.bind(_)
+      change: _.updateFromOriginal.bind(_),
+      focus: _.focus.bind(_)
     });
     let getOption = _.optionsSelected.bind(_);
     _.event(_.hselect.options,'add',{
@@ -94,13 +95,16 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       keydown: getOption
     });
     //listen for click and down arrow events.
-    _.hselect.open = _.openSelect.bind(_);
+    _.open = _.openSelect.bind(_);
     _.event(_.hselect, 'add',{
-      click: _.hselect.open,
-      keydown:_.hselect.open
+      click: _.open
     });
     //create a close function.
-    _.hselect.close = _.closeSelect.bind(_);
+    _.close = _.closeSelect.bind(_);
+    //blur function
+    _.blur = _.blurHybridSelect.bind(_);
+    //navigate with keys.
+    _.keyNav = _.keyboardNavigate.bind(_);
     //fire init event.
     _.emit('hybrid-select-init');
   }
@@ -142,12 +146,64 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     })
     _.el.dispatchEvent(e)
   }
+  //focus hybrid select when the original select is tabbed into.
+  hsProtype.focus = function(){
+    let _ = this;
+    _.el.blur();
+    _.hselect.focus({preventScroll:true});
+    _.hselect.classList.add('focus');
+    //cancel window scrolling on space bar.
+    _.event(_window,'add',{
+      keydown:_.keyNav
+    });
+    _.event(document,'add',{
+      click: _.blur
+    })
+  }
+  //TODO: onblur, clean up window keydown event.
+  hsProtype.blurHybridSelect = function(){
+    let _ = this;
+    _.event(_window,'remove',{
+      keydown:_.keyNav
+    })
+  }
+  //key navigation.
+  hsProtype.keyboardNavigate = function(){
+    let _ = this, e = arguments[0];
+    if(e && e.keyCode){
+      e.preventDefault(); //stop page scroll.
+      switch(e.keyCode){
+        case 40: //down arrow.
+          if(_.hindex>=0) _.hselect.options.children[_.hindex].classList.remove('hover');
+          _.hindex++;
+          if(_.hindex === _.hselect.options.childElementCount) _.hindex=0;
+          _.hselect.options.children[_.hindex].classList.add('hover');
+          break;
+        case 38: //up arrow.
+          if(_.hindex>=0) _.hselect.options.children[_.hindex].classList.remove('hover');
+          _.hindex--;
+          if(_.hindex < 0) _.hindex = _.hselect.options.childElementCount-1;
+          _.hselect.options.children[_.hindex].classList.add('hover');
+          break;
+        case 13: //enter.
+        case 32: //spacebar.
+          if(_.hselect.classList.contains('active') === false){//open the list.
+            _.hselect.classList.remove('focus');
+            _.open();
+          }else{
+            _.updateSelection(_.hindex, true);
+            _.close();
+          }
+          break;
+      }
+    }
+  }
   //options selected.
   hsProtype.optionsSelected = function(){
     let _ = this, e = arguments[0];
     if(e && e.target){
       e = e.target;
-      if(e.classList.contains('.hybrid-option')===false) e = e.closest('.hybrid-option');
+      if(e.classList.contains('hybrid-option')===false) e = e.closest('.hybrid-option');
       let idx = [..._.hselect.options.children].indexOf(e); //index in hybrid.
       _.updateSelection(idx, true);
       //close the dropdown
@@ -166,10 +222,12 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
   //open hybrid dropdown.
   hsProtype.openSelect = function(){
     let _= this, e = arguments[0];
-    if(e.target.classList.contains('hybrid-selected')==false && e.target.closest('.hybrid-selected') === null){
-      return;  // bubbling selection
+    if(e && e.target){ //triggered by event?
+      if(e.target.classList.contains('hybrid-selected')==false && e.target.closest('.hybrid-selected') === null){
+        return;  // bubbling selection
+      }
+      e.stopPropagation();
     }
-    e.stopPropagation();
     if(_.hselect.classList.contains('active')) {
       _.closeSelect();
       return;
@@ -180,7 +238,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     });
     //listen for external clicks to close.
     _.event(document, 'add',{
-      click: _.hselect.close
+      click: _.close
     });
 
   }
@@ -198,6 +256,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     _.event(document, 'remove',{
       click: _.close
     });
+    if(e.type === 'click') _.blur(); //remove focus.
   }
 	return HybridSelect;
 })
