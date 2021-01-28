@@ -1,6 +1,6 @@
 /*
 Hybrid Select JavaScript plugin
-Version: 1.0
+Version: 0.2
 Authors: Sandrina Pereira & Aurovrata Venet
 Twitter: @a_sandrina_p / @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-select
