@@ -17,7 +17,19 @@ body {
 body * {
   box-sizing: inherit;
 }
-
+label {
+	display: grid;
+}
+.button {
+	float: right;
+	text-decoration: none;
+	border: solid 1px grey;
+	padding: 5px 25px;
+	color: inherit;
+	border-radius: 3px;
+	font-weight: bold;
+  display: block;
+}
 strong {
   font-weight: 600;
 }

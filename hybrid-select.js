@@ -1,6 +1,6 @@
 /*
 Hybrid Select JavaScript plugin
-Version: 0.2
+Version: 0.3
 Authors: Sandrina Pereira & Aurovrata Venet
 Twitter: @a_sandrina_p / @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-select
@@ -213,6 +213,37 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
             _.hselect.classList.add('focus');
           }
           break;
+        case 27: //esc
+          if(_.hselect.classList.contains('active')) _.closeSelect(false); //close list if open
+          _.blurHybridSelect(); //blur.
+          break;
+        case 9: //tab key, navigate to next field.
+          if(_.hselect.classList.contains('active')) _.closeSelect(false); //close list if open
+          _.blurHybridSelect(); //blur.
+
+          //check if field has tab index.
+          let tidx = _.el.getAttribute('tabindex'),
+            form = _.el.form,
+            next ;
+
+          if(form === null) form = document;
+          if(tidx != null && tidx != ''){
+            tidx +=1;
+            next = form.querySelector(':input[tabindex='+tidx+']');
+          }else{ //find current field sibling.
+            for(tidx in _.el.form.elements){
+              if(_.el.form.elements[tidx] === _.el){
+                tidx++;
+                if(_.el.form.elements.length==tidx) tidx=0;
+                next = _.el.form.elements[tidx];
+                break;
+              }
+            }
+          }
+          if(null!=next){
+            next.focus();
+            if(next.type === 'text') next.select();
+          }
       }
     }
   }
