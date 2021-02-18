@@ -30,6 +30,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     element._hselect = _; //expose object in its original DOM element.
 
     _.el = element; //keep original element reference.
+    _.el.style="font-size:16px";
     _.el.classList.add('hybrid-select'); //flag the element as converted.
 
     // merge user setting with defaults
@@ -47,70 +48,87 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       settings //user settings.
     );
     //initialise the hybrid-select.
-    _.init();
+    _.init(true);
 	});
   /* Prototyping some methods for HybridSelect object */
   let hsProtype = HybridSelect.prototype;
   //initialisation function.
-  hsProtype.init = function(){
+  hsProtype.init = function(init){
     let _ = this;
-    //wrapper for select and hybrid select.
-    let c = document.createElement('div');
-    c.classList.add('hybrid-select-container');
-    _.el.parentNode.insertBefore(c, _.el.nextSibling);
-    c.appendChild(_.el);
-    //construct the hybrid-select.
-    _.hselect = document.createElement('div');
-    _.el.parentNode.appendChild(_.hselect);
-    _.hselect.classList.add('hybrid-select-js')
-    _.hselect.setAttribute('aria-hidden', true);//hide from readers.
-    _.hselect.selected = document.createElement('div');
-    _.hselect.appendChild(_.hselect.selected);
-    _.hselect.selected.classList.add('hybrid-selected');
-    _.hselect.options = document.createElement('div');
-    _.hselect.appendChild(_.hselect.options);
-    _.hselect.options.classList.add('hybrid-options');
-    _.hindex = -1; //initial option hover index.
-    _.sindex = 0; //initial inex of selected option.
-    _.value = ""; //initial value.
+
+    if(init) {
+      //wrapper for select and hybrid select.
+      let c = document.createElement('div');
+      c.classList.add('hybrid-select-container');
+      _.el.parentNode.insertBefore(c, _.el.nextSibling);
+      c.appendChild(_.el);
+      //construct the hybrid-select.
+      _.hselect = document.createElement('div');
+      _.el.parentNode.appendChild(_.hselect);
+      _.hselect.classList.add('hybrid-select-js')
+      _.hselect.setAttribute('aria-hidden', true);//hide from readers.
+      _.hselect.selected = document.createElement('div');
+      _.hselect.appendChild(_.hselect.selected);
+      _.hselect.selected.classList.add('hybrid-selected');
+      _.hselect.options = document.createElement('div');
+      _.hselect.appendChild(_.hselect.options);
+      _.hselect.options.classList.add('hybrid-options');
+      _.hindex = -1; //initial option hover index.
+      _.sindex = 0; //initial index of selected option.
+      _.value = ""; //initial value.
+    }
     //build list of options.
+    let opts = [];//document.createElement('div');
     [].forEach.call(_.el.children,(o,i) => {
       //TODO: check if o is optgrp, and loop over.
       let hso = document.createElement('div');
       hso.setAttribute('data-value',o.value);
       hso.innerHTML =_.opt.optionLabel(o.textContent);
       hso.classList.add('hybrid-option');
-      if(o.selected===true){
+      if(o.selected===true || i==0){
+        if(i>0) opts[0].classList.remove('active');
         _.hselect.selected.innerHTML = _.opt.selectedLabel(o.textContent);
         hso.classList.add('active');
         _.sindex = i; //keep track of selected value.
       }
-      _.hselect.options.appendChild(hso);
+      //if(init)_.hselect.options.appendChild(hso);
+      // else
+      // opts.appendChild(hso);
+      opts[opts.length] = hso;
     });
-    //bind some events....
-    //listen for 'change' on the original select.
-    _.event(_.el,'add',{
-      change: _.updateFromOriginal.bind(_),
-      focus: _.focus.bind(_)
-    });
-    let getOption = _.optionsSelected.bind(_);
-    _.event(_.hselect.options,'add',{
-      click: getOption,
-      keydown: getOption
-    });
-    //listen for click and down arrow events.
-    _.open = _.openSelect.bind(_);
-    _.event(_.hselect, 'add',{
-      click: _.open
-    });
-    //create a close function.
-    _.close = _.closeSelect.bind(_, true);
-    //blur function
-    _.blur = _.blurHybridSelect.bind(_);
-    //navigate with keys.
-    _.keyNav = _.keyboardNavigate.bind(_);
-    //fire init event.
-    _.emit('hybrid-select-init');
+
+    // if(!init)
+    _.hselect.options.replaceChildren(...opts);//.childNodes , _.hselect.options.childNodes);
+
+
+    if(init){
+      //bind some events....
+      //listen for 'change' on the original select.
+      _.event(_.el,'add',{
+        change: _.updateFromOriginal.bind(_),
+        focus: _.focus.bind(_)
+      });
+      let getOption = _.optionsSelected.bind(_);
+      _.event(_.hselect.options,'add',{
+        click: getOption,
+        keydown: getOption
+      });
+      //listen for click and down arrow events.
+      _.open = _.openSelect.bind(_);
+      _.event(_.hselect, 'add',{
+        click: _.open
+      });
+      //create a close function.
+      _.close = _.closeSelect.bind(_, true);
+      //blur function
+      _.blur = _.blurHybridSelect.bind(_);
+      //navigate with keys.
+      _.keyNav = _.keyboardNavigate.bind(_);
+      //fire init event.
+      _.emit('hybrid-select-init');
+      //refresh fn.
+      _.refresh = _.init.bind(_,false);
+    }
   }
   //method to add event listeners.
   hsProtype.event = function (ele, type, args) {
