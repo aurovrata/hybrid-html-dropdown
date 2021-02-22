@@ -3,8 +3,13 @@
 .hybrid-select,
 .hybrid-select-js {
   position: relative;
-  width: 13.75em;
+  width: 100%;
   height: 2.5em;
+}
+select:disabled + .hybrid-select-js > .hybrid-selected {
+	color: #939191;
+	border-color: #c6c6c6;
+	cursor: default;
 }
 /* Make sure the custom select does not mess with the layout*/
 .hybrid-select-js {
@@ -121,4 +126,5 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 .hybrid-option.active::before {
   content: "✓";
   position: absolute;
-  le
+  left: 0
+}
