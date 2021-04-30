@@ -80,31 +80,11 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       _.value = ""; //initial value.
     }
     //build list of options.
-    let opts = [];//document.createElement('div');
-    [].forEach.call(_.el.children,(o,i) => {
-      //TODO: check if o is optgrp, and loop over.
-      let hso = document.createElement('div');
-      //preserve select options attributes.
-      // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
-      hso.dataset.hsoValue=o.value;
-      hso.innerHTML =_.opt.optionLabel(o.textContent);
-      hso.classList = o.classList;
-      hso.classList.add('hybrid-option');
-      if(o.selected===true || i==0){
-        if(i>0) opts[0].classList.remove('active');
-        _.hselect.selected.innerHTML = _.opt.selectedLabel(o.textContent);
-        hso.classList.add('active');
-        _.sindex = i; //keep track of selected value.
-      }
-      //if(init)_.hselect.options.appendChild(hso);
-      // else
-      // opts.appendChild(hso);
-      opts[opts.length] = hso;
-    });
+
 
     // if(!init)
-    _.hselect.options.replaceChildren(...opts);//.childNodes , _.hselect.options.childNodes);
-
+    let opts = _.getOptions(_.el.children);
+    _.hselect.options.replaceChildren(...opts);
 
     if(init){
       //bind some events....
@@ -134,6 +114,42 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       //refresh fn.
       _.refresh = _.init.bind(_,false);
     }
+  }
+  //method to initialise options.
+  hsProtype.getOptions = function(list){
+    let _ = this,
+      opts = [];//document.createElement('div');
+    [].forEach.call(list,(o,i) => {
+      //TODO: check if o is optgrp, and loop over.
+      let hso = document.createElement('div');
+      switch(o.nodeName){
+        case 'OPTGROUP':
+          hso.innerHTML =_.opt.optionLabel(o.label);
+          hso.classList.add('hybrid-option-group');
+          opts[opts.length] = hso;
+          opts = opts.concat(_.getOptions(o));
+          break;
+        default:
+          //preserve select options attributes.
+          // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
+          hso.dataset.hsoValue=o.value;
+          hso.innerHTML =_.opt.optionLabel(o.textContent);
+          hso.classList = o.classList;
+          hso.classList.add('hybrid-option');
+          if(o.selected===true || i==0){
+            if(i>0) opts[0].classList.remove('active');
+            _.hselect.selected.innerHTML = _.opt.selectedLabel(o.textContent);
+            hso.classList.add('active');
+            _.sindex = i; //keep track of selected value.
+          }
+          //if(init)_.hselect.options.appendChild(hso);
+          // else
+          // opts.appendChild(hso);
+          opts[opts.length] = hso;
+          break;
+      }
+    });
+    return opts;
   }
   //method to add event listeners.
   hsProtype.event = function (ele, type, args) {

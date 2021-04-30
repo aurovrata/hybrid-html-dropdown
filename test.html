@@ -17,14 +17,23 @@
         <form>
           <label for="name-field">Name</label>
           <input type="text" id="name-field" name="name_field" />
-          <label class="select-label" id="jobLabel"> Main job role</label>
+          <label class="select-label" id="jobLabel"> Grocery selection</label>
           <select class="select-native js-select-native" name="select_field" aria-labelledby="jobLabel">
-            <option value="sel" disabled="" selected=""> Select role...</span>
-            <option value="ds">UI/UX Designer</option>
-            <option value="fe">Frontend Engineer</option>
-            <option value="be">Backend Engineer</option>
-            <option value="qa">QA Engineer</option>
-            <option value="un">Unicorn</option>
+            <option value="sel" disabled="" selected=""> Select an item...</span>
+            <optgroup label="Vegetables">
+              <option value="fbn">French beans</option>
+              <option value="pot">Potatoes</option>
+              <option value="chl">Red chillis</option>
+              <option value="bgr">Bitter gourd</option>
+              <option value="oni">Onions</option>
+            </optgroup>
+            <optgroup label="Fruits">
+              <option value="org">Oranges</option>
+              <option value="app">Apples</option>
+              <option value="bnn">Bananas</option>
+              <option value="sfr">Star fruit</option>
+              <option value="csp">Custard apple</option>
+            </optgroup>
           </select>
           <label for="phone-field">Contact number</label>
           <input type="phone" id="phone-field" name="phone_field" />
