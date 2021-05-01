@@ -1,4 +1,4 @@
-=/* Both native and custom selects must have the same width/height*/
+/* Both native and custom selects must have the same width/height*/
 /* :root{font-size: 62.5%} */
 .hybrid-select,
 .hybrid-select-js {
@@ -129,5 +129,6 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 .hybrid-option.active::before {
   content: "✓";
   position: absolute;
-  left: 0
+  left: 0;
+  margin-left: 3px;
 }

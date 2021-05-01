@@ -1,6 +1,6 @@
 /*
 Hybrid Select JavaScript plugin
-Version: 0.3
+Version: 0.4
 Authors: Sandrina Pereira & Aurovrata Venet
 Twitter: @a_sandrina_p / @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-select
@@ -83,7 +83,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
 
 
     // if(!init)
-    let opts = _.getOptions(_.el.children);
+    let opts = _.extractOptions(_.el.children);
     _.hselect.options.replaceChildren(...opts);
 
     if(init){
@@ -116,7 +116,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     }
   }
   //method to initialise options.
-  hsProtype.getOptions = function(list){
+  hsProtype.extractOptions = function(list,idx=0){
     let _ = this,
       opts = [];//document.createElement('div');
     [].forEach.call(list,(o,i) => {
@@ -127,7 +127,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           hso.innerHTML =_.opt.optionLabel(o.label);
           hso.classList.add('hybrid-option-group');
           opts[opts.length] = hso;
-          opts = opts.concat(_.getOptions(o));
+          opts = opts.concat(_.extractOptions(o.children, opts.length));
           break;
         default:
           //preserve select options attributes.
@@ -136,11 +136,11 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           hso.innerHTML =_.opt.optionLabel(o.textContent);
           hso.classList = o.classList;
           hso.classList.add('hybrid-option');
-          if(o.selected===true || i==0){
+          if(o.selected===true || (i+idx)==0){
             if(i>0) opts[0].classList.remove('active');
             _.hselect.selected.innerHTML = _.opt.selectedLabel(o.textContent);
             hso.classList.add('active');
-            _.sindex = i; //keep track of selected value.
+            _.sindex = (i+idx); //keep track of selected value.
           }
           //if(init)_.hselect.options.appendChild(hso);
           // else
