@@ -112,7 +112,12 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   padding: 0.5em;
   padding-left: 1.5625em;
 }
-
+.hybrid-select-js .hybrid-option-group {
+	padding: 0.2em 0.4em;
+	font-weight: bold;
+  border-bottom: 1px solid #d3d3d3;
+  border-top: 1px solid #aaa;
+}
 .hybrid-option.hover {
   background-color: #1e1e1e21;
 }
