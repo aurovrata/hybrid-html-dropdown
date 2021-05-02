@@ -102,11 +102,29 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   background:#e3e3e3;
   min-width: 100%;
 }
-
-.hybrid-select-js.active .hybrid-options {
-  display: block;
+/*
+for horizontal dropdown
+*/
+.hybrid-select-landscape .hybrid-options > div {
+	display: inline-block;
+	float: left;
 }
-
+/* opposite for rtl */
+.hybrid-select-landscape .hybrid-options > div:dir(rtl) {float: right}
+.hybrid-select-landscape .hybrid-options .hybrid-option-group {
+	clear: both;
+	border-top: none;
+	padding: 0.5em 0.4em;
+}
+.hybrid-select-landscape .hybrid-options .hybrid-option.active::before {
+	content: '';
+}
+.hybrid-select-landscape .hybrid-options .hybrid-option{padding: 0.5em}
+.hybrid-select-landscape .hybrid-options .hybrid-option.active {
+	text-decoration: underline;
+}
+/* show dropdown on active select */
+.hybrid-select-js.active .hybrid-options {display: block}
 .hybrid-select-js .hybrid-option {
   position: relative;
   padding: 0.5em;

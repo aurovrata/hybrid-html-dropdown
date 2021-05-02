@@ -49,7 +49,9 @@
        let sel;
        document.addEventListener('DOMContentLoaded', (e) => {
          sel= document.querySelector('.select-native');
-         let hs = new HybridSelect(sel,{});
+         let hs = new HybridSelect(sel,{
+           dropdown: 'landscape'
+         });
        });
        document.querySelector('.button').addEventListener('click', (e)=>{
          let fd = new FormData( e.target.closest('form') );

@@ -77,8 +77,16 @@ element._hselect.refresh({
 ```
 
 ## Changelog
-* v0.5 added refresh and dynamic filter of listed options.
-* v0.4 added optgroup functionality.
-* v0.3 simple select conversion with key navigation.
-* v0.2 migration of code to plugin design.
-* v0.1 initial version based on the post of @sandrina-p
+### v0.6
+* fix some bugs
+* enabled landscape dropdown.
+### v0.5
+* added refresh and dynamic filter of listed options.
+### v0.4
+* added optgroup functionality.
+### v0.3
+* simple select conversion with key navigation.
+### v0.2
+* migration of code to plugin design.
+### v0.1
+* initial version based on the post of @sandrina-p

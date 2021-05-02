@@ -1,6 +1,6 @@
 /*
 Hybrid Select JavaScript plugin
-Version: 0.5
+Version: 0.6
 Authors: Sandrina Pereira & Aurovrata Venet
 Twitter: @a_sandrina_p / @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-select
@@ -39,6 +39,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       {}, //empty target.
       {
         eventPropagate:true,
+        dropdown: 'vertical',
         optionLabel: function(label){
           return '<span>'+label+'</span>';
         },
@@ -62,7 +63,6 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     if(init) {
       //wrapper for select and hybrid select.
       let c = document.createElement('div');
-      c.classList.add('hybrid-select-container');
       _.el.parentNode.insertBefore(c, _.el.nextSibling);
       c.appendChild(_.el);
       //construct the hybrid-select.
@@ -80,10 +80,10 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       _.sindex = 0; //initial index of selected option.
       _.value = ""; //initial value.
     }
+    //set style.
+    _.el.parentElement.classList.value='hybrid-select-container hybrid-select-'+_.opt.dropdown;
+
     //build list of options.
-
-
-    // if(!init)
     let opts = _.extractOptions(_.el.children);
     _.hselect.options.replaceChildren(...opts);
 
@@ -220,6 +220,30 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       keydown:_.keyNav
     })
   }
+  //find next hybrid-option index.
+  hsProtype.nextHybridOption = function(cur){
+    let _ = this, next = cur+1;
+    if(next < _.hselect.options.childElementCount && !_.hselect.options.children[next].classList.contains('hybrid-option')){
+      next++;
+    }
+    if(next === _.hselect.options.childElementCount){ //end of list.
+      next=0;
+      if(!_.hselect.options.children[next].classList.contains('hybrid-option')) next++;
+    }
+    return next;
+  }
+  //find prev option.
+  hsProtype.prevHybridOption = function(cur){
+    let _ = this, prev = cur-1;
+    if(prev > 0 && !_.hselect.options.children[prev].classList.contains('hybrid-option')){
+      prev--;
+    }
+    if(prev < 0){ //end of list.
+      prev =_.hselect.options.childElementCount-1;
+      if(!_.hselect.options.children[prev].classList.contains('hybrid-option')) prev--;
+    }
+    return prev;
+  }
   //key navigation.
   hsProtype.keyboardNavigate = function(){
     let _ = this, e = arguments[0];
@@ -229,24 +253,20 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         case 40: //down arrow.
           if(_.hselect.classList.contains('active')){ //list is open, change hover option
             if(_.hindex>=0) _.hselect.options.children[_.hindex].classList.remove('hover');
-            _.hindex++;
-            if(_.hindex === _.hselect.options.childElementCount) _.hindex=0;
+            _.hindex = _.nextHybridOption(_.hindex);
             _.hselect.options.children[_.hindex].classList.add('hover');
           }else{ //change select value
-            let sindex = _.sindex+1;
-            if(sindex >= _.hselect.options.childElementCount) sindex = 0;
+            let sindex = _.nextHybridOption(_.sindex);
             _.updateSelection(sindex, true);
           }
           break;
         case 38: //up arrow.
           if(_.hselect.classList.contains('active')){ //list is open, change hover option
             if(_.hindex>=0) _.hselect.options.children[_.hindex].classList.remove('hover');
-            _.hindex--;
-            if(_.hindex < 0) _.hindex = _.hselect.options.childElementCount-1;
+            _.hindex = _.prevHybridOption(_.hindex);
             _.hselect.options.children[_.hindex].classList.add('hover');
           }else{ //change select value
-            let sindex = _.sindex-1;
-            if(sindex <0) sindex = _.hselect.options.childElementCount-1;
+            let sindex = _.prevHybridOption(_.sindex);
             _.updateSelection(sindex, true);
           }
           break;
