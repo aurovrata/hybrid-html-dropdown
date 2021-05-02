@@ -54,6 +54,7 @@ the following optional settings are currently exposed when initialising a hybrid
 
 ```js
 new HybridSelect(element, {
+  dropdown: 'landscape', //display the dropdown horizontally. (default is portrait or vertical menu) 
   optionLabel: function(label){ //the function called to display the label of an option (defaults to <span>label</span>)
     return '<span>'+label+'</span>';
   },
