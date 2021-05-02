@@ -44,7 +44,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         },
         selectedLabel: function(label){
           return label;
-        }
+        },
+        listOption: function(o){return true},
       }, //default settings.
       settings //user settings.
     );
@@ -112,8 +113,14 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       //fire init event.
       _.emit('hybrid-select-init');
       //refresh fn.
-      _.refresh = _.init.bind(_,false);
+      _.refresh = _.refreshHybrid.bind(_);
     }
+  }
+  //method to refresh an existing HybridSelect object.
+  hsProtype.refreshHybrid = function(settings={}){
+    let _ = this;
+    _.opt = Object.assign({}, _.opt, settings);
+    _.init(false); //invole init function but do not initialise.
   }
   //method to initialise options.
   hsProtype.extractOptions = function(list,idx=0){
@@ -121,6 +128,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       opts = [];//document.createElement('div');
     [].forEach.call(list,(o,i) => {
       //TODO: check if o is optgrp, and loop over.
+      if(_.opt.listOption(o,i+idx) !== true) return;
       let hso = document.createElement('div');
       switch(o.nodeName){
         case 'OPTGROUP':

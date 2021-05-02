@@ -15,8 +15,8 @@
   <p class="inst">Try to select an option with whatever tool you are using (e.g. mouse, touch, keyboard, etc...)<p>
       <div class="test-form">
         <form>
-          <label for="name-field">Name</label>
-          <input type="text" id="name-field" name="name_field" />
+          <label for="name-field">Filter</label>
+          <input type="text" id="filter-field" name="filter_field" />
           <label class="select-label" id="jobLabel"> Grocery selection</label>
           <select class="select-native js-select-native" name="select_field" aria-labelledby="jobLabel">
             <option value="sel" disabled="" selected=""> Select an item...</span>
@@ -46,14 +46,28 @@
   <footer>
      <script type="text/javascript">
      (function(){
+       let sel;
        document.addEventListener('DOMContentLoaded', (e) => {
-         let sel= document.querySelector('.select-native');
-
+         sel= document.querySelector('.select-native');
          let hs = new HybridSelect(sel,{});
        });
        document.querySelector('.button').addEventListener('click', (e)=>{
          let fd = new FormData( e.target.closest('form') );
          for(let f of fd.keys()) console.log(f+'='+fd.get(f));
+       })
+       document.querySelector('#filter-field').addEventListener('change', (e)=>{
+         let filterField = e.target, show=false;
+         sel._hselect.refresh({
+           listOption: function(o,i){
+             if(filterField.value.trim()=='') return true;
+             if(i==0) return true;
+             if(o.nodeName == 'OPTGROUP'){
+               if(o.label == filterField.value) show = true;
+               else show = false;
+             }
+             return show;
+           }
+         });
        })
      })()
      </script>
