@@ -24,13 +24,14 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       throw new Error("Attempting to convert element "+element.nodeName+" into HybridSelect object.");
     }
 
-    let _ = this;
+    let _ = this, lim=1;
     //if already instanciated, return existing object.
     if(element._hselect) return element._hselect;
 
     element._hselect = _; //expose object in its original DOM element.
 
     _.el = element; //keep original element reference.
+    if(_.el.multiple) lim=-1;
     _.el.style="font-size:16px";
     _.el.classList.add('hybrid-select'); //flag the element as converted.
 
@@ -40,6 +41,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       {
         eventPropagate:true,
         dropdown: 'vertical',
+        limitSelection:lim, //default 1, -1 for multiple, or userset.
         optionLabel: function(label){
           return '<span>'+label+'</span>';
         },
@@ -76,9 +78,9 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       _.hselect.options = document.createElement('div');
       _.hselect.appendChild(_.hselect.options);
       _.hselect.options.classList.add('hybrid-options');
-      _.hindex = -1; //initial option hover index.
-      _.sindex = 0; //initial index of selected option.
-      _.value = ""; //initial value.
+      _.hindex = [-1]; //initial option hover index.
+      _.sindex = [0]; //initial index of selected option.
+      _.value = _.opt.limitSelection==1?"":[""]; //initial value.
     }
     //set style.
     _.el.parentElement.classList.value='hybrid-select-container hybrid-select-'+_.opt.dropdown;
@@ -168,16 +170,53 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     })
   }
   //method to update the hybrid select value.
-  hsProtype.updateSelection = function(idx, emit){
-    let _ = this;
-    if(_.sindex >=0) _.hselect.options.children[_.sindex].classList.remove('active');
-    _.sindex = idx;
-    _.hselect.options.children[idx].classList.add('active');
-    //update values.
-    _.el.value = _.value = _.hselect.options.children[idx].dataset.hsoValue;
+  hsProtype.updateSelection = function(idxs, emit){
+    let _ = this,
+      idx = idxs[0],
+      hasDefaut = _.el.children[0].value==="";
+    switch(_.opt.limitSelection){
+      case 1: //default
+        if(_.sindex[0] >=0) _.hselect.options.children[_.sindex[0]].classList.remove('active');
+        _.sindex[0] = idx;
+        _.hselect.options.children[idx].classList.add('active');
+        //update values.
+        _.el.value = _.value = _.hselect.options.children[idx].dataset.hsoValue;
 
-    //update the selected label.
-    _.hselect.selected.innerHTML = _.hselect.options.children[idx].innerHTML;
+        //update the selected label.
+        _.hselect.selected.innerHTML = _.hselect.options.children[idx].innerHTML;
+        break;
+      case -1: //unlimited
+      default: //limit number of selections.
+        if( hasDefaut && _.sindex.length==1 && _.sindex[0]==0){
+          if(_.opt.limitSelection < 0) _.sindex = idxs;
+          else _.sindex = idxs.slice(0,_.opt.limitSelection);
+        }else{
+          let si =[];
+          idxs.forEach(i=>{
+            if(_.sindex.indexOf(i) >=0 ){
+              _.hselect.options.children[i].classList.remove('active');
+              _.sindex.splice(idx,1);//remove from selection.
+            }else{
+              si[si.length]=i;
+              _.hselect.options.children[i].classList.add('active');
+            }
+          });
+          if(_.opt.limitSelection < 0) _.sindex=_.sindex.concat(si);
+          else if(_.sindex.length < _.opt.limitSelection){
+            _.sindex=_.sindex.concat(si.slice(0,_.opt.limitSelection-_.sindex.length));
+          }
+        }
+        //update values.
+         _.value = [];
+        _.sindex.forEach(i=>{
+           _.value[_.value.length] = _.hselect.options.children[i].dataset.hsoValue;
+        });
+        _.el.value = _.value;
+
+        //update the selected label.
+        _.hselect.selected.innerHTML = _.hselect.options.children[_.sindex[0]].innerHTML+'<span>[...]</span>';
+        break;
+    }
     if(emit) _.emit('change');
   }
   //update from original
@@ -222,7 +261,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
   }
   //find next hybrid-option index.
   hsProtype.nextHybridOption = function(cur){
-    let _ = this, next = cur+1;
+    let _ = this, next = cur[cur.length-1]+1;
     if(next < _.hselect.options.childElementCount && !_.hselect.options.children[next].classList.contains('hybrid-option')){
       next++;
     }
@@ -234,7 +273,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
   }
   //find prev option.
   hsProtype.prevHybridOption = function(cur){
-    let _ = this, prev = cur-1;
+    let _ = this, prev = cur[0]-1;
     if(prev > 0 && !_.hselect.options.children[prev].classList.contains('hybrid-option')){
       prev--;
     }
@@ -256,8 +295,13 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
             _.hindex = _.nextHybridOption(_.hindex);
             _.hselect.options.children[_.hindex].classList.add('hover');
           }else{ //change select value
-            let sindex = _.nextHybridOption(_.sindex);
-            _.updateSelection(sindex, true);
+            if(1==_.opt.limitSelection){ //select the next value.
+              let sindex = _.nextHybridOption(_.sindex);
+              _.updateSelection(sindex, true);
+            }else{ //open the dropdown.
+              _.hselect.classList.remove('focus');
+              _.open();
+            }
           }
           break;
         case 38: //up arrow.
@@ -266,8 +310,13 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
             _.hindex = _.prevHybridOption(_.hindex);
             _.hselect.options.children[_.hindex].classList.add('hover');
           }else{ //change select value
-            let sindex = _.prevHybridOption(_.sindex);
-            _.updateSelection(sindex, true);
+            if(1==_.opt.limitSelection){ //select the next value.
+              let sindex = _.prevHybridOption(_.sindex);
+              _.updateSelection(sindex, true);
+            }else{ //open the dropdown.
+              _.hselect.classList.remove('focus');
+              _.open();
+            }
           }
           break;
         case 13: //enter.
