@@ -44,6 +44,7 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   position: relative;
   display: inline-block;
   font-size: 16px;
+  vertical-align: top;
 }
 /*include any border styling in the box-sizing of our hybrid select.*/
 .hybrid-select-container * {

@@ -150,7 +150,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
             if(i>0) opts[0].classList.remove('active');
             _.hselect.selected.innerHTML = _.opt.selectedLabel(o.textContent);
             hso.classList.add('active');
-            _.sindex = (i+idx); //keep track of selected value.
+            _.sindex[0] = (i+idx); //keep track of selected value.
           }
           //if(init)_.hselect.options.appendChild(hso);
           // else
@@ -173,7 +173,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
   hsProtype.updateSelection = function(idxs, emit){
     let _ = this,
       idx = idxs[0],
-      hasDefaut = _.el.children[0].value==="";
+      hasDefault = _.el.children[0].value==="";
     switch(_.opt.limitSelection){
       case 1: //default
         if(_.sindex[0] >=0) _.hselect.options.children[_.sindex[0]].classList.remove('active');
@@ -187,7 +187,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         break;
       case -1: //unlimited
       default: //limit number of selections.
-        if( hasDefaut && _.sindex.length==1 && _.sindex[0]==0){
+        if( hasDefault && _.sindex.length==1 && _.sindex[0]==0){
+          _.hselect.options.children[0].classList.remove('active');
           if(_.opt.limitSelection < 0) _.sindex = idxs;
           else _.sindex = idxs.slice(0,_.opt.limitSelection);
         }else{
@@ -208,10 +209,12 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         }
         //update values.
          _.value = [];
+         _.el.selectedIndex = -1;
         _.sindex.forEach(i=>{
            _.value[_.value.length] = _.hselect.options.children[i].dataset.hsoValue;
+           _.el.querySelector('option[value="'+_.value[_.value.length-1]+'"]').selected=true;
         });
-        _.el.value = _.value;
+        // _.el.value = _.value;
 
         //update the selected label.
         _.hselect.selected.innerHTML = _.hselect.options.children[_.sindex[0]].innerHTML+'<span>[...]</span>';
@@ -222,10 +225,16 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
   //update from original
   hsProtype.updateFromOriginal = function(){
     let _ = this;
-    if(_.el.value === _.value) return; //not need to update.
+    if(_.el.multiple){
+      let skipUpdate = true;
+      for(let i=0; i<_.el.selectedOptions.length; i++){
+        if(!_.value.includes(_.el.selectedOptions.item(i).value)) skipUpdate=false;
+      }
+      if(skipUpdate) return;
+    }else if(_.el.value === _.value) return; //not need to update.
     let sel = _.hselect.options.querySelector(`.hybrid-option[data-hso-value="${_.el.value}"`);
     sel = [..._.hselect.options.children].indexOf(sel); //index in hybrid.
-    _.updateSelection(sel, false);
+    _.updateSelection([sel], false);
   }
   //trigger events.
   hsProtype.emit = function (name, arg) {
@@ -297,7 +306,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           }else{ //change select value
             if(1==_.opt.limitSelection){ //select the next value.
               let sindex = _.nextHybridOption(_.sindex);
-              _.updateSelection(sindex, true);
+              _.updateSelection([sindex], true);
             }else{ //open the dropdown.
               _.hselect.classList.remove('focus');
               _.open();
@@ -312,7 +321,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           }else{ //change select value
             if(1==_.opt.limitSelection){ //select the next value.
               let sindex = _.prevHybridOption(_.sindex);
-              _.updateSelection(sindex, true);
+              _.updateSelection([sindex], true);
             }else{ //open the dropdown.
               _.hselect.classList.remove('focus');
               _.open();
@@ -325,7 +334,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
             _.hselect.classList.remove('focus');
             _.open();
           }else{
-            _.updateSelection(_.hindex, true);
+            _.updateSelection([_.hindex], true);
             _.closeSelect(false);
             _.hselect.classList.add('focus');
           }
@@ -371,7 +380,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       let t = e.target;
       if(t.classList.contains('hybrid-option')===false) t = t.closest('.hybrid-option');
       let idx = [..._.hselect.options.children].indexOf(t); //index in hybrid.
-      _.updateSelection(idx, true);
+      _.updateSelection([idx], true);
       //close the dropdown
       _.closeSelect(e.type==='click');
     }

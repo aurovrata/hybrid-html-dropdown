@@ -17,9 +17,9 @@
         <form>
           <label for="name-field">Filter</label>
           <input type="text" id="filter-field" name="filter_field" />
-          <label class="select-label" id="jobLabel"> Grocery selection</label>
-          <select class="select-native js-select-native" name="select_field" aria-labelledby="jobLabel">
-            <option value="sel" disabled="" selected=""> Select an item...</span>
+          <label class="select-label" for="single"> Grocery selection</label>
+          <select id="single" class="select-native js-select-native" name="select_field" aria-labelledby="jobLabel">
+            <option value="" disabled="" selected=""> Select single</span>
             <optgroup label="Vegetables">
               <option value="fbn">French beans</option>
               <option value="pot">Potatoes</option>
@@ -35,8 +35,8 @@
               <option value="csp">Custard apple</option>
             </optgroup>
           </select>
-          <select class="" name="select_multiple" multiple aria-labelledby="jobLabel">
-            <option value="sel" disabled="" selected=""> Select an item...</span>
+          <select class="select-native" name="select_multiple" multiple aria-labelledby="jobLabel">
+            <option value="" disabled="" selected=""> Select multiple</span>
             <optgroup label="Vegetables">
               <option value="fbn">French beans</option>
               <option value="pot">Potatoes</option>
@@ -65,10 +65,12 @@
      (function(){
        let sel;
        document.addEventListener('DOMContentLoaded', (e) => {
-         sel= document.querySelector('.select-native');
-         let hs = new HybridSelect(sel,{
-           dropdown: 'landscape'
-         });
+         sel= document.querySelectorAll('.select-native');
+         sel.forEach((s)=>{
+           new HybridSelect(s,{
+             dropdown: 'landscape'
+           })
+         })
        });
        document.querySelector('.button').addEventListener('click', (e)=>{
          let fd = new FormData( e.target.closest('form') );
