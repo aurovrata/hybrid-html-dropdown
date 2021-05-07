@@ -194,12 +194,11 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         }else{
           let si =[];
           idxs.forEach(i=>{
-            if(_.sindex.indexOf(i) >=0 ){
+            if( (idx = _.sindex.indexOf(i)) >=0 ){
               _.hselect.options.children[i].classList.remove('active');
               _.sindex.splice(idx,1);//remove from selection.
             }else{
               si[si.length]=i;
-              _.hselect.options.children[i].classList.add('active');
             }
           });
           if(_.opt.limitSelection < 0) _.sindex=_.sindex.concat(si);
@@ -208,11 +207,12 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           }
         }
         //update values.
-         _.value = [];
-         _.el.selectedIndex = -1;
+        _.value = [];
+        _.el.selectedIndex = -1;
         _.sindex.forEach(i=>{
-           _.value[_.value.length] = _.hselect.options.children[i].dataset.hsoValue;
-           _.el.querySelector('option[value="'+_.value[_.value.length-1]+'"]').selected=true;
+          _.hselect.options.children[i].classList.add('active');
+          _.value[_.value.length] = _.hselect.options.children[i].dataset.hsoValue;
+          _.el.querySelector('option[value="'+_.value[_.value.length-1]+'"]').selected=true;
         });
         // _.el.value = _.value;
 
