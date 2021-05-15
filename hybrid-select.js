@@ -45,8 +45,9 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         optionLabel: function(label){
           return '<span>'+label+'</span>';
         },
-        selectedLabel: function(label){
-          return label;
+        selectedLabel: function(s){
+          let k =  Object.keys(s);
+          return s[k[0]]+ ((k.length>1)?'<span>[...]</span>':'');
         },
         listOption: function(o){return true},
       }, //default settings.
@@ -80,7 +81,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       _.hselect.options.classList.add('hybrid-options');
       _.hindex = [-1]; //initial option hover index.
       _.sindex = [0]; //initial index of selected option.
-      _.value = _.opt.limitSelection==1?"":[""]; //initial value.
+      _.value = {}; //initial value.
     }
     //set style.
     _.el.parentElement.classList.value='hybrid-select-container hybrid-select-'+_.opt.dropdown;
@@ -143,12 +144,13 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           //preserve select options attributes.
           // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
           hso.dataset.hsoValue=o.value;
-          hso.innerHTML =_.opt.optionLabel(o.textContent);
+          hso.innerHTML =_.opt.optionLabel(o.text);
           hso.classList = o.classList;
           hso.classList.add('hybrid-option');
           if(o.selected===true || (i+idx)==0){
             if(i>0) opts[0].classList.remove('active');
-            _.hselect.selected.innerHTML = _.opt.selectedLabel(o.textContent);
+            _.value[o.value] = o.text;
+            _.hselect.selected.innerHTML = _.opt.selectedLabel(_.value);
             hso.classList.add('active');
             _.sindex[0] = (i+idx); //keep track of selected value.
           }
@@ -176,48 +178,40 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       hasDefault = _.el.children[0].value==="";
     switch(_.opt.limitSelection){
       case 1: //default
-        if(_.sindex[0] >=0) _.hselect.options.children[_.sindex[0]].classList.remove('active');
+        if(_.sindex[0] >=0) _.optionClass('active', _.sindex);
         _.sindex[0] = idx;
         _.hselect.options.children[idx].classList.add('active');
         //update values.
-        _.el.value = _.value = _.hselect.options.children[idx].dataset.hsoValue;
-
+        _.el.value = _.hselect.options.children[idx].dataset.hsoValue;
+        _.value[_.el.value] = _.hselect.options.children[idx].innerHTML;
         //update the selected label.
-        _.hselect.selected.innerHTML = _.hselect.options.children[idx].innerHTML;
+        _.hselect.selected.innerHTML = _.opt.selectedLabel(_.value);
         break;
       case -1: //unlimited
       default: //limit number of selections.
         if( hasDefault && _.sindex.length==1 && _.sindex[0]==0){
-          _.hselect.options.children[0].classList.remove('active');
+          _.optionClass('active',[0]); //toggle
           if(_.opt.limitSelection < 0) _.sindex = idxs;
           else _.sindex = idxs.slice(0,_.opt.limitSelection);
         }else{
           let si =[];
-          idxs.forEach(i=>{
-            if( (idx = _.sindex.indexOf(i)) >=0 ){
-              _.hselect.options.children[i].classList.remove('active');
-              _.sindex.splice(idx,1);//remove from selection.
-            }else{
-              si[si.length]=i;
-            }
+          _.sindex.forEach(i=>{
+            _.hselect.options.children[i].classList.remove('active');
           });
-          if(_.opt.limitSelection < 0) _.sindex=_.sindex.concat(si);
-          else if(_.sindex.length < _.opt.limitSelection){
-            _.sindex=_.sindex.concat(si.slice(0,_.opt.limitSelection-_.sindex.length));
-          }
+          if(_.opt.limitSelection < 0) _.sindex=idxs;
+          else _.sindex=idxs.slice(0,_.opt.limitSelection);
         }
         //update values.
-        _.value = [];
+        _.value = {};
         _.el.selectedIndex = -1;
         _.sindex.forEach(i=>{
+          let v= _.hselect.options.children[i].dataset.hsoValue;
           _.hselect.options.children[i].classList.add('active');
-          _.value[_.value.length] = _.hselect.options.children[i].dataset.hsoValue;
-          _.el.querySelector('option[value="'+_.value[_.value.length-1]+'"]').selected=true;
+          _.value[v]=_.hselect.options.children[i].innerHTML;
+          _.el.querySelector('option[value="'+v+'"]').selected=true;
         });
-        // _.el.value = _.value;
-
         //update the selected label.
-        _.hselect.selected.innerHTML = _.hselect.options.children[_.sindex[0]].innerHTML+'<span>[...]</span>';
+        _.hselect.selected.innerHTML = _.opt.selectedLabel(_.value);
         break;
     }
     if(emit) _.emit('change');
@@ -228,10 +222,10 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     if(_.el.multiple){
       let skipUpdate = true;
       for(let i=0; i<_.el.selectedOptions.length; i++){
-        if(!_.value.includes(_.el.selectedOptions.item(i).value)) skipUpdate=false;
+        if(!(_.el.selectedOptions.item(i).value in _.value) ) skipUpdate=false;
       }
       if(skipUpdate) return;
-    }else if(_.el.value === _.value) return; //not need to update.
+    }else if(_.el.value in _.value) return; //not need to update.
     let sel = _.hselect.options.querySelector(`.hybrid-option[data-hso-value="${_.el.value}"`);
     sel = [..._.hselect.options.children].indexOf(sel); //index in hybrid.
     _.updateSelection([sel], false);
@@ -300,9 +294,13 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       switch(e.keyCode){
         case 40: //down arrow.
           if(_.hselect.classList.contains('active')){ //list is open, change hover option
-            if(_.hindex>=0) _.hselect.options.children[_.hindex].classList.remove('hover');
-            _.hindex = _.nextHybridOption(_.hindex);
-            _.hselect.options.children[_.hindex].classList.add('hover');
+            if(_.hindex[0]>=0 && !_.el.multiple && !e.shiftKey) _.optionClass('hover', _.hindex); //toggle class
+            let idx = _.nextHybridOption(_.hindex);
+            _.hselect.options.children[idx].classList.add('hover');
+            if(_.el.multiple && e.shiftKey){
+              _.hindex.push(idx);
+              if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
+            }else _.hindex[0] = idx;
           }else{ //change select value
             if(1==_.opt.limitSelection){ //select the next value.
               let sindex = _.nextHybridOption(_.sindex);
@@ -315,9 +313,13 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           break;
         case 38: //up arrow.
           if(_.hselect.classList.contains('active')){ //list is open, change hover option
-            if(_.hindex>=0) _.hselect.options.children[_.hindex].classList.remove('hover');
-            _.hindex = _.prevHybridOption(_.hindex);
-            _.hselect.options.children[_.hindex].classList.add('hover');
+            if(_.hindex[0]>=0 && !_.el.multiple && !e.shiftKey) _.optionClass('hover', _.hindex);
+            let idx = _.prevHybridOption(_.hindex);
+            _.hselect.options.children[idx].classList.add('hover');
+            if(_.el.multiple && e.shiftKey){
+              _.hindex.push(idx);
+              if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
+            }else _.hindex[0] = idx;
           }else{ //change select value
             if(1==_.opt.limitSelection){ //select the next value.
               let sindex = _.prevHybridOption(_.sindex);
@@ -379,19 +381,31 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     if(e && e.target){
       let t = e.target;
       if(t.classList.contains('hybrid-option')===false) t = t.closest('.hybrid-option');
-      let idx = [..._.hselect.options.children].indexOf(t); //index in hybrid.
-      _.updateSelection([idx], true);
+      _.updateSelection(_.hindex, true);
       //close the dropdown
-      _.closeSelect(e.type==='click');
+      if(!e.ctrlKey && !e.shiftKey) _.closeSelect(e.type==='click');
     }
   }
   //function to flag options being hovered.
   hsProtype.optionHover = function(){
     let _ = this, e = arguments[0];
     if(e && e.target && e.target.classList.contains('hybrid-option')) {
-      if(_.hindex>=0) _.hselect.options.children[_.hindex].classList.remove('hover');
-      _.hindex = [..._.hselect.options.children].indexOf(e.target);
-      _.hselect.options.children[_.hindex].classList.add('hover');
+      if(_.hindex[0]>=0 && !e.shiftKey) _.optionClass('hover',_.hindex);
+      let idx = [..._.hselect.options.children].indexOf(e.target);
+      _.hselect.options.children[idx].classList.add('hover');
+      if(_.el.multiple && e.shiftKey){
+        _.hindex.push(idx);
+        if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
+      }else _.hindex = [idx];
+    }
+  }
+  //toggle class on option.
+  hsProtype.optionClass = function(cl, idxs=[]){
+    let _ = this;
+    if('string' == typeof cl && cl.length>0){
+      idxs.forEach(i=>{
+        _.hselect.options.children[i].classList.toggle(cl);
+      })
     }
   }
   //open hybrid dropdown.
@@ -417,6 +431,10 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     _.event(document, 'add',{
       click: _.close
     });
+    //listen for key navigation
+    _.event(_window,'add',{
+      keydown:_.keyNav
+    });
     //close if another hselect field opens.
     _.event(document,'add',{
       'hybrid-select-click':_.close
@@ -424,15 +442,21 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
   }
   //close hybrid dropdown.
   hsProtype.closeSelect = function(blur){
-    let _ = this, e = arguments[0],e2 = arguments[1];
-
+    let _ = this,
+      e = arguments[0],
+      e2 = arguments[1]; //click on document
+    //if click to select cancel close.
     if(e && e.target && e.target.classList.contains('hselect-option')) return;
-    if(e2 && e2.target.isSameNode(_.el)) return;
+
+    if(e2){
+      if(e2.target.isSameNode(_.el)) return; //in case original element is clicked
+      if(_.el.multiple && (e2.ctrlKey || e2.shiftKey)) return; //multiple select w/ ctrl|shift key
+    }
 
     _.hselect.classList.remove('active');
     //reset the option hover index.
     if(_.hindex>=0) _.hselect.options.children[_.hindex].classList.remove('hover');
-    _.hindex = -1;
+    _.hindex = [-1];
     //stop listening to external clicks.
     _.event(document, 'remove',{
       click: _.close
