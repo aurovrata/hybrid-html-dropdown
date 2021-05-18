@@ -1,4 +1,4 @@
-# hybrid-html-select v0.5
+# hybrid-html-select v0.7
 A hybrid HTML select fully customisable and emulating all navigational functions of a select element based on an initial [work](https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/) by @sandrina-p
 
 ## How to use it.
