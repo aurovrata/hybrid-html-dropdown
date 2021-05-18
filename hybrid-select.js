@@ -127,10 +127,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     _.init(false); //invole init function but do not initialise.
   }
   //method to initialise options.
-  hsProtype.extractOptions = function(list,idx=0){
-    let _ = this,
-      opts = [],
-      defhso;
+  hsProtype.extractOptions = function(list,opts=[]){
+    let _ = this, defhso, idx=opts.length;
     [].forEach.call(list,(o,i) => {
       //TODO: check if o is optgrp, and loop over.
       if(_.opt.listOption(o,i+idx) !== true) return;
@@ -140,7 +138,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           hso.innerHTML =_.opt.optionLabel(o.label);
           hso.classList.add('hybrid-option-group');
           opts[opts.length] = hso;
-          opts = opts.concat(_.extractOptions(o.children, opts.length));
+          // opts = opts.concat(_.extractOptions(o.children, opts));
+          _.extractOptions(o.children, opts);
           break;
         default:
           //preserve select options attributes.
