@@ -78,6 +78,10 @@ element._hselect.refresh({
 ```
 
 ## Changelog
+### v0.7
+* fix some bugs.
+* fix multiple select fields.
+* * enabled shit/ctrl modifier key in navigation/selection
 ### v0.6
 * fix some bugs
 * enabled landscape dropdown.
