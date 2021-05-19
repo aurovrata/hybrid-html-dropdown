@@ -1,19 +1,19 @@
 /* Both native and custom selects must have the same width/height*/
 /* :root{font-size: 62.5%} */
-.hybrid-select,
-.hybrid-select-js {
+.hybriddd,
+.hybriddd-js {
   position: relative;
   width: max-content;
   height: 2.5em;
   min-width: 100%;
 }
-select:disabled + .hybrid-select-js > .hybrid-selected {
+select:disabled + .hybriddd-js > .hybriddd-selected {
 	color: #939191;
 	border-color: #c6c6c6;
 	cursor: default;
 }
 /* Make sure the custom select does not mess with the layout*/
-.hybrid-select-js {
+.hybriddd-js {
   position: absolute;
   top: 0;
   left: 0;
@@ -23,42 +23,42 @@ select:disabled + .hybrid-select-js > .hybrid-selected {
 input mechanism can hover over elements. (e.g. computers with a mouse) */
 @media (hover: hover) {
   /* // Since we are using a mouse, it's safe to show the custom select. */
-  .hybrid-select-js {
+  .hybriddd-js {
     display: block;
   }
   /*In a computer using keyboard? Then let's hide back the custom select
   while the native one is focused: */
-  .hybrid-select:focus + .hybrid-select-js {
+  .hybriddd:focus + .hybriddd-js {
     display: none;
   }
 }
 /* Add the focus states too, They matter, always! */
-.hybrid-select:focus,
-.hybrid-select-js.active .hybrid-selected,
-.hybrid-select-js.focus .hybrid-selected {
+.hybriddd:focus,
+.hybriddd-js.active .hybriddd-selected,
+.hybriddd-js.focus .hybriddd-selected {
 	outline: none;
 	box-shadow: white 0 0 0 1px, #5e95ff 0 0 1px 2px;
 }
 /* hybrid select styling */
-.hybrid-select-container {
+.hybriddd-container {
   position: relative;
   display: inline-block;
   font-size: 16px;
   vertical-align: top;
 }
 /*include any border styling in the box-sizing of our hybrid select.*/
-.hybrid-select-container * {
+.hybriddd-container * {
 	box-sizing: border-box;
   cursor: default;
 }
-.hybrid-select,
-.hybrid-selected {
+.hybriddd,
+.hybriddd-selected {
   font-size: 1em;
   background-color: #fff;
   border: 1px solid #6f6f6f;
   border-radius: 0.25em;
 }
-.hybrid-select {
+.hybriddd {
   -webkit-appearance: none;
   -moz-appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
@@ -67,7 +67,7 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   background-position-y: 0.5em;
   padding: 0rem 0.8rem;
 }
-.hybrid-selected {
+.hybriddd-selected {
   position: relative;
   width: max-content;
   height: 100%;
@@ -76,7 +76,7 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   cursor: pointer;
   min-width: 100%;
 }
-.hybrid-selected::after {
+.hybriddd-selected::after {
   content: "▾";
   position: absolute;
   top: 0;
@@ -84,11 +84,11 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   right: 0.5em;
   font-size: 0.9375em;
 }
-.hybrid-selected:hover {
+.hybriddd-selected:hover {
   border-color: #8c00ff;
 }
 
-.hybrid-select-js .hybrid-options {
+.hybriddd-js .hybriddd-options {
   position: absolute;
   top: calc(2.375em + 1px);
   right: 0;
@@ -106,42 +106,42 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 /*
 for horizontal dropdown
 */
-.hybrid-select-landscape .hybrid-options > div {
+.hybriddd-landscape .hybriddd-options > div {
 	display: inline-block;
 	float: left;
 }
 /* opposite for rtl */
-.hybrid-select-landscape .hybrid-options > div:dir(rtl) {float: right}
-.hybrid-select-landscape .hybrid-options .hybrid-option-group {
+.hybriddd-landscape .hybriddd-options > div:dir(rtl) {float: right}
+.hybriddd-landscape .hybriddd-options .hybriddd-group {
 	clear: both;
 	border-top: none;
 	padding: 0.5em 0.4em;
 }
-.hybrid-select-landscape .hybrid-options .hybrid-option.active::before {
+.hybriddd-landscape .hybriddd-options .hybriddd-option.active::before {
 	content: '';
 }
-.hybrid-select-landscape .hybrid-options .hybrid-option{padding: 0.5em}
-.hybrid-select-landscape .hybrid-options .hybrid-option.active {
+.hybriddd-landscape .hybriddd-options .hybriddd-option{padding: 0.5em}
+.hybriddd-landscape .hybriddd-options .hybriddd-option.active {
 	text-decoration: underline;
 }
 /* show dropdown on active select */
-.hybrid-select-js.active .hybrid-options {display: block}
-.hybrid-select-js .hybrid-option {
+.hybriddd-js.active .hybriddd-options {display: block}
+.hybriddd-js .hybriddd-option {
   position: relative;
   padding: 0.5em;
   padding-left: 1.5625em;
 }
-.hybrid-select-js .hybrid-option-group {
+.hybriddd-js .hybriddd-group {
 	padding: 0.2em 0.4em;
 	font-weight: bold;
   border-bottom: 1px solid #d3d3d3;
   border-top: 1px solid #aaa;
 }
-.hybrid-option.hover {
+.hybriddd-option.hover {
   background-color: #1e1e1e21;
 }
 
-.hybrid-option:not(:last-of-type)::after {
+.hybriddd-option:not(:last-of-type)::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -150,9 +150,10 @@ for horizontal dropdown
   border-bottom: 1px solid #d3d3d3;
 }
 
-.hybrid-option.active::before {
+.hybriddd-option.active::before {
   content: "✓";
   position: absolute;
   left: 0;
   margin-left: 3px;
 }
+hybriddd-

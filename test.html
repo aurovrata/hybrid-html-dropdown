@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <title>Hybrid Select</title>
     <link rel="stylesheet" href="./css/page.css" media="all">
-    <link rel="stylesheet" href="./hybrid-select.css" media="all">
-    <script src="./hybrid-select.js" type="text/javascript" defer=""></script>
+    <link rel="stylesheet" href="./hybrid-dropdown.css" media="all">
+    <script src="./hybrid-dropdown.js" type="text/javascript" defer=""></script>
   </head>
   <body>
 
@@ -67,7 +67,7 @@
        document.addEventListener('DOMContentLoaded', (e) => {
          sel= document.querySelectorAll('.select-native');
          sel.forEach((s)=>{
-           new HybridSelect(s,{
+           new HybridDropdown(s,{
              // dropdown: 'landscape'
            });
          })
@@ -78,7 +78,7 @@
        })
        document.querySelector('#filter-field').addEventListener('change', (e)=>{
          let filterField = e.target, show=false;
-         sel._hselect.refresh({
+         sel._hybridd.refresh({
            listOption: function(o,i){
              if(filterField.value.trim()=='') return true;
              if(i==0) return true;

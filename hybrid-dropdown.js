@@ -1,9 +1,9 @@
 /*
-Hybrid Select JavaScript plugin
-Version: 0.6
+Hybrid Dropdown JavaScript plugin
+Version: 2.0
 Authors: Sandrina Pereira & Aurovrata Venet
 Twitter: @a_sandrina_p / @aurovrata
-GitHub: https://github.com/aurovrata/hybrid-html-select
+GitHub: https://github.com/aurovrata/hybrid-html-dropdown
 */
 
 // global module creation
@@ -15,25 +15,25 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       : factory()
 })(function () { //hybrid-select factory.
 	let _window = typeof window !== 'undefined' ? window : this;
-	let HybridSelect = (_window.HybridSelect = function (element, settings) {
+	let HybridDropdown = (_window.HybridDropdown = function (element, settings) {
     //verify we have an element.
     if(typeof element === 'undefined'){
-      throw new Error("Cannot initialise HybridSelect object with null element.");
+      throw new Error("Cannot initialise HybridDropdown object with null element.");
     }
 		if(element.nodeName !== "SELECT") {
-      throw new Error("Attempting to convert element "+element.nodeName+" into HybridSelect object.");
+      throw new Error("Attempting to convert element "+element.nodeName+" into HybridDropdown object.");
     }
 
     let _ = this, lim=1;
     //if already instanciated, return existing object.
-    if(element._hselect) return element._hselect;
+    if(element._hybriddd) return element._hybriddd;
 
-    element._hselect = _; //expose object in its original DOM element.
+    element._hybriddd = _; //expose object in its original DOM element.
 
     _.el = element; //keep original element reference.
     if(_.el.multiple) lim=-1;
     _.el.style="font-size:16px";
-    _.el.classList.add('hybrid-select'); //flag the element as converted.
+    _.el.classList.add('hybriddd'); //flag the element as converted.
 
     // merge user setting with defaults
     _.opt = Object.assign(
@@ -54,12 +54,12 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       }, //default settings.
       settings //user settings.
     );
-    //initialise the hybrid-select.
+    //initialise the hybrid-dd.
     _.init(true);
     return _;
 	});
-  /* Prototyping some methods for HybridSelect object */
-  let hsProtype = HybridSelect.prototype;
+  /* Prototyping some methods for HybridDropdown object */
+  let hsProtype = HybridDropdown.prototype;
   //initialisation function.
   hsProtype.init = function(init){
     let _ = this;
@@ -70,26 +70,26 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       _.el.parentNode.insertBefore(c, _.el.nextSibling);
       c.appendChild(_.el);
       //construct the hybrid-select.
-      _.hselect = document.createElement('div');
-      _.el.parentNode.appendChild(_.hselect);
-      _.hselect.classList.add('hybrid-select-js')
-      _.hselect.setAttribute('aria-hidden', true);//hide from readers.
-      _.hselect.selected = document.createElement('div');
-      _.hselect.appendChild(_.hselect.selected);
-      _.hselect.selected.classList.add('hybrid-selected');
-      _.hselect.options = document.createElement('div');
-      _.hselect.appendChild(_.hselect.options);
-      _.hselect.options.classList.add('hybrid-options');
+      _.hdd = document.createElement('div');
+      _.el.parentNode.appendChild(_.hdd);
+      _.hdd.classList.add('hybriddd-js')
+      _.hdd.setAttribute('aria-hidden', true);//hide from readers.
+      _.hdd.selected = document.createElement('div');
+      _.hdd.appendChild(_.hdd.selected);
+      _.hdd.selected.classList.add('hybriddd-selected');
+      _.hdd.options = document.createElement('div');
+      _.hdd.appendChild(_.hdd.options);
+      _.hdd.options.classList.add('hybriddd-options');
       _.hindex = [-1]; //initial option hover index.
       _.sindex = []; //initial index of selected option.
       _.value = {}; //initial value.
     }
     //set style.
-    _.el.parentElement.classList.value='hybrid-select-container hybrid-select-'+_.opt.dropdown;
+    _.el.parentElement.classList.value='hybriddd-container hybriddd-'+_.opt.dropdown;
 
     //build list of options.
     let opts = _.extractOptions(_.el.children);
-    _.hselect.options.replaceChildren(...opts);
+    _.hdd.options.replaceChildren(...opts);
 
     if(init){
       //bind some events....
@@ -99,28 +99,28 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         focus: _.focus.bind(_)
       });
       let getOption = _.optionsSelected.bind(_);
-      _.event(_.hselect.options,'add',{
+      _.event(_.hdd.options,'add',{
         click: getOption,
         keydown: getOption
       });
       //listen for click and down arrow events.
       _.open = _.openSelect.bind(_);
-      _.event(_.hselect, 'add',{
+      _.event(_.hdd, 'add',{
         click: _.open
       });
       //create a close function.
       _.close = _.closeSelect.bind(_, true);
       //blur function
-      _.blur = _.blurHybridSelect.bind(_);
+      _.blur = _.blurField.bind(_);
       //navigate with keys.
       _.keyNav = _.keyboardNavigate.bind(_);
       //fire init event.
-      _.emit('hybrid-select-init');
+      _.emit('hybrid-dd-init');
       //refresh fn.
       _.refresh = _.refreshHybrid.bind(_);
     }
   }
-  //method to refresh an existing HybridSelect object.
+  //method to refresh an existing HybridDropdown object.
   hsProtype.refreshHybrid = function(settings={}){
     let _ = this;
     _.opt = Object.assign({}, _.opt, settings);
@@ -136,7 +136,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       switch(o.nodeName){
         case 'OPTGROUP':
           hso.innerHTML =_.opt.optionLabel(o.label);
-          hso.classList.add('hybrid-option-group');
+          hso.classList.add('hybriddd-group');
           opts[opts.length] = hso;
           // opts = opts.concat(_.extractOptions(o.children, opts));
           _.extractOptions(o.children, opts);
@@ -147,7 +147,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
           hso.dataset.hsoValue=o.value;
           hso.innerHTML =_.opt.optionLabel(o.text);
           hso.classList = o.classList;
-          hso.classList.add('hybrid-option');
+          hso.classList.add('hybriddd-option');
           if(o.selected===true || (i+idx)==0){
             if(i>0 && typeof _.value[''] != 'undefined'){
               opts[0].classList.remove('active');
@@ -161,11 +161,11 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
               _.sindex.push((i+idx));
               _.value[o.value] = hso.innerHTML;
             }
-            _.hselect.selected.innerHTML = _.opt.selectedLabel(_.value);
+            _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
             hso.classList.add('active');
           }
           if(''==o.value) defhso = hso;
-          //if(init)_.hselect.options.appendChild(hso);
+          //if(init)_.hdd.options.appendChild(hso);
           // else
           // opts.appendChild(hso);
           opts[opts.length] = hso;
@@ -197,12 +197,12 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         if(_.sindex.length>0) _.optionClass('active', _.sindex);
         _.sindex[0] = idx;
         _.value={};
-        _.hselect.options.children[idx].classList.add('active');
+        _.hdd.options.children[idx].classList.add('active');
         //update values.
-        _.el.value = _.hselect.options.children[idx].dataset.hsoValue;
-        _.value[_.el.value] = _.hselect.options.children[idx].innerHTML;
+        _.el.value = _.hdd.options.children[idx].dataset.hsoValue;
+        _.value[_.el.value] = _.hdd.options.children[idx].innerHTML;
         //update the selected label.
-        _.hselect.selected.innerHTML = _.opt.selectedLabel(_.value);
+        _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
         break;
       case -1: //unlimited
       default: //limit number of selections.
@@ -214,13 +214,13 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
         _.value = {};
         _.el.selectedIndex = -1;
         _.sindex.forEach(i=>{
-          let v = _.hselect.options.children[i].dataset.hsoValue;
-          _.hselect.options.children[i].classList.add('active');
-          _.value[v]=_.hselect.options.children[i].innerHTML;
+          let v = _.hdd.options.children[i].dataset.hsoValue;
+          _.hdd.options.children[i].classList.add('active');
+          _.value[v]=_.hdd.options.children[i].innerHTML;
           _.el.querySelector('option[value="'+v+'"]').selected=true;
         });
         //update the selected label.
-        _.hselect.selected.innerHTML = _.opt.selectedLabel(_.value);
+        _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
         break;
     }
     if(emit) _.emit('change');
@@ -235,8 +235,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       }
       if(skipUpdate) return;
     }else if(_.el.value in _.value) return; //not need to update.
-    let sel = _.hselect.options.querySelector(`.hybrid-option[data-hso-value="${_.el.value}"`);
-    sel = [..._.hselect.options.children].indexOf(sel); //index in hybrid.
+    let sel = _.hdd.options.querySelector(`.hybriddd-option[data-hso-value="${_.el.value}"`);
+    sel = [..._.hdd.options.children].indexOf(sel); //index in hybrid.
     _.updateSelection([sel], false);
   }
   //trigger events.
@@ -253,8 +253,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     let _ = this;
     if(_.el.disabled) return;
     _.el.blur();
-    _.hselect.focus({preventScroll:true});
-    _.hselect.classList.add('focus');
+    _.hdd.focus({preventScroll:true});
+    _.hdd.classList.add('focus');
     //cancel window scrolling on space bar.
     _.event(_window,'add',{
       keydown:_.keyNav
@@ -264,9 +264,9 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     })
   }
   //TODO: onblur, clean up window keydown event.
-  hsProtype.blurHybridSelect = function(){
+  hsProtype.blurField = function(){
     let _ = this;
-    _.hselect.classList.remove('focus');
+    _.hdd.classList.remove('focus');
     _.event(_window,'remove',{
       keydown:_.keyNav
     })
@@ -274,24 +274,24 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
   //find next hybrid-option index.
   hsProtype.nextHybridOption = function(cur){
     let _ = this, next = cur[cur.length-1]+1;
-    if(next < _.hselect.options.childElementCount && !_.hselect.options.children[next].classList.contains('hybrid-option')){
+    if(next < _.hdd.options.childElementCount && !_.hdd.options.children[next].classList.contains('hybriddd-option')){
       next++;
     }
-    if(next === _.hselect.options.childElementCount){ //end of list.
+    if(next === _.hdd.options.childElementCount){ //end of list.
       next=0;
-      if(!_.hselect.options.children[next].classList.contains('hybrid-option')) next++;
+      if(!_.hdd.options.children[next].classList.contains('hybriddd-option')) next++;
     }
     return next;
   }
   //find prev option.
   hsProtype.prevHybridOption = function(cur){
     let _ = this, prev = cur[0]-1;
-    if(prev > 0 && !_.hselect.options.children[prev].classList.contains('hybrid-option')){
+    if(prev > 0 && !_.hdd.options.children[prev].classList.contains('hybriddd-option')){
       prev--;
     }
     if(prev < 0){ //end of list.
-      prev =_.hselect.options.childElementCount-1;
-      if(!_.hselect.options.children[prev].classList.contains('hybrid-option')) prev--;
+      prev =_.hdd.options.childElementCount-1;
+      if(!_.hdd.options.children[prev].classList.contains('hybriddd-option')) prev--;
     }
     return prev;
   }
@@ -302,10 +302,10 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       e.preventDefault(); //stop page scroll.
       switch(e.keyCode){
         case 40: //down arrow.
-          if(_.hselect.classList.contains('active')){ //list is open, change hover option
+          if(_.hdd.classList.contains('active')){ //list is open, change hover option
             if(_.hindex[0]>=0 && !_.el.multiple && !e.shiftKey) _.optionClass('hover', _.hindex); //toggle class
             let idx = _.nextHybridOption(_.hindex);
-            _.hselect.options.children[idx].classList.add('hover');
+            _.hdd.options.children[idx].classList.add('hover');
             if(_.el.multiple && e.shiftKey){
               _.hindex.push(idx);
               if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
@@ -315,16 +315,16 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
               let idx = _.nextHybridOption(_.sindex);
               _.updateSelection([idx], true);
             }else{ //open the dropdown.
-              _.hselect.classList.remove('focus');
+              _.hdd.classList.remove('focus');
               _.open();
             }
           }
           break;
         case 38: //up arrow.
-          if(_.hselect.classList.contains('active')){ //list is open, change hover option
+          if(_.hdd.classList.contains('active')){ //list is open, change hover option
             if(_.hindex[0]>=0 && !_.el.multiple && !e.shiftKey) _.optionClass('hover', _.hindex);
             let idx = _.prevHybridOption(_.hindex);
-            _.hselect.options.children[idx].classList.add('hover');
+            _.hdd.options.children[idx].classList.add('hover');
             if(_.el.multiple && e.shiftKey){
               _.hindex.push(idx);
               if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
@@ -334,29 +334,29 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
               let idx = _.prevHybridOption(_.sindex);
               _.updateSelection([idx], true);
             }else{ //open the dropdown.
-              _.hselect.classList.remove('focus');
+              _.hdd.classList.remove('focus');
               _.open();
             }
           }
           break;
         case 13: //enter.
         case 32: //spacebar.
-          if(_.hselect.classList.contains('active') === false){//open the list.
-            _.hselect.classList.remove('focus');
+          if(_.hdd.classList.contains('active') === false){//open the list.
+            _.hdd.classList.remove('focus');
             _.open();
           }else{
             _.updateSelection(_.hindex, true);
             _.closeSelect(false);
-            _.hselect.classList.add('focus');
+            _.hdd.classList.add('focus');
           }
           break;
         case 27: //esc
-          if(_.hselect.classList.contains('active')) _.closeSelect(false); //close list if open
-          _.blurHybridSelect(); //blur.
+          if(_.hdd.classList.contains('active')) _.closeSelect(false); //close list if open
+          _.blurField(); //blur.
           break;
         case 9: //tab key, navigate to next field.
-          if(_.hselect.classList.contains('active')) _.closeSelect(false); //close list if open
-          _.blurHybridSelect(); //blur.
+          if(_.hdd.classList.contains('active')) _.closeSelect(false); //close list if open
+          _.blurField(); //blur.
 
           //check if field has tab index.
           let tidx = _.el.getAttribute('tabindex'),
@@ -399,9 +399,9 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
   //function to flag options being hovered.
   hsProtype.optionHover = function(){
     let _ = this, e = arguments[0];
-    if(e && e.target && e.target.classList.contains('hybrid-option')) {
+    if(e && e.target && e.target.classList.contains('hybriddd-option')) {
       if(_.hindex[0]>=0 && !e.shiftKey) _.optionClass('hover',_.hindex);
-      let idx = [..._.hselect.options.children].indexOf(e.target);
+      let idx = [..._.hdd.options.children].indexOf(e.target);
       if(_.el.multiple && e.shiftKey){
         if(_.hindex.includes(idx)){
           idx=_.hindex[(_.hindex.length-1)]; //toggle last inserted idx.
@@ -418,7 +418,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     let _ = this;
     if('string' == typeof cl && cl.length>0){
       idxs.forEach(i=>{
-        _.hselect.options.children[i].classList.toggle(cl);
+        _.hdd.options.children[i].classList.toggle(cl);
       })
     }
   }
@@ -427,18 +427,18 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     let _= this, e = arguments[0];
     if(_.el.disabled) return;
     if(e && e.target){ //triggered by event?
-      if(e.target.classList.contains('hybrid-selected')==false && e.target.closest('.hybrid-selected') === null){
+      if(e.target.classList.contains('hybriddd-selected')==false && e.target.closest('.hybriddd-selected') === null){
         return;  // bubbling selection
       }
       e.stopPropagation();
-      _.emit('hybrid-select-'+e.type); //notify other hselect fields that his one is being opened.
+      _.emit('hybrid-dd-'+e.type); //notify other hdd fields that his one is being opened.
     }
-    if(_.hselect.classList.contains('active')) {
+    if(_.hdd.classList.contains('active')) {
       _.closeSelect();
       return;
     }
-    _.hselect.classList.add('active');
-    _.event(_.hselect.options,'add',{
+    _.hdd.classList.add('active');
+    _.event(_.hdd.options,'add',{
       mouseenter: _.optionHover.bind(_)
     });
     //listen for external clicks to close.
@@ -449,9 +449,9 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
     _.event(_window,'add',{
       keydown:_.keyNav
     });
-    //close if another hselect field opens.
+    //close if another hdd field opens.
     _.event(document,'add',{
-      'hybrid-select-click':_.close
+      'hybrid-dd-click':_.close
     });
   }
   //close hybrid dropdown.
@@ -460,14 +460,14 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       e = arguments[0],
       e2 = arguments[1]; //click on document
     //if click to select cancel close.
-    if(e && e.target && e.target.classList.contains('hselect-option')) return;
+    if(e && e.target && e.target.classList.contains('hybriddd-option')) return;
 
     if(e2){
       if(e2.target.isSameNode(_.el)) return; //in case original element is clicked
       if(_.el.multiple && (e2.ctrlKey || e2.shiftKey)) return; //multiple select w/ ctrl|shift key
     }
 
-    _.hselect.classList.remove('active');
+    _.hdd.classList.remove('active');
     //reset the option hover index.
     if(_.hindex[0]>=0) _.optionClass('hover', _.hindex);
     _.hindex = [-1];
@@ -476,9 +476,9 @@ GitHub: https://github.com/aurovrata/hybrid-html-select
       click: _.close
     });
     _.event(document,'remove',{
-      'hybrid-select-click':_.close
+      'hybrid-dd-click':_.close
     });
     if(blur) _.blur(); //remove focus.
   }
-	return HybridSelect;
+	return HybridDropdown;
 })
