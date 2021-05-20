@@ -1,108 +1,98 @@
 /* Both native and custom selects must have the same width/height*/
 /* :root{font-size: 62.5%} */
-.hybriddd,
-.hybriddd-js {
+.hybrid-dropdown {
   position: relative;
   width: max-content;
+  min-width: 30px;
   height: 2.5em;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 1em;
+  background-color: #fff;
+  border: 1px solid #6f6f6f;
+  border-radius: 0.25em;
+	padding: 0 30px 0 18px;
+}
+.hybrid-dropdown.wide,.hybrid-dropdown.wide .hybriddd-options {
   min-width: 100%;
 }
-select:disabled + .hybriddd-js > .hybriddd-selected {
-	color: #939191;
-	border-color: #c6c6c6;
-	cursor: default;
+.hybriddd-options {
+	position: absolute;
+	width: max-content;
+	border: 1px solid #6f6f6f;
+	border-radius: 0.25em;
+	background-color: #fff;
+	/* box-shadow: 3px 3px 3px #bfbebe; */
+	padding: 0.5em;
+	list-style: none;
+	display: none;
+	z-index: 1;
+	margin: 0;
+	min-width: 100%;
+	left: 0;
+}
+.hybriddd-options ul {
+  list-style: none;
+  padding-left: 0.75em;
+}
+.hybriddd-group > span {
+	font-weight: bold;
+}
+.hybriddd-selected {
+	cursor: pointer;
 }
 /* Make sure the custom select does not mess with the layout*/
-.hybriddd-js {
-  position: absolute;
-  top: 0;
-  left: 0;
+.hybriddd-option input {
   display: none;
 }
 /* This media query detects devices where the primary
 input mechanism can hover over elements. (e.g. computers with a mouse) */
 @media (hover: hover) {
   /* // Since we are using a mouse, it's safe to show the custom select. */
-  .hybriddd-js {
-    display: block;
-  }
-  /*In a computer using keyboard? Then let's hide back the custom select
-  while the native one is focused: */
-  .hybriddd:focus + .hybriddd-js {
-    display: none;
-  }
 }
-/* Add the focus states too, They matter, always! */
-.hybriddd:focus,
-.hybriddd-js.active .hybriddd-selected,
-.hybriddd-js.focus .hybriddd-selected {
-	outline: none;
-	box-shadow: white 0 0 0 1px, #5e95ff 0 0 1px 2px;
-}
-/* hybrid select styling */
-.hybriddd-container {
-  position: relative;
-  display: inline-block;
-  font-size: 16px;
-  vertical-align: top;
+.hybrid-dropdown.active > .hybriddd-options{
+  display: block;
 }
 /*include any border styling in the box-sizing of our hybrid select.*/
-.hybriddd-container * {
+.hybrid-dropdown * {
 	box-sizing: border-box;
   cursor: default;
-}
-.hybriddd,
-.hybriddd-selected {
-  font-size: 1em;
-  background-color: #fff;
-  border: 1px solid #6f6f6f;
-  border-radius: 0.25em;
-}
-.hybriddd {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-  background-repeat: no-repeat;
-  background-position-x: 100%;
-  background-position-y: 0.5em;
-  padding: 0rem 0.8rem;
 }
 .hybriddd-selected {
   position: relative;
   width: max-content;
   height: 100%;
-  background-color: #fff;
   padding: 0.5em 0.5em;
   cursor: pointer;
   min-width: 100%;
 }
-.hybriddd-selected::after {
-  content: "▾";
-  position: absolute;
-  top: 0;
-  line-height: 2.375em;
-  right: 0.5em;
-  font-size: 0.9375em;
+
+.hybrid-dropdown::after {
+	border-bottom: 2px solid #90a1b5;
+	border-right: 2px solid #90a1b5;
+	content: '';
+	display: block;
+	height: 5px;
+	margin-top: -4px;
+	pointer-events: none;
+	position: absolute;
+	right: 12px;
+	top: 50%;
+	-webkit-transform-origin: 66% 66%;
+	-ms-transform-origin: 66% 66%;
+	transform-origin: 66% 66%;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+	-webkit-transition: all 0.15s ease-in-out;
+	transition: all 0.15s ease-in-out;
+	width: 5px;
 }
 .hybriddd-selected:hover {
   border-color: #8c00ff;
 }
 
-.hybriddd-js .hybriddd-options {
-  position: absolute;
-  top: calc(2.375em + 1px);
-  right: 0;
-  width: max-content;
-  border: 1px solid #6f6f6f;
-  border-radius: 0.25em;
-  background-color: #fff;
-  box-shadow: 0 0 4px #e9e1f8;
-  z-index: 1;
-  padding: 0.5em 0;
-  display: none;
-  background:#e3e3e3;
-  min-width: 100%;
-}
+
 /*
 for horizontal dropdown
 */
