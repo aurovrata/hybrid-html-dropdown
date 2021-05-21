@@ -24,7 +24,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       throw new Error("Attempting to convert element "+element.nodeName+" into HybridDropdown object.");
     }
 
-    let _ = this, lim=1, fname = element.name;
+    let _ = this, lim=1;
     //if already instanciated, return existing object.
     if(element._hybriddd) return element._hybriddd;
 
@@ -32,9 +32,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
 
     _.el = element; //keep original element reference.
     if(_.el.multiple) lim=-1;
-    _.el.style="font-size:16px";
-    _.el.classList.add('hybriddd'); //flag the element as converted.
-
+    _.el.style="width:1px;height:1px";
+    _.el.classList.add('hybridddised'); //flag the element as converted.
     // merge user setting with defaults
     _.opt = Object.assign(
       {}, //empty target.
@@ -50,11 +49,12 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           return s[k[0]]+ ((k.length>1)?'<span>[...]</span>':'');
         },
         defaultText:'---',
-        fieldName: fname,
+        fieldName: '',
         listOption: function(o){return true},
       }, //default settings.
       settings //user settings.
     );
+    _.multi = _.opt.limitSelection !=1; //flag multi select field.
     //initialise the hybrid-dd.
     _.init(true);
     return _;
@@ -75,7 +75,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       // _.hdd = document.createElement('div');
       // _.el.parentNode.appendChild(_.hdd);
       //hide original element.
-      _.el.style.display='none';
+      // _.el.style.display='none';
       _.hdd.classList.add('hybrid-dropdown')
       // _.hdd.setAttribute('aria-hidden', true);//hide from readers.
       _.hdd.selected = document.createElement('div');
@@ -85,6 +85,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       _.hdd.appendChild(_.hdd.ddlist);
       _.hdd.ddlist.classList.add('hybriddd-options');
       _.hdd.options = {};
+      _.hdd.style['margin-left']='-'+_.el.getBoundingClientRect()['width']+'px';
       _.hindex = []; //initial option hover index.
       _.sindex = []; //initial index of selected option.
       _.value = {}; //initial value.
@@ -102,7 +103,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       //listen for 'change' on the original select.
       _.event(_.el,'add',{
         change: _.updateFromOriginal.bind(_),
-        focus: _.focus.bind(_)
+        focus: _.originalElementFocus.bind(_)
       });
       let getOption = _.optionsSelected.bind(_);
       _.event(_.hdd.ddlist,'add',{
@@ -134,11 +135,11 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   }
   //method to initialise options.
   hsProtype.buildOptionList = function(list,p=0){
-    let _ = this,
+    let _ = this, defhso, //track the default option.
       opts=[],
-      t=(_.opt.limitSelection>1) ? 'checkbox':'radio',
+      t=(_.multi) ? 'checkbox':'radio',
+      fname = (_.opt.fieldName.length>0 ? ' name="'+_.opt.fieldName+'"':'');
 
-      defhso; //track the default option.
     [].forEach.call(list,(o,i) => {
       //TODO: check if o is optgrp, and loop over.
       if(_.opt.listOption(o,i) !== true) return;
@@ -162,7 +163,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           //preserve select options attributes.
           // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
           hso.innerHTML = '<label>'+o.text +
-            '<input type="'+t+'" value="'+o.value+'" name="'+_.opt.fieldName+'"/>'+
+            '<input class="hybridddin" type="'+t+'" value="'+o.value+'"'+fname+' />'+
             '</label>';
           hso.classList.value = 'hybriddd-option '+ o.classList.value + (o.value!=''?'hybriddd-'+o.value:'');
           _.hdd.options[o.value] = hso;
@@ -201,7 +202,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
         _.hdd.options[v].classList.add('active');
         //update values.
         _.el.value = v;
-        _.value[v] = _.hdd.options[v].querySelector('label').text;
+        _.value[v] = _.hdd.options[v].querySelector('label').innerText;
         //update the selected label.
         _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
         break;
@@ -216,7 +217,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
         _.el.selectedIndex = -1;
         _.sindex.forEach(v=>{
           _.hdd.options[v].classList.add('active');
-          _.value[v]=_.hdd.options[v].querySelector('label').text;
+          _.value[v]=_.hdd.options[v].querySelector('label').innerText;
           _.el.querySelector('option[value="'+v+'"]').selected=true;
         });
         //update the selected label.
@@ -228,7 +229,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   //update from original
   hsProtype.updateFromOriginal = function(){
     let _ = this, vs=[];
-    if(_.el.multiple){
+    if(_.multi){
       let skipUpdate = true;
       for(let i=0; i<_.el.selectedOptions.length; i++){
         if(!(_.el.selectedOptions.item(i).value in _.value) ){
@@ -252,7 +253,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     _.el.dispatchEvent(e)
   }
   //focus hybrid select when the original select is tabbed into.
-  hsProtype.focus = function(){
+  hsProtype.originalElementFocus = function(){
     let _ = this;
     if(_.el.disabled) return;
     _.el.blur();
@@ -276,30 +277,35 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   }
   //find next hybrid-option index.
   hsProtype.nextOption = function(cur){
-    let _ = this, next = cur[cur.length-1]+1;
-    if(next < _.hdd.options.length) next++;
-    if(next === _.hdd.options.length) next=0;//end of list.
-    return Object.keys(_.hdd.options).at(next);
+    let _ = this,
+      keys = Object.keys(_.hdd.options),
+      next = (cur.length>0?keys.indexOf(cur[cur.length-1]):-1);
+    if(next < keys.length) next++;
+    if(next === keys.length) next=0;//end of list.
+    return keys[next];
   }
   //find prev option.
   hsProtype.prevOption = function(cur){
-    let _ = this, prev = cur[0]-1;
-    if(prev > 0 ) prev--;
-    if(prev < 0) prev =_.hdd.options.length-1;//end of list.
-    return Object.keys(_.hdd.options).at(prev);
+    let _ = this,
+      keys = Object.keys(_.hdd.options),
+      prev = (cur.length>0?keys.indexOf(cur[0]):keys.length);
+    if(prev >= 0 ) prev--;
+    if(prev < 0) prev =keys.length-1;//end of list.
+    return keys[prev];
   }
   //key navigation.
   hsProtype.keyboardNavigate = function(){
     let _ = this, e = arguments[0], v;
+    if(_.el.disabled) return;
     if(e && e.keyCode){
       e.preventDefault(); //stop page scroll.
       switch(e.keyCode){
         case 40: //down arrow.
           if(_.hdd.classList.contains('active')){ //list is open, change hover option
-            if(_.hindex.length>0 && !_.el.multiple && !e.shiftKey) _.optionClass('hover', _.hindex); //toggle class
+            if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.optionClass('hover', _.hindex); //toggle class
              v = _.nextOption(_.hindex);
             _.hdd.options[v].classList.add('hover');
-            if(_.el.multiple && e.shiftKey){
+            if(_.multi && e.shiftKey){
               _.hindex.push(v);
               if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
             }else _.hindex[0] = v;
@@ -315,10 +321,10 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           break;
         case 38: //up arrow.
           if(_.hdd.classList.contains('active')){ //list is open, change hover option
-            if(_.hindex.length>0 && !_.el.multiple && !e.shiftKey) _.optionClass('hover', _.hindex);
+            if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.optionClass('hover', _.hindex);
             v = _.prevOption(_.hindex);
             _.hdd.options[v].classList.add('hover');
-            if(_.el.multiple && e.shiftKey){
+            if(_.multi && e.shiftKey){
               _.hindex.push(v);
               if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
             }else _.hindex[0] = v;
@@ -363,7 +369,9 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           }else{ //find current field sibling.
             for(tidx in _.el.form.elements){
               if(_.el.form.elements[tidx] === _.el){
-                tidx++;
+                do{
+                  tidx++
+                }while(tidx<_.el.form.elements.length && _.el.form.elements[tidx].classList.contains('hybridddin'));
                 if(_.el.form.elements.length==tidx) tidx=0;
                 next = _.el.form.elements[tidx];
                 break;
@@ -380,7 +388,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   //options selected.
   hsProtype.optionsSelected = function(){
     let _ = this, e = arguments[0];
-    if(e && e.target){
+    if(e && e.target && e.target.parentNode.classList.contains('hybriddd-option')){
       let sel = _.hindex;
       // if ctrl key, then get symmetrical difference between active and hover.
       if(e.ctrlKey) sel = _.sindex.filter(i=> !_.hindex.includes(i)).concat(_.hindex.filter(i=>!_.sindex.includes(i)));
@@ -393,9 +401,9 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   hsProtype.optionHover = function(){
     let _ = this, e = arguments[0], v;
     if(e && e.target && e.target.classList.contains('hybriddd-option')) {
-      if(_.hindex.length>0 && !e.shiftKey) _.optionClass('hover',_.hindex);
+      if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.optionClass('hover',_.hindex);
       v = e.target.querySelector('input').value;
-      if(_.el.multiple && e.shiftKey){
+      if(_.multi && e.shiftKey){
         if(_.hindex.includes(v)){
           v =_.hindex[(_.hindex.length-1)]; //toggle last inserted idx.
           _.hindex =_.hindex.slice(0,-1);
@@ -408,6 +416,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   }
   //toggle class on option.
   hsProtype.optionClass = function(cl, els=[]){
+    let _ = this;
     if('string' == typeof cl && cl.length>0){
       els.forEach(v=>{
         _.hdd.options[v].classList.toggle(cl);
@@ -419,7 +428,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     let _= this, e = arguments[0];
     if(_.el.disabled) return;
     if(e && e.target){ //triggered by event?
-      if(e.target.classList.contains('hybriddd-selected')==false && e.target.closest('.hybriddd-selected') === null){
+      if(e.target.classList.contains('hybriddd-options') || e.target.closest('.hybriddd-options')){
         return;  // bubbling selection
       }
       e.stopPropagation();
@@ -456,7 +465,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
 
     if(e2){
       if(e2.target.isSameNode(_.el)) return; //in case original element is clicked
-      if(_.el.multiple && (e2.ctrlKey || e2.shiftKey)) return; //multiple select w/ ctrl|shift key
+      if(_.multi && (e2.ctrlKey || e2.shiftKey)) return; //multiple select w/ ctrl|shift key
+      if(e2.target.parentNode.classList.contains('hybriddd-group')) return;
     }
 
     _.hdd.classList.remove('active');
