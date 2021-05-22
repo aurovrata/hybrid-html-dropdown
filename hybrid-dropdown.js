@@ -15,22 +15,30 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       : factory()
 })(function () { //hybrid-select factory.
 	let _window = typeof window !== 'undefined' ? window : this;
-	let HybridDropdown = (_window.HybridDropdown = function (element, settings) {
-    //verify we have an element.
-    if(typeof element === 'undefined'){
-      throw new Error("Cannot initialise HybridDropdown object with null element.");
-    }
-		if(element.nodeName !== "SELECT") {
-      throw new Error("Attempting to convert element "+element.nodeName+" into HybridDropdown object.");
+	let HybridDropdown = (_window.HybridDropdown = function (elm, settings) {
+    //verify we have an element and a source
+    if(!elm || !(elm instanceof Element)){
+      throw new Error("HybridDropdown requires a DOM element to intialise.");
     }
 
     let _ = this, lim=1;
+    _.isDS = false; //track source
+
+    switch(true){
+      case elm.nodeName === "SELECT": //select field source.
+        break;
+      case 'object' == typeof settings['dataSet'] && Object.getPrototypeOf(settings['dataSet'])===Object.prototype:
+        _.isDS = true;// dateset source.
+        break;
+      default:
+        throw new Error("HybridDropdown requires either a <select> element or a dataSet defined in its settings.");
+    }
     //if already instanciated, return existing object.
-    if(element._hybriddd) return element._hybriddd;
+    if(elm._hybriddd) return elm._hybriddd;
 
-    element._hybriddd = _; //expose object in its original DOM element.
+    elm._hybriddd = _; //expose object in its original DOM element.
 
-    _.el = element; //keep original element reference.
+    _.el = elm; //keep original element reference.
     if(_.el.multiple) lim=-1;
     _.el.style="width:1px;height:1px";
     _.el.classList.add('hybridddised'); //flag the element as converted.
@@ -50,11 +58,17 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
         },
         defaultText:'---',
         fieldName: '',
-        listOption: function(o){return true},
+        listOption: function(o,i){return true},
+        selectedValues:[],
       }, //default settings.
       settings //user settings.
     );
     _.multi = _.opt.limitSelection !=1; //flag multi select field.
+    //check if we have a field name.
+    if(_.isDS){
+      if(_.opt.fieldName.length==0) _.opt.fieldName = _.el.getAttribute('id'); //try to set it to id.
+      if(_.multi && _.opt.fieldName.length>0 && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
+    }
     //initialise the hybrid-dd.
     _.init(true);
     return _;
@@ -94,7 +108,10 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
 
     //build list of options.
-    let opts = _.buildOptionList(_.el.children);
+    let opts = null;
+    if(_.isDS) opts = Object.entries(_.opt.dataSet);
+    else opts = _.el.children;
+    opts = _.buildOptionList(opts);
     _.hdd.ddlist.replaceChildren(...opts);
 
 
@@ -135,7 +152,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   }
   //method to initialise options.
   hsProtype.buildOptionList = function(list,p=0){
-    let _ = this, defhso, //track the default option.
+    let _ = this,
       opts=[],
       t=(_.multi) ? 'checkbox':'radio',
       fname = (_.opt.fieldName.length>0 ? ' name="'+_.opt.fieldName+'"':'');
@@ -143,39 +160,66 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     [].forEach.call(list,(o,i) => {
       //TODO: check if o is optgrp, and loop over.
       if(_.opt.listOption(o,i) !== true) return;
-      let hso = document.createElement('li');
-      switch(o.nodeName){
-        case 'OPTGROUP':
-          hso.innerHTML ='<span>'+o.label+'</span>';
+
+      let hso = document.createElement('li'),
+       isGroup = false, isSelected = false, lbl, val, kids;
+      if(_.isDS){
+        lbl = o[0];
+        switch(true){
+          case typeof o[1] === 'object':
+            kids = Object.entries(o[1]);
+            isGroup = true;
+            break;
+          default:
+            val = o[0];
+            lbl = o[1];
+            isSelected = _.opt.selectedValues.indexOf(val) >=0;
+        }
+      }else{
+        switch(o.nodeName){
+          case 'OPTGROUP':
+            isGroup = true;
+            lbl = o.label;
+            kids = o.children;
+            break;
+          default:
+            lbl = o.text;
+            val = o.value;
+            isSelected = o.selected;
+        }
+      }
+      switch(isGroup){
+        case true:
+          hso.innerHTML ='<span>'+lbl+'</span>';
           hso.classList.add('hybriddd-group');
           // opts = opts.concat(_.extractOptions(o.children, opts));
-          let cos = _.buildOptionList(o.children, p++),
+          let cos = _.buildOptionList(kids, p++),
             ul = document.createElement('ul');
           ul.replaceChildren(...cos);
           hso.appendChild(ul);
           break;
         default:
-          if(o.selected===true){
-            _.value[o.value] = o.text;
+          if(isSelected){
+            _.value[val] = lbl;
             hso.classList.add('active');
           }
-          if(''==o.value) defhso = hso;
           //preserve select options attributes.
           // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
-          hso.innerHTML = '<label>'+o.text +
-            '<input class="hybridddin" type="'+t+'" value="'+o.value+'"'+fname+' />'+
+          hso.innerHTML = '<label>'+lbl +
+            '<input class="hybridddin" type="'+t+'" value="'+val+'"'+fname+' />'+
             '</label>';
-          hso.classList.value = 'hybriddd-option '+ o.classList.value + (o.value!=''?'hybriddd-'+o.value:'');
-          _.hdd.options[o.value] = hso;
+          hso.classList.value = 'hybriddd-option';
+          if(!_.isDS) hso.classList.value += o.classList.value; // + (o.value!=''?'hybriddd-'+o.value:'');
+          _.hdd.options[val] = hso;
           break;
       }
       opts[opts.length] = hso;
     });
     if(0==p){ //first level end.
-      if(0==_.value.length){
-        if(defhso){
-          _.value['']=defhso.querySelector('label').text;
-          defhso.classList.add('active');
+      if(0==Object.keys(_.value).length){
+        if(_.hdd.options['']){
+          _.value['']=_.hdd.options[''].querySelector('label').innerText;
+          _.hdd.options[''].classList.add('active');
         }else _.value[''] = _.opt.defaultText;
       }
       _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);

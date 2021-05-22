@@ -48,12 +48,19 @@
 	font-weight: bold;
 }
 /* Make sure the custom select does not mess with the layout*/
-.hybriddd-option,.hybriddd-group > span {
+.hybriddd-option{
+	padding: 0 1em;
+}
+.hybriddd-options ul .hybriddd-option {
+	padding: 0 2em;
+}
+.hybriddd-group > span{
 	padding: 0 0.5em;
 }
-.hybriddd-options ul li {
-  padding-left: 1.25em;
+.hybriddd-options ul .hybriddd-group > span {
+	padding: 0 1em;
 }
+
 .hybriddd-option input {
   display: none;
 }

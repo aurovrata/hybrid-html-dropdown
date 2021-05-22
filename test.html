@@ -52,8 +52,55 @@
               <option value="csp">Custard apple</option>
             </optgroup>
           </select>
-          <label for="phone-field">Contact number</label>
-          <input type="phone" id="phone-field" name="phone_field" />
+          <div id="hotel-field">
+            <script>
+            const cityHotels = {
+              '':'Choose a hotel',
+              'Paris': {
+                '5-star':{
+                  'lr' : 'Le Ritz',
+                  'rm': 'Le Royal Manceau'
+                },
+                '4-star':{
+                  'hb':'Hotel Brighton',
+                  'he':'Hotel Edmond'
+                },
+                '3-star':{
+                  'lp':'Le Presbytere',
+                  'll':'Les 3 Lions'
+                }
+              },
+              'London': {
+                '5-star':{
+                  'lml':'Le Meridien',
+                  'rz' : 'The Ritz'
+                },
+                '4-star':{
+                  'cr':'The Carlton Hotel',
+                  'rs':'The Royal Star'
+                },
+                '3-star':{
+                  'ts':'The 3 Star',
+                  'lc':'The Lancaster'
+                }
+              },
+              'Delhi': {
+                '5-star':{
+                  'lm':'Le Meridien',
+                  'tlp':'The Lila Palace',
+                },
+                '4-star':{
+                  'sh':'The Shangrila',
+                  'ph':'The Plaza Hotel'
+                },
+                '3-star':{
+                  'tr': 'The Raj',
+                  'f1':'Formula 1'
+                }
+              }
+            }
+            </script>
+          </div>
           <div style="height:36px"><a href="JavaScript:void(0);" class="button">submit</a></div>
         </form>
       </div>
@@ -70,11 +117,16 @@
            new HybridDropdown(s,{
              // dropdown: 'landscape'
            });
+         });
+         sel = document.querySelector('#hotel-field');
+         new HybridDropdown(sel,{
+           dataSet:cityHotels,
+           // fieldName:'hotels',
          })
        });
        document.querySelector('.button').addEventListener('click', (e)=>{
-         let fd = new FormData( e.target.closest('form') );
-         for(let f of fd.keys()) console.log(f+'='+fd.get(f));
+         let form = e.target.closest('form'), fd = new FormData( form );
+         for(let f of fd.keys()) console.log(f+'='+fd.getAll(f));
        })
        document.querySelector('#filter-field').addEventListener('change', (e)=>{
          let filterField = e.target, show=false;
