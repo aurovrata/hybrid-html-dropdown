@@ -101,6 +101,91 @@
             }
             </script>
           </div>
+          <div id="hotel-field2">
+            <script>
+            const cityHotels2 = {
+              '':'Choose a hotel',
+              'paris': {
+                'label':'Paris',
+                'children':{
+                  '5-star':{
+                    'label':'5 Stars',
+                    'children':{
+                      'lr' : 'Le Ritz',
+                      'rm': 'Le Royal Manceau'
+                    }
+                  },
+                  '4-star':{
+                    'label':'4 Stars',
+                    'children':{
+                      'hb':'Hotel Brighton',
+                      'he':'Hotel Edmond'
+                    }
+                  },
+                  '3-star':{
+                    'label':'3 Stars',
+                    'children':{
+                      'lp':'Le Presbytere',
+                      'll':'Les 3 Lions'
+                    }
+                  }
+                }
+              },
+              'london': {
+                'label':'London',
+                'children':{
+                  '5-star':{
+                    'label':'5 Stars',
+                    'children':{
+                      'lml':'Le Meridien',
+                      'rz' : 'The Ritz'
+                    }
+                  },
+                  '4-star':{
+                    'label':'4 Stars',
+                    'children':{
+                      'cr':'The Carlton Hotel',
+                      'rs':'The Royal Star'
+                    }
+                  },
+                  '3-star':{
+                    'label':'3 Stars',
+                    'children':{
+                      'ts':'The 3 Star',
+                      'lc':'The Lancaster'
+                    }
+                  }
+                }
+              },
+              'delhi': {
+                'label':'Delhi',
+                'children':{
+                  '5-star':{
+                    'label':'5 Stars',
+                    'children':{
+                      'lm':'Le Meridien',
+                      'tlp':'The Lila Palace',
+                    }
+                  },
+                  '4-star':{
+                    'label':'4 Stars',
+                    'children':{
+                      'sh':'The Shangrila',
+                      'ph':'The Plaza Hotel'
+                    }
+                  },
+                  '3-star':{
+                    'label':'3 Stars',
+                    'children':{
+                      'tr': 'The Raj',
+                      'f1':'Formula 1'
+                    }
+                  }
+                }
+              }
+            }
+            </script>
+          </div>
           <div style="height:36px"><a href="JavaScript:void(0);" class="button">submit</a></div>
         </form>
       </div>
@@ -121,6 +206,11 @@
          sel = document.querySelector('#hotel-field');
          new HybridDropdown(sel,{
            dataSet:cityHotels,
+           // fieldName:'hotels',
+         });
+         sel = document.querySelector('#hotel-field2');
+         new HybridDropdown(sel,{
+           dataSet:cityHotels2,
            // fieldName:'hotels',
          })
        });

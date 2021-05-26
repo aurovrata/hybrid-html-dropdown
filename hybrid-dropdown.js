@@ -26,6 +26,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
 
     switch(true){
       case elm.nodeName === "SELECT": //select field source.
+        if(elm.multiple) lim=-1;
+        elm.style="width:1px;height:1px"; //hide the origial select field.
         break;
       case 'object' == typeof settings['dataSet'] && Object.getPrototypeOf(settings['dataSet'])===Object.prototype:
         _.isDS = true;// dateset source.
@@ -35,12 +37,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     }
     //if already instanciated, return existing object.
     if(elm._hybriddd) return elm._hybriddd;
-
     elm._hybriddd = _; //expose object in its original DOM element.
-
     _.el = elm; //keep original element reference.
-    if(_.el.multiple) lim=-1;
-    _.el.style="width:1px;height:1px";
     _.el.classList.add('hybridddised'); //flag the element as converted.
     // merge user setting with defaults
     _.opt = Object.assign(
@@ -83,7 +81,11 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       //wrapper for select and hybrid select.
       // let c = document.createElement('div');
       _.hdd = document.createElement('div');
-      _.el.parentNode.insertBefore(_.hdd, _.el.nextSibling);
+      if(_.isDS) _.el.prepend(_.hdd);
+      else{
+        _.el.parentNode.insertBefore(_.hdd, _.el.nextSibling);
+        _.hdd.style['margin-left']='-'+_.el.getBoundingClientRect()['width']+'px';
+      }
       // c.appendChild(_.el);
       //construct the hybrid-select.
       // _.hdd = document.createElement('div');
@@ -99,17 +101,18 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       _.hdd.appendChild(_.hdd.ddlist);
       _.hdd.ddlist.classList.add('hybriddd-options');
       _.hdd.options = {};
-      _.hdd.style['margin-left']='-'+_.el.getBoundingClientRect()['width']+'px';
       _.hindex = []; //initial option hover index.
       _.sindex = []; //initial index of selected option.
       _.value = {}; //initial value.
     }
     //set style.
     _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
-
     //build list of options.
     let opts = null;
-    if(_.isDS) opts = Object.entries(_.opt.dataSet);
+    if(_.isDS){
+      _.hdd.classList.add('hybriddd-custom');
+      opts = Object.entries(_.opt.dataSet);
+    }
     else opts = _.el.children;
     opts = _.buildOptionList(opts);
     _.hdd.ddlist.replaceChildren(...opts);
@@ -162,15 +165,22 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       if(_.opt.listOption(o,i) !== true) return;
 
       let hso = document.createElement('li'),
-       isGroup = false, isSelected = false, lbl, val, kids;
+       isGroup = false, isSelected = false, hasChildren = false, lbl, val, kids=[], icl='';
       if(_.isDS){
         lbl = o[0];
+        val=null;
         switch(true){
           case typeof o[1] === 'object':
-            kids = Object.entries(o[1]);
-            isGroup = true;
+            hasChildren = isGroup = true;
+            if('undefined' != typeof o[1]['label'] && 'undefined' != typeof o[1]['children']){
+              val = o[0];
+              lbl = o[1]['label'];
+              kids = Object.entries(o[1]['children']);
+              isGroup = false;
+            }else kids = Object.entries(o[1]);
             break;
           default:
+            icl = 'hybridddis';
             val = o[0];
             lbl = o[1];
             isSelected = _.opt.selectedValues.indexOf(val) >=0;
@@ -178,11 +188,12 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       }else{
         switch(o.nodeName){
           case 'OPTGROUP':
-            isGroup = true;
+            hasChildren = isGroup = true;
             lbl = o.label;
             kids = o.children;
             break;
           default:
+            icl = 'hybridddin';
             lbl = o.text;
             val = o.value;
             isSelected = o.selected;
@@ -192,11 +203,6 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
         case true:
           hso.innerHTML ='<span>'+lbl+'</span>';
           hso.classList.add('hybriddd-group');
-          // opts = opts.concat(_.extractOptions(o.children, opts));
-          let cos = _.buildOptionList(kids, p++),
-            ul = document.createElement('ul');
-          ul.replaceChildren(...cos);
-          hso.appendChild(ul);
           break;
         default:
           if(isSelected){
@@ -206,12 +212,18 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           //preserve select options attributes.
           // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
           hso.innerHTML = '<label>'+lbl +
-            '<input class="hybridddin" type="'+t+'" value="'+val+'"'+fname+' />'+
+            '<input class="'+icl+'" type="'+t+'" value="'+val+'"'+fname+' />'+
             '</label>';
           hso.classList.value = 'hybriddd-option';
           if(!_.isDS) hso.classList.value += o.classList.value; // + (o.value!=''?'hybriddd-'+o.value:'');
           _.hdd.options[val] = hso;
           break;
+      }
+      if(hasChildren){
+        let cos = _.buildOptionList(kids, p++),
+          ul = document.createElement('ul');
+        ul.replaceChildren(...cos);
+        hso.appendChild(ul);
       }
       opts[opts.length] = hso;
     });
@@ -220,6 +232,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
         if(_.hdd.options['']){
           _.value['']=_.hdd.options[''].querySelector('label').innerText;
           _.hdd.options[''].classList.add('active');
+          _.sindex.push('');
         }else _.value[''] = _.opt.defaultText;
       }
       _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
@@ -253,7 +266,6 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       case -1: //unlimited
       default: //limit number of selections.
         _.optionClass('active',_.sindex); //toggle active class.
-
         if(_.opt.limitSelection < 0) _.sindex=idxs;
         else _.sindex=idxs.slice(0,_.opt.limitSelection);
         //update values.
@@ -403,28 +415,47 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
 
           //check if field has tab index.
           let tidx = _.el.getAttribute('tabindex'),
-            form = _.el.form,
-            next ;
+            form = _.el.closest('form'),
+            next, cur;
 
           if(form === null) form = document;
           if(tidx != null && tidx != ''){
             tidx +=1;
-            next = form.querySelector(':input[tabindex='+tidx+']');
-          }else{ //find current field sibling.
-            for(tidx in _.el.form.elements){
-              if(_.el.form.elements[tidx] === _.el){
-                do{
-                  tidx++
-                }while(tidx<_.el.form.elements.length && _.el.form.elements[tidx].classList.contains('hybridddin'));
-                if(_.el.form.elements.length==tidx) tidx=0;
-                next = _.el.form.elements[tidx];
-                break;
+            next = form.querySelector('[tabindex="'+tidx+'"]');
+          }else if(form !== document){ //find current field sibling.
+            cur = _.el;
+            if(_.isDS){
+              cur = Object.keys(_.hdd.options);
+              tidx = cur[cur.length-1]; //last key.
+              cur = _.hdd.options[tidx].querySelector('input');
+            }
+            for(tidx in form.elements){
+              if(form.elements[tidx] !== cur) continue; //move to next element.
+
+              do{
+                tidx++
+              }while(tidx<form.elements.length && form.elements[tidx].classList.contains('hybridddin'));
+              if(form.elements.length==tidx) tidx=0;
+              if(form.elements[tidx].classList.contains('hybridddis')){
+                next = form.elements[tidx].closest('.hybriddd-custom');
+              }else{
+                next = form.elements[tidx];
               }
+              break;
             }
           }
           if(null!=next){
-            next.focus();
-            if(next.type === 'text') next.select();
+            switch(true){
+              case next.classList.contains('hybriddd-custom'):
+                next.parentElement._hybriddd.originalElementFocus();
+                break;
+              case next.type === 'text':
+                next.select();
+                break;
+              default:
+                next.focus();
+                break;
+            }
           }
       }
     }
