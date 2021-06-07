@@ -27,18 +27,19 @@
 }
 .hybriddd-options {
 	position: absolute;
-	width: max-content;
+	min-width: max-content;
 	border: 1px solid #6f6f6f;
 	border-radius: 0.25em;
 	background-color: #fff;
-	/* box-shadow: 3px 3px 3px #bfbebe; */
-	padding:0;
+	padding: 0;
 	list-style: none;
 	display: none;
 	z-index: 1;
 	margin: 0;
-	min-width: 100%;
 	left: -1px;
+	max-height: 43vh;
+	overflow-y: auto;
+	scrollbar-width: thin;
 }
 .hybriddd-options ul{
   list-style: none;
@@ -48,11 +49,23 @@
 	font-weight: bold;
 }
 /* Make sure the custom select does not mess with the layout*/
-.hybriddd-option{
+.hybriddd-l0{
 	padding: 0 1em;
 }
-.hybriddd-options ul .hybriddd-option {
-	padding: 0 2em;
+.hybriddd-l1{
+	padding: 0 1em 0 2em;
+}
+.hybriddd-l2{
+	padding: 0 1em 0 3em;
+}
+.hybriddd-l3{
+	padding: 0 1em 0 4em;
+}
+.hybriddd-l4{
+	padding: 0 1em 0 5em;
+}
+.hybriddd-l5{
+	padding: 0 1em 0 6em;
 }
 .hybriddd-group > span{
 	padding: 0 0.5em;
@@ -60,9 +73,40 @@
 .hybriddd-options ul .hybriddd-group > span {
 	padding: 0 1em;
 }
-
-.hybriddd-option input {
-  display: none;
+.hybriddd-option > label > input {
+	opacity: 0;
+	margin-left: -15px;
+	width: 0;
+}
+.hybriddd-option > label {display:block}
+.hybriddd-option > label > span::before {
+	content: ' '; /* '\2610'; */
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	border: solid 1px;
+	vertical-align: text-top;
+	text-align: center;
+	line-height: 17px;
+	margin-right: 3px;
+}
+.hybriddd-option > label > input[type="radio"]+span::before {
+	border-radius: 50%; /* content: '\25EF';*/
+	height: 13px;
+	width: 13px;
+}
+.hybriddd-option > label > input:checked + span::before,
+.hybriddd-option > .partial > span::before {
+	content: '\2716'; /* '\2612'; */
+}
+.hybriddd-option > label > input[type="radio"]:checked + span::before{
+	content:'\2022';
+	font-size: 32px;
+	line-height: 13px;
+	vertical-align: sub;
+}
+.hybriddd-option > .partial > span::before {
+	color: #b9b9b9;
 }
 /* This media query detects devices where the primary
 input mechanism can hover over elements. (e.g. computers with a mouse) */
@@ -129,8 +173,8 @@ for horizontal dropdown
 .hybriddd-landscape .hybriddd-options .hybriddd-option.active::before {
 	content: '';
 }
-.hybriddd-landscape .hybriddd-options .hybriddd-option{padding: 0.5em}
-.hybriddd-landscape .hybriddd-options .hybriddd-option.active {
+.hybriddd-landscape .hybriddd-options .hybriddd-option > label{padding: 0.5em}
+.hybriddd-landscape .hybriddd-options .hybriddd-option.active > label {
 	text-decoration: underline;
 }
 /* show dropdown on active select */
@@ -146,7 +190,8 @@ for horizontal dropdown
   border-bottom: 1px solid #d3d3d3;
   border-top: 1px solid #aaa;
 } */
-.hybriddd-option.hover {
+.hybriddd-option.hover > label,
+.hybriddd-option > label:hover {
   background-color: #eaeaea;
 }
 
