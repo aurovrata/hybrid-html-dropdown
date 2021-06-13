@@ -523,6 +523,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       return;
     }
     _.hdd.classList.add('active');
+    //adjust width of dropdown.
+    if(0==_.hdd.ddlist.style.width.length) _.hdd.ddlist.style.width=(_.hdd.ddlist.offsetWidth + 10)+"px";
     if(_.multi){
       _.event(_.hdd.ddlist,'add',{
         mouseenter: _.optionHover.bind(_)

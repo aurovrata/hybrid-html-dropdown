@@ -195,14 +195,14 @@ for horizontal dropdown
   background-color: #eaeaea;
 }
 
-.hybriddd-option:not(:last-of-type)::after {
+/* .hybriddd-option:not(:last-of-type)::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   border-bottom: 1px solid #d3d3d3;
-}
+} */
 
 .hybriddd-option.active::before {
   content: "✓";
