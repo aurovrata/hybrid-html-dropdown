@@ -85,10 +85,11 @@
 	height: 15px;
 	display: inline-block;
 	border: solid 1px;
-	vertical-align: text-top;
+	vertical-align: middle;
 	text-align: center;
 	line-height: 17px;
-	margin-right: 3px;
+  margin-right: 3px;
+	margin-bottom: 2px;
 }
 .hybriddd-option > label > input[type="radio"]+span::before {
 	border-radius: 50%; /* content: '\25EF';*/
@@ -103,7 +104,6 @@
 	content:'\2022';
 	font-size: 32px;
 	line-height: 13px;
-	vertical-align: sub;
 }
 .hybriddd-option > .partial > span::before {
 	color: #b9b9b9;
