@@ -16,9 +16,9 @@
       <div class="test-form">
         <form>
           <label for="name-field">Filter</label>
-          <input type="text" id="filter-field" name="filter_field" />
+          <input type="text" id="filter-field" name="filter_field" tabindex="1"/>
           <label class="select-label" for="single"> Grocery selection</label>
-          <select id="single" class="select-native js-select-native" name="select_field" aria-labelledby="jobLabel">
+          <select id="single" tabindex="2" class="select-native js-select-native" name="select_field" aria-labelledby="jobLabel">
             <option value="" disabled="" selected=""> Select single</span>
             <optgroup label="Vegetables">
               <option value="fbn">French beans</option>
@@ -52,7 +52,7 @@
               <option value="csp">Custard apple</option>
             </optgroup>
           </select>
-          <div id="hotel-field">
+          <div id="hotel-field" tabindex="-1">
             <script>
             const cityHotels = {
               '':'Choose a hotel',
