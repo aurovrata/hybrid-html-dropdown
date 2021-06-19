@@ -261,47 +261,6 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       else eventHandler(k, args[k])
     })
   }
-  //method to update the hybrid select value.
-  hsProtype.updateSelection = function(idxs, emit){
-    let _ = this,
-      v = idxs[0];
-    switch(_.opt.limitSelection){
-      case 1: //default
-        _.sindex.forEach(v=>{
-          _.hdd.options[v].querySelector('input').checked=false;
-        });
-        _.sindex[0] = v;
-        _.value={};
-        _.hdd.options[v].querySelector('input').checked=true;
-        //update values.
-        if(!_.isDS) _.el.value = v;
-        _.value[v] = _.hdd.options[v].querySelector('label').innerText;
-        //update the selected label.
-        _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
-        break;
-      case -1: //unlimited
-      default: //limit number of selections.
-        _.sindex.forEach(v=>{
-          _.hdd.options[v].querySelector('input').checked=false;
-        });
-        if(_.opt.limitSelection < 0) _.sindex=idxs;
-        else _.sindex=idxs.slice(0,_.opt.limitSelection);
-        //update values.
-        _.value = {};
-        _.sindex.forEach(v=>{
-          _.value[v]=_.hdd.options[v].querySelector('label').innerText;
-          _.hdd.options[v].querySelector('input').checked=true;
-          if(!_.isDS){
-            _.el.selectedIndex = -1;
-            _.el.querySelector('option[value="'+v+'"]').selected=true;
-          }
-        });
-        //update the selected label.
-        _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
-        break;
-    }
-    if(emit) _.emit('change');
-  }
   //update from original
   hsProtype.updateFromOriginal = function(){
     let _ = this, vs=[];
@@ -318,7 +277,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     }else if(_.el.value in _.value) return; //not need to update.
     else vs.push(_.el.value);
 
-    _.updateSelection(vs, false);
+    _.addValue(vs, false);
   }
   //trigger events.
   hsProtype.emit = function (name, arg) {
@@ -389,7 +348,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           }else{ //change select value
             if(1==_.opt.limitSelection){ //select the next value.
               v = _.nextOption(_.sindex);
-              _.updateSelection([v], true);
+              _.toggleValue([v], true);
             }else{ //open the dropdown.
               _.hdd.classList.remove('focus');
               _.open();
@@ -408,7 +367,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           }else{ //change select value
             if(1==_.opt.limitSelection){ //select the next value.
               let v = _.prevOption(_.sindex);
-              _.updateSelection([v], true);
+              _.toggleValue([v], true);
             }else{ //open the dropdown.
               _.hdd.classList.remove('focus');
               _.open();
@@ -421,7 +380,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
             _.hdd.classList.remove('focus');
             _.open();
           }else{
-            _.updateSelection(_.hindex, true);
+            if(_.hindex.length>0) _.toggleValue(_.hindex, true);
             _.closeSelect(false);
             _.hdd.classList.add('focus');
           }
@@ -508,8 +467,15 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       _.closeSelect(false);
     }
   }
+  //toggle values that are hoghlighted.
+  hsProtype.toggleValue = function(varr, emit){
+    let _ = this;
+    //for now simply add/remove based on first value.
+    if(_.hdd.options[varr[0]].querySelector('input').checked) _.removeValue(varr, emit);
+    else _.addValue(varr, emit);
+  }
   //add value.
-  hsProtype.addValue = function(varr){
+  hsProtype.addValue = function(varr, emit=false){
     let _ = this;
     switch(_.opt.limitSelection){
       case 1:
@@ -531,11 +497,13 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       _.hdd.options[v].querySelector('input').checked=true;
       _.hdd.options[v].classList.add('active');
     });
+    if(!_.isDS) _.updateOriginal();
     //update selected value label.
     _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
+    if(emit) _.emit('change');
   }
   //remove value.
-  hsProtype.removeValue = function(varr){
+  hsProtype.removeValue = function(varr, emit=false){
     let _ = this,idx;
     varr.forEach(v=>{
       _.hdd.options[v].classList.remove('active');
@@ -553,42 +521,17 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
         _.hdd.options[''].querySelector('input').checked=true;
       }else _.value={'': _.opt.defaultText};
     }
+    if(!_.isDS) _.updateOriginal();
     _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
+    if(emit) _.emit('change');
   }
-  //options selected.
-  hsProtype.optionsSelected = function(){
-    let _ = this, e = arguments[0], sel,o;
-    if(('click'==e.type) || 13==e.keyCode || 32==e.keyCode){ //enter or spacebar
-      switch(true){
-        case e.target.classList.contains('hybridddl'):
-        case 'LABEL' == e.target.nodeName:
-          o = e.target.closest('.hybriddd-option');
-          break;
-        default:
-          break;
-      }
-      if(o){
-        sel = [o.querySelector('input').value];
-        if(_.multi){ //need to track hindex.
-          switch(true){
-            case (e.shiftKey && !e.ctrlKey): //hindex trackec by optionHover().
-              sel = _.hindex;
-              break;
-            case (e.ctrlKey && !e.shiftKey): //add curent target to existing sindex.
-              sel = [...new Set([..._.sindex,...sel])]; //merge unique.
-              break;
-            case (e.ctrlKey && e.shiftKey): //get intersect between hover and selection.
-              //get symmetrical difference between active and hover.
-              sel = _.sindex.filter(i=> !_.hindex.includes(i)).concat(_.hindex.filter(i=>!_.sindex.includes(i)));
-              break;
-          }
-        }
-        //update selection.
-        _.updateSelection(sel, true);
-        //close the dropdown
-        // if(!e.ctrlKey && !e.shiftKey) _.closeSelect(e.type==='click');
-      }
-    }
+  //method to update the hybrid select value.
+  hsProtype.updateOriginal = function(){
+    let _ = this;
+    Object.keys(_.value).forEach(v=>{
+      _.el.selectedIndex = -1;
+      _.el.querySelector('option[value="'+v+'"]').selected=true;
+    });
   }
   //function to flag options being hovered.
   hsProtype.optionHover = function(){

@@ -35,7 +35,7 @@
               <option value="csp">Custard apple</option>
             </optgroup>
           </select>
-          <select class="select-native" name="select_multiple[]" multiple aria-labelledby="jobLabel">
+          <select class="select-native" tabindex="3" name="select_multiple[]" multiple aria-labelledby="jobLabel">
             <option value="" disabled="" selected=""> Select multiple</span>
             <optgroup label="Vegetables">
               <option value="fbn">French beans</option>
@@ -52,7 +52,7 @@
               <option value="csp">Custard apple</option>
             </optgroup>
           </select>
-          <div id="hotel-field" tabindex="-1">
+          <div id="hotel-field" tabindex="4">
             <script>
             const cityHotels = {
               '':'Choose a hotel',
@@ -101,7 +101,7 @@
             }
             </script>
           </div>
-          <div id="hotel-field2">
+          <div id="hotel-field2" tabindex="5">
             <script>
             const cityHotels2 = {
               '':'Choose a hotel',
@@ -182,12 +182,13 @@
          sel = document.querySelector('#hotel-field');
          new HybridDropdown(sel,{
            dataSet:cityHotels,
-           // fieldName:'hotels',
+           fieldName:'hotels',
          });
          sel = document.querySelector('#hotel-field2');
          new HybridDropdown(sel,{
            dataSet:cityHotels2,
-           // fieldName:'hotels',
+           fieldName:'hotels2',
+           multiple:true,
          })
        });
        document.querySelector('.button').addEventListener('click', (e)=>{
