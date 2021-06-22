@@ -31,6 +31,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
         break;
       case 'object' == typeof settings['dataSet'] && Object.getPrototypeOf(settings['dataSet'])===Object.prototype:
         _.isDS = true;// dateset source.
+        elm.classList.add('hybriddd-custom'); //flag the element as custom.
         break;
       default:
         throw new Error("HybridDropdown requires either a <select> element or a dataSet defined in its settings.");
@@ -82,13 +83,15 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     let _ = this;
 
     if(init) {
-      //wrapper for select and hybrid select.
-      // let c = document.createElement('div');
-      _.hdd = document.createElement('div');
-      if(_.isDS) _.el.prepend(_.hdd);
-      else{
+      _.hdd = null; //dropdown container.
+      if(_.isDS){
+        _.hdd=_.el;
+        if(!_.el.hasAttribute('tabindex')) _.hdd.setAttribute('tabindex',_.opt.tabIndex);
+      }else{
+        _.hdd = document.createElement('div');
         _.el.parentNode.insertBefore(_.hdd, _.el.nextSibling);
         _.hdd.style['margin-left']='-'+_.el.getBoundingClientRect()['width']+'px';
+        _.hdd.setAttribute('tabindex',_.opt.tabIndex);
       }
       // c.appendChild(_.el);
       //construct the hybrid-select.
@@ -96,7 +99,6 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
       // _.el.parentNode.appendChild(_.hdd);
       //hide original element.
       // _.el.style.display='none';
-      _.hdd.setAttribute('tabindex',_.opt.tabIndex);
       _.hdd.classList.add('hybrid-dropdown')
       // _.hdd.setAttribute('aria-hidden', true);//hide from readers.
       _.hdd.selected = document.createElement('div');
@@ -291,8 +293,10 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   //focus hybrid select when the original select is tabbed into.
   hsProtype.originalElementFocus = function(){
     let _ = this;
-    if(_.el.disabled) return;
+    if(!_.isDS){
+      if(_.el.disabled) return;
     _.el.blur();
+    }
     _.hdd.focus({preventScroll:true});
     _.hdd.classList.add('focus');
     //cancel window scrolling on space bar.
@@ -331,7 +335,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
   }
   //key navigation.
   hsProtype.keyboardNavigate = function(){
-    let _ = this, e = arguments[0], v;
+    let _ = this, e = arguments[0], v, bdl,bdi;
     if(_.el.disabled) return;
     if(e && e.keyCode){
       e.preventDefault(); //stop page scroll.
@@ -341,6 +345,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
             if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.optionClass('hover', _.hindex); //toggle class
              v = _.nextOption(_.hindex);
             _.hdd.options[v].classList.add('hover');
+            _.scroll(v, 'down');
             if(_.multi && e.shiftKey){
               _.hindex.push(v);
               if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
@@ -360,6 +365,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
             if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.optionClass('hover', _.hindex);
             v = _.prevOption(_.hindex);
             _.hdd.options[v].classList.add('hover');
+            _.scroll(v,'up');
             if(_.multi && e.shiftKey){
               _.hindex.push(v);
               if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(-1*_.opt.limitSelection);
@@ -394,7 +400,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           _.blurField(); //blur.
 
           //check if field has tab index.
-          let tidx = _.el.getAttribute('tabindex'),
+          let tidx = _.el.getAttribute('tabindex')*1.0,
             form = _.el.closest('form'),
             next, cur;
 
@@ -427,7 +433,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           if(null!=next){
             switch(true){
               case next.classList.contains('hybriddd-custom'):
-                next.parentElement._hybriddd.originalElementFocus();
+                next._hybriddd.originalElementFocus();
                 break;
               case next.type === 'text':
                 next.select();
@@ -437,6 +443,10 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
                 break;
             }
           }
+          // else if('FORM' == form.nodeName){ //atempt to get a submit button.
+          //   let ls = form.querySelectorAll('a');
+          //   if(ls.length>0) ls.item(ls.length-1).focus();
+          // }
           break;
         case 16: //shift.
           if(_.multi && _.hdd.classList.contains('active')){
@@ -452,6 +462,24 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
               _.listenForBulk = true;
             }
           }
+          break;
+      }
+    }
+  }
+  //scroll items into view.
+  hsProtype.scroll = function(v,dir='up'){
+    let _ = this, i = _.hdd.options[v].querySelector('label'),
+    bdi = i.getBoundingClientRect(),
+    bdl = _.hdd.ddlist.getBoundingClientRect();
+    if(bdi.top < bdl.top || bdi.bottom > bdl.bottom){
+      switch(dir){
+        case 'up':
+          if(bdl.top > bdi.top) _.hdd.ddlist.scrollTop -= bdi.height;
+          else if(bdl.bottom < bdi.bottom) _.hdd.ddlist.scrollTop=bdi.bottom - bdl.bottom;
+          break;
+        case 'down':
+          if(bdl.bottom < bdi.bottom) _.hdd.ddlist.scrollTop += bdi.height;
+          else if(bdl.top > bdi.top) _.hdd.ddlist.scrollTop=0;
           break;
       }
     }

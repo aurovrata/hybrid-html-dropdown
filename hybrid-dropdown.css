@@ -151,11 +151,24 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 	transition: all 0.15s ease-in-out;
 	width: 5px;
 }
-/* .hybriddd-selected:hover {
-  border-color: #8c00ff;
+
+.hybriddd-option.hover > label,
+.hybriddd-option > label:hover {
+  background-color: #eaeaea;
+}
+.hybriddd-option.active > label {
+	background: #0466ff;
+	color: white;
+}
+.hybriddd-option.active > label:hover {
+	color: inherit;
+}
+/* .hybriddd-option.active::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  margin-left: 3px;
 } */
-
-
 /*
 for horizontal dropdown
 */
@@ -163,50 +176,13 @@ for horizontal dropdown
 	display: inline-block;
 	float: left;
 }
-/* opposite for rtl */
 .hybriddd-landscape .hybriddd-options > div:dir(rtl) {float: right}
 .hybriddd-landscape .hybriddd-options .hybriddd-group {
 	clear: both;
 	border-top: none;
 	padding: 0.5em 0.4em;
 }
-.hybriddd-landscape .hybriddd-options .hybriddd-option.active::before {
-	content: '';
-}
-.hybriddd-landscape .hybriddd-options .hybriddd-option > label{padding: 0.5em}
-.hybriddd-landscape .hybriddd-options .hybriddd-option.active > label {
+.hybriddd-landscape .hybriddd-option > label{padding: 0.5em}
+.hybriddd-landscape .hybriddd-option.active > label {
 	text-decoration: underline;
-}
-/* show dropdown on active select */
-/* .hybriddd-js.active .hybriddd-options {display: block}
-.hybriddd-js .hybriddd-option {
-  position: relative;
-  padding: 0.5em;
-  padding-left: 1.5625em;
-}
-.hybriddd-js .hybriddd-group {
-	padding: 0.2em 0.4em;
-	font-weight: bold;
-  border-bottom: 1px solid #d3d3d3;
-  border-top: 1px solid #aaa;
-} */
-.hybriddd-option.hover > label,
-.hybriddd-option > label:hover {
-  background-color: #eaeaea;
-}
-
-/* .hybriddd-option:not(:last-of-type)::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  border-bottom: 1px solid #d3d3d3;
-} */
-
-.hybriddd-option.active::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  margin-left: 3px;
 }
