@@ -81,30 +81,28 @@
 .hybriddd-option > label {display:block}
 .hybriddd-option > label > span::before {
 	content: ' '; /* '\2610'; */
-	width: 15px;
-	height: 15px;
+	width: 10px;
+	height: 10px;
 	display: inline-block;
 	border: solid 1px;
 	vertical-align: middle;
 	text-align: center;
 	line-height: 17px;
   margin-right: 3px;
-	margin-bottom: 2px;
+	margin-bottom: 3px;
+	padding: 3px;
 }
 .hybriddd-option > label > input[type="radio"]+span::before {
 	border-radius: 50%; /* content: '\25EF';*/
-	height: 13px;
-	width: 13px;
 }
-.hybriddd-option > label > input:checked + span::before,
-.hybriddd-option > .partial > span::before {
-	content: '\2716'; /* '\2612'; */
+.hybriddd-option > label > input:checked + span::before, .hybriddd-option > .partial > span::before {
+	border: solid 3px;
+	padding: 1px;
 }
-.hybriddd-option > label > input[type="radio"]:checked + span::before{
-	content:'\2022';
-	font-size: 32px;
-	line-height: 13px;
-}
+/* .hybriddd-option > label > input[type="radio"]:checked + span::before {
+	border: solid 3px;
+	padding: 1px;
+} */
 .hybriddd-option > .partial > span::before {
 	color: #b9b9b9;
 }
@@ -154,9 +152,9 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 
 .hybriddd-option.hover > label,
 .hybriddd-option > label:hover {
-  background-color: #eaeaea;
+  background: #eaeaea;
 }
-.hybriddd-option.active > label {
+.hybriddd-option.active > label, .hybriddd-option > label > input:checked + span::before {
 	background: #0466ff;
 	color: white;
 }

@@ -230,7 +230,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
             '<input tabindex="-1" class="'+ icl+'" type="'+ t+'" value="'+ val+ '"'+ fname+ checked+ ' />'+
             '<span class="hybridddl">'+ lbl +'</span>' +
             '</label>';
-          hso.classList.value = 'hybriddd-option';
+          hso.classList.value = 'hybriddd-option' + (isSelected ? ' active':'');
           if(!_.isDS) hso.classList.value += o.classList.value; // + (o.value!=''?'hybriddd-'+o.value:'');
           _.hdd.options[val] = hso;
           break;
@@ -246,6 +246,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     if(0==p){ //first level end.
       if(0==Object.keys(_.value).length){
         if(_.hdd.options['']){
+          _.hdd.options[''].classList.add('active');
           _.value['']=_.hdd.options[''].querySelector('label').innerText;
           _.hdd.options[''].querySelector('input').checked=true;
           _.sindex.push('');
