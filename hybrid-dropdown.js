@@ -4,6 +4,30 @@ Version: 2.0
 Authors: Sandrina Pereira & Aurovrata Venet
 Twitter: @a_sandrina_p / @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
+
+Method list:
+hsProtype.init - initialise object.
+hsProtype.refreshHybrid - enable object refresh once initialised, used to filter options.
+hsProtype.buildOptionList - build th elist of optons to populate the dropdown.
+hsProtype.event - add event listeners.
+hsProtype.updateFromOriginal - update hybrid selected values from original SELECT element.
+hsProtype.emit - emit events to notify of changes.
+hsProtype.originalElementFocus - transfer focus to hybraid when original SELECT element receive focus.
+hsProtype.blurField - change hybrid status when focus is lost.
+hsProtype.nextOption - retrieve next option in dropdown list for key navigation.
+hsProtype.prevOption - retrieve prev option in dropdown list for key navigation.
+hsProtype.keyboardNavigate - handle keyboard navigation.
+hsProtype.scroll - scroll long dropdown lists.
+hsProtype.inputChange - handle change in option input field.
+hsProtype.toggleValue - toggle values for multiple highlighted options.
+hsProtype.addValue - add selected values to the hybrid value tracker.
+hsProtype.removeValue - remove selected values to the hybrid value tracker.
+hsProtype.updateOriginal - update the original SELECT element.
+hsProtype.optionHover - flag optoins being hovered in multiple selection fields.
+hsProtype.optionClass - toggle classes on elements.
+hsProtype.openSelect - open dropdown list.
+hsProtype.closeSelect - close dropdown list.
+
 */
 
 // global module creation
@@ -22,19 +46,25 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     }
 
     let _ = this, lim=1, tabIdx = elm.getAttribute('tabindex');
-    _.isDS = false; //track source
+    _.isDS = false, cnfg={}; //track source
 
     switch(true){
       case elm.nodeName === "SELECT": //select field source.
         if(elm.multiple) lim=-1;
         elm.style="width:1px;height:1px"; //hide the origial select field.
         break;
-      case 'object' == typeof settings['dataSet'] && Object.getPrototypeOf(settings['dataSet'])===Object.prototype:
+      default:
         _.isDS = true;// dateset source.
+        cnfg = Object.assign({}, elm.dataset); //get any initial settings.
+        try{
+          cnfg['dataSet'] = JSON.parse(elm.querySelector('script').innerHTML);
+        }catch(se){
+          console.log(se);
+          console.log("Unable to Hybridise element, missing or malformed json dataset");
+        }
+
         elm.classList.add('hybriddd-custom'); //flag the element as custom.
         break;
-      default:
-        throw new Error("HybridDropdown requires either a <select> element or a dataSet defined in its settings.");
     }
     //if already instanciated, return existing object.
     if(elm._hybriddd) return elm._hybriddd;
@@ -42,8 +72,19 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     _.el = elm; //keep original element reference.
     _.el.classList.add('hybridddised'); //flag the element as converted.
     // merge user setting with defaults
+    Object.keys(cnfg).forEach(k=>{
+      switch(k){
+        case 'limitSelection':
+          cnfg[k] = parseInt(cnfg[k]);
+          break;
+        case 'eventPropagate':
+        case 'treeView':
+          cnfg[k] = (cnfg[k] == 'true');
+          break;
+      }
+    });
     _.opt = Object.assign(
-      {}, //empty target.
+      {},//initial target.
       {
         eventPropagate:true,
         dropdown: 'vertical',
@@ -56,14 +97,16 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           return s[k[0]]+ ((k.length>1)?'<span>[...]</span>':'');
         },
         defaultText:'---',
+        treeView:false,
         fieldName: '',
         tabIndex:tabIdx?tabIdx:0,
         listOption: function(o,i){return true},
         selectedValues:[],
       }, //default settings.
-      settings //user settings.
+      settings, //user settings.
+      cnfg //element data attribtues.
     );
-    _.multi = _.opt.limitSelection !=1; //flag multi select field.
+    _.multi = (_.opt.limitSelection !=1); //flag multi select field.
     //check if we have a field name.
     if(_.isDS){
       if(_.opt.fieldName.length==0) _.opt.fieldName = _.el.getAttribute('id'); //try to set it to id.
@@ -228,7 +271,7 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           hso.setAttribute('tabindex','-1');
           hso.innerHTML = '<label class="hybriddd-l'+p+'">'+
             '<input tabindex="-1" class="'+ icl+'" type="'+ t+'" value="'+ val+ '"'+ fname+ checked+ ' />'+
-            '<span class="hybridddl">'+ lbl +'</span>' +
+            '<span class="hybridddl"><span class="hybridddcb"></span>'+ lbl +'</span>' +
             '</label>';
           hso.classList.value = 'hybriddd-option' + (isSelected ? ' active':'');
           if(!_.isDS) hso.classList.value += o.classList.value; // + (o.value!=''?'hybriddd-'+o.value:'');
@@ -252,6 +295,8 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
           _.sindex.push('');
         }else _.value[''] = _.opt.defaultText;
       }
+      //make sure empty value does not cohabit with others.
+      if(_.value.length>1 && _.value.indexOf('')>=0) _.value = _.value.splice(_.value.indexOf(''),1);
       _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
     }
     return opts;
@@ -491,9 +536,51 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     if(e && e.target){
       _.optionClass('hover',[e.target.value]);
       _.hindex.push(e.target.value);
-      if(e.target.checked) _.addValue(_.hindex);
-      else _.removeValue(_.hindex);
-      _.closeSelect(false);
+
+      if(_.opt.treeView){
+        //toggle all children
+        let ai,
+          i,
+          start = true,
+          pl = e.target.closest('.hybriddd-option'),
+          ci = pl.querySelectorAll("input");
+
+        for (i of ci.values()) {
+          i.checked = e.target.checked;
+          if(e.target.checked) _.addValue([i.value]);
+          else _.removeValue([i.value]);
+          i.closest('.hybriddd-option').classList.remove("partial");
+        }
+
+        //check parent branch.
+        while (pl) {
+          i = pl.querySelector("input");
+          if (!start && !i.checked &&
+            (pl.querySelectorAll("label input").length - pl.querySelectorAll("label input:checked").length)==1
+          ) {
+            i.checked = true;
+            _.addValue([i.value])
+            pl.classList.remove("partial");
+          }
+          ci = pl.querySelectorAll("input:checked");
+          ai = pl.querySelectorAll("input");
+          if (i.checked && ci.length == 1 && ai.length > 1) {
+            //special case, all children unchecked.
+            pl.classList.remove("partial");
+            i.checked = false;
+            _.removeValue([i.value]);
+          } else if (ci.length > 0 && ai.length != ci.length) {
+            pl.classList.add("partial");
+            _.removeValue([i.value]);
+          } else pl.classList.remove("partial");
+          pl = pl.parentNode.closest('.hybriddd-option');
+          start = false;
+        }
+      }else{
+        if(e.target.checked) _.addValue(_.hindex);
+        else _.removeValue(_.hindex);
+      }
+      if(!e.ctrlKey && !e.shiftKey) _.closeSelect(false);
     }
   }
   //toggle values that are hoghlighted.
@@ -675,5 +762,6 @@ GitHub: https://github.com/aurovrata/hybrid-html-dropdown
     }
     if(blur) _.blur(); //remove focus.
   }
+
 	return HybridDropdown;
 })

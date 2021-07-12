@@ -53,110 +53,110 @@
             </optgroup>
           </select>
           <div id="hotel-field" tabindex="4">
-            <script>
-            const cityHotels = {
-              '':'Choose a hotel',
-              'Paris': {
-                '5-star':{
-                  'lr' : 'Le Ritz',
-                  'rm': 'Le Royal Manceau'
+            <script type="application/json">
+             {
+              "":"Choose a hotel",
+              "Paris": {
+                "5-star":{
+                  "lr" : "Le Ritz",
+                  "rm": "Le Royal Manceau"
                 },
-                '4-star':{
-                  'hb':'Hotel Brighton',
-                  'he':'Hotel Edmond'
+                "4-star":{
+                  "hb":"Hotel Brighton",
+                  "he":"Hotel Edmond"
                 },
-                '3-star':{
-                  'lp':'Le Presbytere',
-                  'll':'Les 3 Lions'
+                "3-star":{
+                  "lp":"Le Presbytere",
+                  "ll":"Les 3 Lions"
                 }
               },
-              'London': {
-                '5-star':{
-                  'lml':'Le Meridien',
-                  'rz' : 'The Ritz'
+              "London": {
+                "5-star":{
+                  "lml":"Le Meridien",
+                  "rz" : "The Ritz"
                 },
-                '4-star':{
-                  'cr':'The Carlton Hotel',
-                  'rs':'The Royal Star'
+                "4-star":{
+                  "cr":"The Carlton Hotel",
+                  "rs":"The Royal Star"
                 },
-                '3-star':{
-                  'ts':'The 3 Star',
-                  'lc':'The Lancaster'
+                "3-star":{
+                  "ts":"The 3 Star",
+                  "lc":"The Lancaster"
                 }
               },
-              'Delhi': {
-                '5-star':{
-                  'lm':'Le Meridien',
-                  'tlp':'The Lila Palace',
+              "Delhi": {
+                "5-star":{
+                  "lm":"Le Meridien",
+                  "tlp":"The Lila Palace"
                 },
-                '4-star':{
-                  'sh':'The Shangrila',
-                  'ph':'The Plaza Hotel'
+                "4-star":{
+                  "sh":"The Shangrila",
+                  "ph":"The Plaza Hotel"
                 },
-                '3-star':{
-                  'tr': 'The Raj',
-                  'f1':'Formula 1'
+                "3-star":{
+                  "tr": "The Raj",
+                  "f1":"Formula 1"
                 }
               }
             }
             </script>
           </div>
-          <div id="hotel-field2" tabindex="5">
-            <script>
-            const cityHotels2 = {
-              '':'Choose a hotel',
-              'paris': {
-                'label':'Paris',
-                'p5-star':{
-                  'label':'5 Stars',
-                    'lr' : 'Le Ritz',
-                    'rm': 'Le Royal Manceau'
+          <div id="hotel-field2" data-limit-selection="3" data-tree-view="true" tabindex="5">
+            <script type="application/json">
+            {
+              "":"Choose 3 hotels",
+              "paris": {
+                "label":"Paris",
+                "p5-star":{
+                  "label":"5 Stars",
+                    "lr" : "Le Ritz",
+                    "rm": "Le Royal Manceau"
                 },
-                'p4-star':{
-                  'label':'4 Stars',
-                    'hb':'Hotel Brighton',
-                    'he':'Hotel Edmond'
+                "p4-star":{
+                  "label":"4 Stars",
+                    "hb":"Hotel Brighton",
+                    "he":"Hotel Edmond"
                 },
-                'p3-star':{
-                  'label':'3 Stars',
-                    'lp':'Le Presbytere',
-                    'll':'Les 3 Lions'
+                "p3-star":{
+                  "label":"3 Stars",
+                    "lp":"Le Presbytere",
+                    "ll":"Les 3 Lions"
                 }
               },
-              'london': {
-                'label':'London',
-                'l5-star':{
-                  'label':'5 Stars',
-                    'lml':'Le Meridien',
-                    'rz' : 'The Ritz'
+              "london": {
+                "label":"London",
+                "l5-star":{
+                  "label":"5 Stars",
+                    "lml":"Le Meridien",
+                    "rz" : "The Ritz"
                 },
-                'l4-star':{
-                  'label':'4 Stars',
-                    'cr':'The Carlton Hotel',
-                    'rs':'The Royal Star'
+                "l4-star":{
+                  "label":"4 Stars",
+                    "cr":"The Carlton Hotel",
+                    "rs":"The Royal Star"
                 },
-                'l3-star':{
-                  'label':'3 Stars',
-                    'ts':'The 3 Star',
-                    'lc':'The Lancaster'
+                "l3-star":{
+                  "label":"3 Stars",
+                    "ts":"The 3 Star",
+                    "lc":"The Lancaster"
                 }
               },
-              'delhi': {
-              'label':'Delhi',
-                'd5-star':{
-                  'label':'5 Stars',
-                    'lm':'Le Meridien',
-                    'tlp':'The Lila Palace',
+              "delhi": {
+              "label":"Delhi",
+                "d5-star":{
+                  "label":"5 Stars",
+                    "lm":"Le Meridien",
+                    "tlp":"The Lila Palace"
                 },
-                'd4-star':{
-                  'label':'4 Stars',
-                    'sh':'The Shangrila',
-                    'ph':'The Plaza Hotel'
+                "d4-star":{
+                  "label":"4 Stars",
+                    "sh":"The Shangrila",
+                    "ph":"The Plaza Hotel"
                 },
-                'd3-star':{
-                  'label':'3 Stars',
-                    'tr': 'The Raj',
-                    'f1':'Formula 1'
+                "d3-star":{
+                  "label":"3 Stars",
+                    "tr": "The Raj",
+                    "f1":"Formula 1"
                 }
               }
             }
@@ -181,14 +181,11 @@
          });
          sel = document.querySelector('#hotel-field');
          new HybridDropdown(sel,{
-           dataSet:cityHotels,
            fieldName:'hotels',
          });
          sel = document.querySelector('#hotel-field2');
          new HybridDropdown(sel,{
-           dataSet:cityHotels2,
            fieldName:'hotels2',
-           multiple:true,
          })
        });
        document.querySelector('.button').addEventListener('click', (e)=>{

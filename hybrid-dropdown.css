@@ -78,33 +78,42 @@
 	margin-left: -15px;
 	width: 0;
 }
-.hybriddd-option > label {display:block}
-.hybriddd-option > label > span::before {
-	content: ' '; /* '\2610'; */
-	width: 10px;
-	height: 10px;
-	display: inline-block;
+.hybriddd-option label {display:block}
+.hybridddcb {
+	width: 16px;
+	height: 16px;
 	border: solid 1px;
 	vertical-align: middle;
-	text-align: center;
-	line-height: 17px;
-  margin-right: 3px;
+	margin-right: 3px;
 	margin-bottom: 3px;
-	padding: 3px;
+	display: inline-block;
 }
-.hybriddd-option > label > input[type="radio"]+span::before {
+.hybridddcb::before {
+	content: '';
+	display: block;
+	width: 10px;
+	height: 10px;
+	margin: 2px auto;
+}
+.hybriddd-option.partial > label .hybridddcb::before {
+	background: #a5a5a5;
+}
+.hybriddd-option input[type="radio"] .hybridddcb {
 	border-radius: 50%; /* content: '\25EF';*/
 }
-.hybriddd-option > label > input:checked + span::before, .hybriddd-option > .partial > span::before {
+.hybriddd-option input:checked .hybridddcb::before {
 	border: solid 3px;
 	padding: 1px;
 }
-/* .hybriddd-option > label > input[type="radio"]:checked + span::before {
-	border: solid 3px;
-	padding: 1px;
-} */
-.hybriddd-option > .partial > span::before {
-	color: #b9b9b9;
+.hybriddd-option.active > label{
+	background: #0466ff;
+	color: white;
+}
+input:checked + .hybridddl > .hybridddcb::before{
+	background: white;
+}
+.hybriddd-option.active > label:hover {
+	color: inherit;
 }
 /* This media query detects devices where the primary
 input mechanism can hover over elements. (e.g. computers with a mouse) */
@@ -154,13 +163,7 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 .hybriddd-option > label:hover {
   background: #eaeaea;
 }
-.hybriddd-option.active > label, .hybriddd-option > label > input:checked + span::before {
-	background: #0466ff;
-	color: white;
-}
-.hybriddd-option.active > label:hover {
-	color: inherit;
-}
+
 /* .hybriddd-option.active::before {
   content: "✓";
   position: absolute;
