@@ -296,7 +296,7 @@ hsProtype.closeSelect - close dropdown list.
         }else _.value[''] = _.opt.defaultText;
       }
       //make sure empty value does not cohabit with others.
-      if(_.value.length>1 && _.value.indexOf('')>=0) _.value = _.value.splice(_.value.indexOf(''),1);
+      if(_.value.length>1 && _.value.indexOf('')>=0) _.value.splice(_.value.indexOf(''),1);
       _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
     }
     return opts;
@@ -534,10 +534,13 @@ hsProtype.closeSelect - close dropdown list.
   hsProtype.inputChange = function(){
     let _ = this, e = arguments[0];
     if(e && e.target){
-      _.optionClass('hover',[e.target.value]);
-      _.hindex.push(e.target.value);
-
-      if(_.opt.treeView){
+      if(_.hindex.indexOf(e.target.value)<0){
+        _.optionClass('hover',[e.target.value]);
+        _.hindex.push(e.target.value);
+      }
+      if(e.target.checked && ''==e.target.value){ //clear values.
+        _.removeValue([..._.sindex]); //use array copy else buggy.
+      }else if(_.opt.treeView && _.opt.limitSelection > _.sindex.length){
         //toggle all children
         let ai,
           i,
@@ -626,7 +629,7 @@ hsProtype.closeSelect - close dropdown list.
       _.hdd.options[v].querySelector('input').checked=false;
       idx = _.sindex.indexOf(v);
       if(idx >=0){
-        _.sindex = _.sindex.splice(idx+1,1);
+        _.sindex.splice(idx,1);
         delete _.value[v];
       }
     });
@@ -635,6 +638,7 @@ hsProtype.closeSelect - close dropdown list.
         _.sindex=[''];
         _.value={'':_.hdd.options[''].querySelector('label').innerText};
         _.hdd.options[''].querySelector('input').checked=true;
+        _.hdd.options[''].classList.add('active');
       }else _.value={'': _.opt.defaultText};
     }
     if(!_.isDS) _.updateOriginal();
