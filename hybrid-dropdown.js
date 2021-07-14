@@ -24,7 +24,8 @@ hsProtype.addValue - add selected values to the hybrid value tracker.
 hsProtype.removeValue - remove selected values to the hybrid value tracker.
 hsProtype.updateOriginal - update the original SELECT element.
 hsProtype.optionHover - flag optoins being hovered in multiple selection fields.
-hsProtype.optionClass - toggle classes on elements.
+hsProtype.addClass - add class on options.
+hsProtype.clearClass - remove class on options.
 hsProtype.openSelect - open dropdown list.
 hsProtype.closeSelect - close dropdown list.
 
@@ -155,6 +156,7 @@ hsProtype.closeSelect - close dropdown list.
       _.sindex=[]; //initial index of selected option.
       _.value={}; //initial value.
       _.listenForBulk = false;
+      _.listenCtrlClick = false;
     }
     //set style.
     _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
@@ -179,8 +181,9 @@ hsProtype.closeSelect - close dropdown list.
         });
       }
       //listen for input field changes.
+      _.change = _.inputChange.bind(_);
       _.event(_.hdd.ddlist,'add',{
-        change: _.inputChange.bind(_)
+        change: _.change
       });
       //listen for click and down arrow events.
       _.open = _.openSelect.bind(_);
@@ -195,10 +198,16 @@ hsProtype.closeSelect - close dropdown list.
       _.hover = _.optionHover.bind(_);
       //navigate with keys.
       _.keyNav = _.keyboardNavigate.bind(_);
-      //fire init event.
-      _.emit('hybrid-dd-init');
+      //listen for spacebar/arrow keys used for navigation.
+      _.event(_.hdd,'add',{
+        keydown:_.keyNav
+      });
       //refresh fn.
       _.refresh = _.refreshHybrid.bind(_);
+      //ctril + click event handling.
+      _.ctrlClick = _.optionCtrlClick.bind(_);
+      //fire init event.
+      _.emit('hybrid-dd-init');
     }
   }
   //method to refresh an existing HybridDropdown object.
@@ -341,14 +350,11 @@ hsProtype.closeSelect - close dropdown list.
     let _ = this;
     if(!_.isDS){
       if(_.el.disabled) return;
-    _.el.blur();
+      _.el.blur();
     }
     _.hdd.focus({preventScroll:true});
     _.hdd.classList.add('focus');
     //cancel window scrolling on space bar.
-    _.event(_.hdd,'add',{
-      keydown:_.keyNav
-    });
     _.event(document,'add',{
       click: _.blur
     })
@@ -357,9 +363,9 @@ hsProtype.closeSelect - close dropdown list.
   hsProtype.blurField = function(){
     let _ = this;
     _.hdd.classList.remove('focus');
-    _.event(_.hdd,'remove',{
-      keydown:_.keyNav
-    })
+    // _.event(_.hdd,'remove',{
+    //   keydown:_.keyNav
+    // })
   }
   //find next hybrid-option index.
   hsProtype.nextOption = function(cur){
@@ -385,10 +391,10 @@ hsProtype.closeSelect - close dropdown list.
     if(_.el.disabled) return;
     if(e && e.keyCode){
       e.preventDefault(); //stop page scroll.
-      switch(e.keyCode){
-        case 40: //down arrow.
+      switch(true){
+        case 40==e.keyCode && 'keydown' == e.type: //down arrow.
           if(_.hdd.classList.contains('active')){ //list is open, change hover option
-            if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.optionClass('hover', _.hindex); //toggle class
+            if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.clearClass('hover'); //toggle class
              v = _.nextOption(_.hindex);
             _.hdd.options[v].classList.add('hover');
             _.scroll(v, 'down');
@@ -406,9 +412,9 @@ hsProtype.closeSelect - close dropdown list.
             }
           }
           break;
-        case 38: //up arrow.
+        case 38==e.keyCode && 'keydown' == e.type: //up arrow.
           if(_.hdd.classList.contains('active')){ //list is open, change hover option
-            if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.optionClass('hover', _.hindex);
+            if(_.hindex.length>0 && !_.multi || !e.shiftKey) _.clearClass('hover');
             v = _.prevOption(_.hindex);
             _.hdd.options[v].classList.add('hover');
             _.scroll(v,'up');
@@ -426,8 +432,8 @@ hsProtype.closeSelect - close dropdown list.
             }
           }
           break;
-        case 13: //enter.
-        case 32: //spacebar.
+        case 13==e.keyCode && 'keydown' == e.type: //enter.
+        case 32==e.keyCode && 'keydown' == e.type: //spacebar.
           if(_.hdd.classList.contains('active') === false){//open the list.
             _.hdd.classList.remove('focus');
             _.open();
@@ -437,11 +443,11 @@ hsProtype.closeSelect - close dropdown list.
             _.hdd.classList.add('focus');
           }
           break;
-        case 27: //esc
+        case 27==e.keyCode && 'keydown' == e.type: //esc
           if(_.hdd.classList.contains('active')) _.closeSelect(false); //close list if open
           _.blurField(); //blur.
           break;
-        case 9: //tab key, navigate to next field.
+        case 9==e.keyCode && 'keydown' == e.type: //tab key, navigate to next field.
           if(_.hdd.classList.contains('active')) _.closeSelect(false); //close list if open
           _.blurField(); //blur.
 
@@ -489,12 +495,8 @@ hsProtype.closeSelect - close dropdown list.
                 break;
             }
           }
-          // else if('FORM' == form.nodeName){ //atempt to get a submit button.
-          //   let ls = form.querySelectorAll('a');
-          //   if(ls.length>0) ls.item(ls.length-1).focus();
-          // }
           break;
-        case 16: //shift.
+        case 16==e.keyCode && 'keydown' == e.type: //shift.
           if(_.multi && _.hdd.classList.contains('active')){
             //listen for drag event.
             let o = e.originalTarget;
@@ -509,6 +511,53 @@ hsProtype.closeSelect - close dropdown list.
             }
           }
           break;
+        case 16==e.keyCode && 'keyup' == e.type:
+          _.event(_.hdd.ddlist,'remove',{
+            mouseenter:_.hover,
+            mouseleave:_.hover
+          });
+          _.listenForBulk = false;
+          break;
+        case 17==e.keyCode && 'keydown' == e.type: //shift.
+          if(!_.listenCtrlClick && _.multi){
+            _.event(_.hdd.ddlist,'add',{
+              click:_.ctrlClick,
+              'hybrid-ddi-change':_.change
+            });
+            _.listenCtrlClick = true;
+          }
+          break;
+        case 17==e.keyCode && 'keyup' == e.type: //shift.
+          if(_.listenCtrlClick){
+            _.event(_.hdd.ddlist,'remove',{
+              click:_.ctrlClick,
+              'hybrid-ddi-change':_.change
+            });
+            _.listenCtrlClick = false;
+          }
+          break;
+      }
+    }
+  }
+  //listen for ctrl+click on multiple dropdown.
+  hsProtype.optionCtrlClick = function(e){
+    let _ = this, o, i;
+    if(e && e.target){
+      if(!e.ctrlKey){
+        if(_.listenCtrlClick){
+          _.event(_.hdd.ddlist,'remove',{
+            click:_.ctrlClick,
+            'hybrid-ddi-change':_.change
+          });
+          _.listenCtrlClick = false;
+        }
+        return;
+      }
+      o = e.target.closest('.hybriddd-option');
+      if(o){
+        i = o.querySelector('input');
+        i.checked = (!i.checked);
+        i.dispatchEvent(new Event('hybrid-ddi-change', { 'bubbles': true}));
       }
     }
   }
@@ -532,12 +581,10 @@ hsProtype.closeSelect - close dropdown list.
   }
   //options input changed.
   hsProtype.inputChange = function(){
-    let _ = this, e = arguments[0];
+    let _ = this, e = arguments[0], v=[];
     if(e && e.target){
-      if(_.hindex.indexOf(e.target.value)<0){
-        _.optionClass('hover',[e.target.value]);
-        _.hindex.push(e.target.value);
-      }
+      if(_.hindex.length>0) v = [..._.hindex]; //shift + scroll.
+
       if(e.target.checked && ''==e.target.value){ //clear values.
         _.removeValue([..._.sindex]); //use array copy else buggy.
       }else if(_.opt.treeView && _.opt.limitSelection > _.sindex.length){
@@ -550,7 +597,7 @@ hsProtype.closeSelect - close dropdown list.
 
         for (i of ci.values()) {
           i.checked = e.target.checked;
-          if(e.target.checked) _.addValue([i.value]);
+          if(e.target.checked) v.push(i.value);
           else _.removeValue([i.value]);
           i.closest('.hybriddd-option').classList.remove("partial");
         }
@@ -562,7 +609,7 @@ hsProtype.closeSelect - close dropdown list.
             (pl.querySelectorAll("label input").length - pl.querySelectorAll("label input:checked").length)==1
           ) {
             i.checked = true;
-            _.addValue([i.value])
+            v.push(i.value)
             pl.classList.remove("partial");
           }
           ci = pl.querySelectorAll("input:checked");
@@ -579,11 +626,13 @@ hsProtype.closeSelect - close dropdown list.
           pl = pl.parentNode.closest('.hybriddd-option');
           start = false;
         }
-      }else{
-        if(e.target.checked) _.addValue(_.hindex);
-        else _.removeValue(_.hindex);
+        _.addValue(v);
+      }else{ //just add the current value.
+        v.push(e.target.value);
+        if(e.target.checked) _.addValue(v);
+        else _.removeValue(v);
       }
-      if(!e.ctrlKey && !e.shiftKey) _.closeSelect(false);
+      if('hybrid-ddi-change'!= e.type && !e.shiftKey) _.closeSelect(false);
     }
   }
   //toggle values that are hoghlighted.
@@ -659,7 +708,7 @@ hsProtype.closeSelect - close dropdown list.
       e = arguments[0];
     if(!e.shiftKey){
       if(_.hindex.length>0){
-        _.optionClass('hover',_.hindex);
+        _.clearClass('hover');
         _.hindex=[];
       }
       return; //track shift mouseenter events only.
@@ -673,25 +722,34 @@ hsProtype.closeSelect - close dropdown list.
           _.event(_.hdd.ddlist, 'remove',{
             mouseleave: _.hover
           });
-          _.hindex=[v];
+          if(v) _.hindex=[v];
           break;
         case 'mouseenter':
           if(_.hindex.includes(v)){
             v =_.hindex[(_.hindex.length-1)]; //toggle last inserted idx.
             _.hindex =_.hindex.slice(0,-1);
-          }else _.hindex.push(v);
+          }else if(v) _.hindex.push(v);
           if(_.opt.limitSelection>0) _.hindex = _.hindex.slice(0,_.opt.limitSelection);
           break;
       }
-      _.optionClass('hover',[v]);
+      if(v && !_.sindex.includes(v)) _.hdd.options[v].classList.add('hover');
     }
   }
   //toggle class on option.
-  hsProtype.optionClass = function(cl, els=[]){
+  // hsProtype.addClass = function(cl, els=[]){
+  //   let _ = this;
+  //   if('string' == typeof cl && cl.length>0){
+  //     els.forEach(v=>{
+  //       _.hdd.options[v].classList.add(cl);
+  //     });
+  //   }
+  // }
+  //clear class from option.
+  hsProtype.clearClass = function(cl){
     let _ = this;
     if('string' == typeof cl && cl.length>0){
-      els.forEach(v=>{
-        _.hdd.options[v].classList.toggle(cl);
+      _.hdd.querySelectorAll('.'+cl).forEach(o=>{
+        o.classList.remove(cl)
       })
     }
   }
@@ -713,18 +771,14 @@ hsProtype.closeSelect - close dropdown list.
     _.hdd.classList.add('active');
     //adjust width of dropdown.
     if(0==_.hdd.ddlist.style.width.length) _.hdd.ddlist.style.width=(_.hdd.ddlist.offsetWidth + 10)+"px";
-    // if(_.multi){
-    //   _.event(_.hdd.ddlist,'add',{
-    //     mouseenter: _.optionHover.bind(_)
-    //   });
-    // }
+
     //listen for external clicks to close.
     _.event(document, 'add',{
       click: _.close
     });
-    //listen for key navigation
+    //listen for keyup navigation (ctrl/shift key)
     _.event(_.hdd,'add',{
-      keydown:_.keyNav
+      keyup:_.keyNav
     });
     //close if another hdd field opens.
     _.event(document,'add',{
@@ -748,7 +802,7 @@ hsProtype.closeSelect - close dropdown list.
 
     _.hdd.classList.remove('active');
     //reset the option hover index.
-    if(_.hindex.length>0) _.optionClass('hover', _.hindex);
+    _.clearClass('hover');
     _.hindex = [];
     //stop listening to external clicks.
     _.event(document, 'remove',{
@@ -757,7 +811,10 @@ hsProtype.closeSelect - close dropdown list.
     _.event(document,'remove',{
       'hybrid-dd-click':_.close
     });
-    //stop listening for option list mouse clicks.
+    _.event(_.hdd,'remove',{
+      keyup:_.keyNav
+    });
+    //stop listening for option list mouseenter.
     if(_.listenForBulk){
       _.event(_.hdd.ddlist, 'remove',{
         mouseenter: _.hover

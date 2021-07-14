@@ -95,9 +95,7 @@
 	height: 10px;
 	margin: 2px auto;
 }
-.hybriddd-option.partial > label .hybridddcb::before {
-	background: #a5a5a5;
-}
+
 .hybriddd-option input[type="radio"] .hybridddcb {
 	border-radius: 50%; /* content: '\25EF';*/
 }
@@ -105,15 +103,26 @@
 	border: solid 3px;
 	padding: 1px;
 }
+/* COLOURS */
+.hybriddd-option > label{
+	background-color: transparent;
+	color:#5d5d5d
+}
 .hybriddd-option.active > label{
 	background: #0466ff;
-	color: white;
+	color: #fff;
+}
+.hybriddd-option.active > label:hover{
+	color: #5d5d5d;
 }
 input:checked + .hybridddl > .hybridddcb::before{
 	background: white;
 }
-.hybriddd-option.active > label:hover {
-	color: inherit;
+.hybriddd-option.partial > label .hybridddcb::before {
+	background: #a5a5a5;
+}
+:hover > input:checked + .hybridddl > .hybridddcb::before{
+	background: #5d5d5d;
 }
 /* This media query detects devices where the primary
 input mechanism can hover over elements. (e.g. computers with a mouse) */
