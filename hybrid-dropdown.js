@@ -543,7 +543,7 @@ hsProtype.closeSelect - close dropdown list.
   hsProtype.optionCtrlClick = function(e){
     let _ = this, o, i;
     if(e && e.target){
-      if(!e.ctrlKey){
+      if(!e.ctrlKey){ //ctrl keyup  does not fire after a ctrl+click.
         if(_.listenCtrlClick){
           _.event(_.hdd.ddlist,'remove',{
             click:_.ctrlClick,
