@@ -17,6 +17,7 @@ hsProtype.blurField - change hybrid status when focus is lost.
 hsProtype.nextOption - retrieve next option in dropdown list for key navigation.
 hsProtype.prevOption - retrieve prev option in dropdown list for key navigation.
 hsProtype.keyboardNavigate - handle keyboard navigation.
+hsProtype.optionModClick - handle modifier key (shft|ctrl) + click events.
 hsProtype.scroll - scroll long dropdown lists.
 hsProtype.inputChange - handle change in option input field.
 hsProtype.toggleValue - toggle values for multiple highlighted options.
@@ -156,7 +157,7 @@ hsProtype.closeSelect - close dropdown list.
       _.sindex=[]; //initial index of selected option.
       _.value={}; //initial value.
       _.listenForBulk = false;
-      _.listenCtrlClick = false;
+      _.listenModClick = false;
     }
     //set style.
     _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
@@ -205,7 +206,7 @@ hsProtype.closeSelect - close dropdown list.
       //refresh fn.
       _.refresh = _.refreshHybrid.bind(_);
       //ctril + click event handling.
-      _.ctrlClick = _.optionCtrlClick.bind(_);
+      _.modClick = _.optionModClick.bind(_);
       //fire init event.
       _.emit('hybrid-dd-init');
     }
@@ -505,51 +506,66 @@ hsProtype.closeSelect - close dropdown list.
             if(!_.listenForBulk){
               _.event(_.hdd.ddlist,'add',{
                 mouseenter:_.hover,
-                mouseleave:_.hover
+                mouseleave:_.hover,
+                click:_.modClick,
+                'hybrid-ddi-change':_.change
               });
               _.listenForBulk = true;
+              _.listenModClick = true;
             }
           }
           break;
         case 16==e.keyCode && 'keyup' == e.type:
-          _.event(_.hdd.ddlist,'remove',{
-            mouseenter:_.hover,
-            mouseleave:_.hover
-          });
-          _.listenForBulk = false;
-          break;
-        case 17==e.keyCode && 'keydown' == e.type: //shift.
-          if(!_.listenCtrlClick && _.multi){
-            _.event(_.hdd.ddlist,'add',{
-              click:_.ctrlClick,
+          if(_.listenForBulk){
+            _.event(_.hdd.ddlist,'remove',{
+              mouseenter:_.hover,
+              mouseleave:_.hover,
+              click:_.modClick,
               'hybrid-ddi-change':_.change
             });
-            _.listenCtrlClick = true;
+            _.listenForBulk = false;
+            _.listenModClick = false;
           }
           break;
-        case 17==e.keyCode && 'keyup' == e.type: //shift.
-          if(_.listenCtrlClick){
-            _.event(_.hdd.ddlist,'remove',{
-              click:_.ctrlClick,
+        case 17==e.keyCode && 'keydown' == e.type: //ctrl.
+          if(!_.listenModClick && _.multi){
+            _.event(_.hdd.ddlist,'add',{
+              click:_.modClick,
               'hybrid-ddi-change':_.change
             });
-            _.listenCtrlClick = false;
+            _.listenModClick = true;
+          }
+          break;
+        case 17==e.keyCode && 'keyup' == e.type: //ctrl.
+          if(_.listenModClick){
+            _.event(_.hdd.ddlist,'remove',{
+              click:_.modClick,
+              'hybrid-ddi-change':_.change
+            });
+            _.listenModClick = false;
           }
           break;
       }
     }
   }
   //listen for ctrl+click on multiple dropdown.
-  hsProtype.optionCtrlClick = function(e){
+  hsProtype.optionModClick = function(e){
     let _ = this, o, i;
     if(e && e.target){
-      if(!e.ctrlKey){ //ctrl keyup  does not fire after a ctrl+click.
-        if(_.listenCtrlClick){
+      if(!e.ctrlKey && !e.shiftKey){ //ctrl keyup  does not fire after a ctrl+click.
+        if(_.listenModClick){
           _.event(_.hdd.ddlist,'remove',{
-            click:_.ctrlClick,
+            click:_.modClick,
             'hybrid-ddi-change':_.change
           });
-          _.listenCtrlClick = false;
+          _.listenModClick = false;
+        }
+        if(_.listenForBulk){
+          _.event(_.hdd.ddlist,'remove',{
+            mouseenter:_.hover,
+            mouseleave:_.hover,
+          });
+          _.listenForBulk = false;
         }
         return;
       }
@@ -609,7 +625,7 @@ hsProtype.closeSelect - close dropdown list.
             (pl.querySelectorAll("label input").length - pl.querySelectorAll("label input:checked").length)==1
           ) {
             i.checked = true;
-            v.push(i.value)
+            v.push(i.value);
             pl.classList.remove("partial");
           }
           ci = pl.querySelectorAll("input:checked");
@@ -657,6 +673,7 @@ hsProtype.closeSelect - close dropdown list.
           _.sindex=varr;
         }else _.sindex = _.sindex.concat(varr);
         if(_.opt.limitSelection>0) _.sindex = _.sindex.slice(0,_.opt.limitSelection);
+        _.clearClass('hover');
         break;
     }
     _.value={};

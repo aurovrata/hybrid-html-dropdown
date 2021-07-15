@@ -78,7 +78,13 @@
 	margin-left: -15px;
 	width: 0;
 }
-.hybriddd-option label {display:block}
+.hybriddd-option label {
+  user-select: none; /* CSS3 (little to no support) */
+  -ms-user-select: none; /* IE 10+ */
+  -moz-user-select: none; /* Gecko (Firefox) */
+  -webkit-user-select: none; /* Webkit (Safari, Chrome) */
+  display:block
+}
 .hybridddcb {
 	width: 16px;
 	height: 16px;
