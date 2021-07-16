@@ -297,19 +297,30 @@ hsProtype.closeSelect - close dropdown list.
       opts[opts.length] = hso;
     });
     if(0==p){ //first level end.
-      if(0==Object.keys(_.value).length){
-        if(_.hdd.options['']){
-          _.hdd.options[''].classList.add('active');
-          _.value['']=_.hdd.options[''].querySelector('label').innerText;
-          _.hdd.options[''].querySelector('input').checked=true;
-          _.sindex.push('');
-        }else _.value[''] = _.opt.defaultText;
-      }
+      if(_.empty()) _.reset();
       //make sure empty value does not cohabit with others.
-      if(_.value.length>1 && _.value.indexOf('')>=0) _.value.splice(_.value.indexOf(''),1);
+      let vs = Object.keys(_.value);
+      if( vs.length>1 && vs.indexOf('')>=0) delete _.value[''];
       _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
     }
     return opts;
+  }
+  //check if values are empty.
+  hsProtype.empty = function(){
+    let _ = this;
+    for(let k in _.value) return false;
+    return true;
+  }
+  //reset the default value of the field.
+  hsProtype.reset = function(){
+    let _ = this;
+    _.sindex = [];
+    if(_.hdd.options['']){
+      _.hdd.options[''].classList.add('active');
+      _.value['']=_.hdd.options[''].querySelector('label').innerText;
+      _.hdd.options[''].querySelector('input').checked=true;
+      _.sindex.push('');
+    }else _.value[''] = _.opt.defaultText;
   }
   //method to add event listeners.
   hsProtype.event = function (ele, type, args) {
@@ -548,7 +559,7 @@ hsProtype.closeSelect - close dropdown list.
       }
     }
   }
-  //listen for ctrl+click on multiple dropdown.
+  //listen for ctrl|shift + click on multiple dropdown.
   hsProtype.optionModClick = function(e){
     let _ = this, o, i;
     if(e && e.target){
@@ -674,6 +685,7 @@ hsProtype.closeSelect - close dropdown list.
         }else _.sindex = _.sindex.concat(varr);
         if(_.opt.limitSelection>0) _.sindex = _.sindex.slice(0,_.opt.limitSelection);
         _.clearClass('hover');
+        _.hindex=[];
         break;
     }
     _.value={};
@@ -682,6 +694,7 @@ hsProtype.closeSelect - close dropdown list.
       _.hdd.options[v].querySelector('input').checked=true;
       _.hdd.options[v].classList.add('active');
     });
+    if(_.empty()) _.reset();
     if(!_.isDS) _.updateOriginal();
     //update selected value label.
     _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
@@ -707,6 +720,7 @@ hsProtype.closeSelect - close dropdown list.
         _.hdd.options[''].classList.add('active');
       }else _.value={'': _.opt.defaultText};
     }
+    if(_.empty()) _.reset();
     if(!_.isDS) _.updateOriginal();
     _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
     if(emit) _.emit('change');
@@ -752,15 +766,6 @@ hsProtype.closeSelect - close dropdown list.
       if(v && !_.sindex.includes(v)) _.hdd.options[v].classList.add('hover');
     }
   }
-  //toggle class on option.
-  // hsProtype.addClass = function(cl, els=[]){
-  //   let _ = this;
-  //   if('string' == typeof cl && cl.length>0){
-  //     els.forEach(v=>{
-  //       _.hdd.options[v].classList.add(cl);
-  //     });
-  //   }
-  // }
   //clear class from option.
   hsProtype.clearClass = function(cl){
     let _ = this;
