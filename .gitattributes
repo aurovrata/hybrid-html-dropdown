@@ -3,6 +3,6 @@
 .gitattributes export-ignore
 .gitignore export-ignore
 #test files
-test.html
-css/page.css
-README.md
+test.html export-ignore
+css/page.css export-ignore
+README.md export-ignore
