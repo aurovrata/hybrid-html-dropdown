@@ -4,5 +4,5 @@
 .gitignore export-ignore
 #test files
 test.html export-ignore
-css/page.css export-ignore
+css/ export-ignore
 README.md export-ignore
