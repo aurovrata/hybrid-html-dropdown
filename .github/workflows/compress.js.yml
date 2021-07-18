@@ -1,7 +1,12 @@
-jobs:
-  test:
-    runs-on: ${{ matrix.os }}
+name: Node.js Package
 
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -9,7 +14,8 @@ jobs:
     env:
       prepo: ${{github.repository}}
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
     - name: Set up Minify Actions
       uses: amireshoon/minifyAction@main
       with:
