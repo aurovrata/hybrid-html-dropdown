@@ -1,8 +1,9 @@
 name: Compress js/css
 
-on:
-  release:
-    types: [created]
+push:
+    branches: [ hybrid-dropdown ]
+  pull_request:
+    branches: [ hybrid-dropdown ]
 jobs:
   build:
     runs-on: ubuntu-latest
