@@ -1,8 +1,8 @@
 /*
-Hybrid Dropdown JavaScript plugin
-Version: 2.0
-Authors: Sandrina Pereira & Aurovrata Venet
-Twitter: @a_sandrina_p / @aurovrata
+Hybrid Dropdown JavaScript plugin insprired from an original idea by Sandrina Pereira (twitter:@a_sandrina_p)
+Version: 2.0rc1
+Authors: Aurovrata Venet
+Twitter: @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
 
 Method list:
