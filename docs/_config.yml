@@ -1,5 +1,4 @@
-title: "Hybrid Dropdown: a better alaternative to <select/> fields"
-description: "Build powerful customised styled dropdown fields with filtrable list of options for your forms"
+title: Hybrid Dropdown: a better alaternative to <select/> fields
+description: Build powerful customised styled dropdown fields with filtrable list of options for your forms
 remote_theme: pmarsceill/just-the-docs
-color_scheme: "dark"
-search_enabled: false
+search_enabled: true
