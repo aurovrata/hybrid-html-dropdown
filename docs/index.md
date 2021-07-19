@@ -1,4 +1,12 @@
-## Hybrid HTML Dropdown field
+---
+layout: default
+title: Home
+nav_order: 1
+description: "Getting sarted with Hybrid Drodpown fields."
+permalink: /
+---
+
+# Hybrid HTML Dropdown field
 
 This is an HTML dropdown widget that can replace a <select/> field or built using a json object which can be fully customised using css.  This is inspired by an original [idea](https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/) by Sandrina Pereira (@sandrina-p). This plugin is written in pure javascript and has evolved consderably from the initial idea.
 
