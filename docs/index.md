@@ -81,7 +81,6 @@ For example, the following hybrid dropdown is configured to allow multiple selec
 
 ```javascript
 let hyd = new HybridDropdown(el,{
-  'multiple':true,
   'limitSelection':3
 });
 ```
@@ -89,7 +88,7 @@ let hyd = new HybridDropdown(el,{
 this can also be configured on the HTML element using `data-` attributes,
 
 ```html
-<div id="my-list" data-multiple="true" data-limit-selection="3">
+<div id="my-list" data-limit-selection="3">
    <script type="application/json">
     {
       "":"Select a value",
