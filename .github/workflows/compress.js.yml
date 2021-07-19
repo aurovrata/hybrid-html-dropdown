@@ -1,12 +1,11 @@
-name: Compress js/css
+name: minify
 
-push:
-    branches: [ hybrid-dropdown ]
-  pull_request:
-    branches: [ hybrid-dropdown ]
+on: [push, pull_request]
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ${{ matrix.os }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -19,10 +18,10 @@ jobs:
       uses: amireshoon/minifyAction@main
       with:
         repo: $prepo
-    - name: Minifying Codes
+    - name: Running Tests
       run: |
         minifier.sh $prepo
-    - name: Pushing to production branch
+    - name: Commiting changes
       uses: actions-js/push@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -32,3 +31,4 @@ jobs:
         author_name: MinifyAction[bot]
         author_email: amireshoon-minifyAction@users.noreply.github.com
         force: true
+    name: Minify
