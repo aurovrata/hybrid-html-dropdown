@@ -1,37 +1,38 @@
-## Welcome to GitHub Pages
+## Hybrid HTML Dropdown field
 
-You can use the [editor on GitHub](https://github.com/aurovrata/hybrid-html-dropdown/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+This is an HTML dropdown widget that can replace a <select/> field or built using a json object which can be fully customised using css.  This is inspired by an original [idea](https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/) by Sandrina Pereira (@sandrina-p). This plugin is written in pure javascript and has evolved consderably from the initial idea.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The main features are
 
-### Markdown
+- selection and navigation using arrow/esc/tab/space bar/enter keys
+- fully styled using CSS
+- initialised using existing `<select/>` form field
+- initialised using embeded json objects.
+- build complex embed and grouped lists.
+- restrain selection to any interger limit.
+- filter list displayed in the dropdown.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## How to use it?
 
-```markdown
-Syntax highlighted code block
+Download the latest [release](https://github.com/aurovrata/hybrid-html-dropdown/releases) and uncompress the library into your project.
 
-# Header 1
-## Header 2
-### Header 3
+Include the minified css stylesheet in the head of your HTML file,
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+<link rel="stylesheet" href="./hybrid-html-dropdown/hybrid-dropdown.css" media="all">
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+and the minified js file in your footer,
 
-### Jekyll Themes
+```
+<script src="./hybrid-html-dropdown/hybrid-dropdown.js" type="text/javascript"></script>
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/aurovrata/hybrid-html-dropdown/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+If you have an existing `<select/>` field,
 
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+```html
+<select id="my-list" name="list_field">
+   ...
+</select/>
+```
+            
