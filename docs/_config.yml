@@ -1,1 +1,3 @@
-theme: jekyll-theme-minimal
+theme: just-the-docs
+title: "Hybrid Dropdown: a better alaternative to <select/> fields"
+description: "Build powerful customised styled dropdown fields with filtrable list of options for your forms"
