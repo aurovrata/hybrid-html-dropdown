@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Options & Methods"
+nav_order: 1
+---
+
 # Hybrid dropdown configuration options
 
 - `dropdown`: 'vertical'|'horizontal', default is a vertical dropdown list.
