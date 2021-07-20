@@ -1,6 +1,14 @@
-## Hybrid HTML Dropdown field
+---
+layout: default
+title: Home
+nav_order: 1
+description: "Getting sarted with Hybrid Drodpown fields."
+permalink: /
+---
 
-This is an HTML dropdown widget that can replace a <select/> field or built using a json object which can be fully customised using css.  This is inspired by an original [idea](https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/) by Sandrina Pereira (@sandrina-p). This plugin is written in pure javascript and has evolved consderably from the initial idea.
+# Hybrid HTML Dropdown field
+
+This is an HTML dropdown widget that can replace a `<select/>` field or built using a json object which can be fully customised using css.  This is inspired by an original [idea](https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/) by Sandrina Pereira (@sandrina-p). This plugin is written in pure javascript and has evolved consderably from the initial idea.
 
 The main features are
 
@@ -48,7 +56,7 @@ you can convert it to a hybrid dropdown,
   })
   </script>
   ```
-  
+
 ## Creating hybrid dropdowns from embeded json data objects.
 
 A hybrid dropdown can be instantiated from a json data object embeded within the element on which the dropdown will be created,
@@ -81,7 +89,6 @@ For example, the following hybrid dropdown is configured to allow multiple selec
 
 ```javascript
 let hyd = new HybridDropdown(el,{
-  'multiple':true,
   'limitSelection':3
 });
 ```
@@ -89,7 +96,7 @@ let hyd = new HybridDropdown(el,{
 this can also be configured on the HTML element using `data-` attributes,
 
 ```html
-<div id="my-list" data-multiple="true" data-limit-selection="3">
+<div id="my-list" data-limit-selection="3">
    <script type="application/json">
     {
       "":"Select a value",
@@ -98,4 +105,3 @@ this can also be configured on the HTML element using `data-` attributes,
    </script>
 </div>
 ```
-            
