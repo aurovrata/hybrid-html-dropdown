@@ -45,7 +45,7 @@ If you have an existing `<select/>` field,
 ```
 you can convert it to a hybrid dropdown,
 
-```javascript
+```html
 <script type="text/javascript">
   (function(){
     let sel, hyd;
@@ -83,7 +83,7 @@ A hybrid dropdown can be instantiated from a json data object embeded within the
 
 ## Ccofiguring the hybrid list object.
 
-The HybridDropdonw object can be configured using settings parsed at the time of object instantiation or as `data-'` attributes on the HTML element itself.  Optional functions need to be configured as bbject settings at the time of instantiaion.  See the option page for a full list of configuration settings.
+The `HybridDropdown` object can be configured using settings parsed at the time of object instantiation or as `data-` attributes on the HTML element itself.  Optional functions need to be configured as bbject settings at the time of instantiaion.  See the option page for a full list of configuration settings.
 
 For example, the following hybrid dropdown is configured to allow multiple selections limited to a maximum of 3,
 

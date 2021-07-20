@@ -1,5 +1,5 @@
 title: Hybrid Dropdown
-description: "A better alaternative to `<select/>` fields"
+description: "A better alaternative to &lt;select/&gt; fields"
 remote_theme: pmarsceill/just-the-docs
 baseurl: "/hybrid-html-dropdown" # the subpath of your site, e.g. /blog
 url: "https://aurovrata.github.io" # the base hostname & protocol for your site, e.g. http://example.com
@@ -12,11 +12,11 @@ heading_anchors: true
 # nav_sort: case_insensitive # default, equivalent to nil
 nav_sort: case_sensitive # Capital letters sorted before lowercase
 
-#upper right link 
+#upper right link
 aux_links:
   "Hybrid Dropdown on GitHub":
     - "//github.com/aurovrata/hybrid-html-dropdown"
-    
+
 # Back to top link
 back_to_top: true
 back_to_top_text: "Back to top"
@@ -36,4 +36,3 @@ gh_edit_repository: "https://github.com/aurovrata/hybrid-html-dropdown/tree/gh-p
 gh_edit_branch: "master" # the branch that your docs is served from
 # gh_edit_source: docs # the source that your files originate from
 gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
-
