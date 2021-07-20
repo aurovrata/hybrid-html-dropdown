@@ -1,9 +1,17 @@
-title: "Hybrid Dropdown - a better alaternative to <select/> fields"
-description: Build powerful customised styled dropdown fields with filtrable list of options for your forms
+title: Hybrid Dropdown
+description: "A better alaternative to `<select/>` fields"
 remote_theme: pmarsceill/just-the-docs
+baseurl: "/hybrid-html-dropdown" # the subpath of your site, e.g. /blog
+url: "https://aurovrata.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+permalink: pretty
+
 color_scheme: light
 search_enabled: true
 heading_anchors: true
+# Sort order for navigation links
+# nav_sort: case_insensitive # default, equivalent to nil
+nav_sort: case_sensitive # Capital letters sorted before lowercase
+
 #upper right link 
 aux_links:
   "Hybrid Dropdown on GitHub":
