@@ -8,7 +8,7 @@ nav_order: 2
 
 | option           | description                                                  |
 |:-----------------|:-------------------------------------------------------------|      
-| `dropdown`       | 'vertical'|'horizontal', default is a vertical dropdown list.|
+| `dropdown`       | 'vertical'&vert;'horizontal', default is a vertical dropdown list.|
 | `limitSelection` | default 1, -1 for illimited, or an integer value.            |
 | `selectedLabel`  | a function to display the selected label, see selected label function section below.|
 | `defaultText`    | if a an empty value option is providded in the data list it will be used by default, else the default selected text will diplay this text value.|
