@@ -114,7 +114,16 @@ hsProtype.closeSelect - close dropdown list.
       if(_.opt.fieldName.length==0) _.opt.fieldName = _.el.getAttribute('id'); //try to set it to id.
       if(_.multi && _.opt.fieldName.length>0 && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
     }else{
-      if(_.opt.fieldName.length==0) _.opt.fieldName = _.el.getAttribute('name');
+      if(_.opt.fieldName.length==0){
+        switch(true){
+          case _.el.hasAttribute('name'):
+            _.opt.fieldName = _.el.getAttribute('name');
+            break;
+          case _.el.hasAttribute('id'):
+            _.opt.fieldName = _.el.getAttribute('id');
+            break;
+        }
+      }
       _.el.setAttribute('name','');
     }
     //initialise the hybrid-dd.
