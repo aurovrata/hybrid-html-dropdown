@@ -10,12 +10,12 @@ nav_order: 2
 |:-----------------|:-------------------------------------------------------------|      
 | `dropdown`       | 'vertical'&#124;'horizontal', default is a vertical dropdown list.|
 | `limitSelection` | default 1, -1 for illimited, or an integer value.            |
-| `selectedLabel`  | a function to display the selected label, see selected label function section below.|
+| `selectedLabel`  | a function to display the selected label, see [Selected label function](./#selected-label-function) section below.|
 | `defaultText`    | if a an empty value option is providded in the data list it will be used by default, else the default selected text will diplay this text value.|
 | `treeView`       | `false` by default, setting this to true allows Tree View selection, see Tree Vien section below.|
 | `fieldName`      | '' the field name to use for the form submission if none are provided in the HTML element used to intialise the dropdown object.|
 | `tabIndex`       | the tabindex value of the field used for tabbed navigation between the form fields.|
-| `listOption`     | filter functon to determine if a data option is to be included in the dropdonw list.  This is especially useful when needing to display a subset of the options depending on the value of another field in the form. See the sectoin Filtering Dropdonw lists below.|
+| `listOption`     | filter functon to determine if a data option is to be included in the dropdonw list.  This is especially useful when needing to display a subset of the options depending on the value of another field in the form. See the section [Filtering Dropdown lists](./#filtering-dropdown-lists) below.|
 | `selectedValues` | `[]` an empty array by default, but can hold existing option values which show as pre-selected when the dropdown is initialised.|
 
 ## Selected label function
