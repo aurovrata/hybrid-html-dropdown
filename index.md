@@ -63,7 +63,7 @@ If you have an existing `<select/>` field,
 ```html
 <select id="my-list" name="list_field">
    ...
-</select/>
+</select>
 ```
 you can convert it to a hybrid dropdown,
 
