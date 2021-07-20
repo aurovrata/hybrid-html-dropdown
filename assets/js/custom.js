@@ -3,4 +3,4 @@
     let sel= document.querySelector('#ex1-hdd');
     new HybridDropdown(sel,{});
   })
-})
+})()
