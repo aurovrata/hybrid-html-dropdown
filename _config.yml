@@ -5,7 +5,7 @@ baseurl: "/hybrid-html-dropdown" # the subpath of your site, e.g. /blog
 url: "https://aurovrata.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 permalink: pretty
 
-color_scheme: light
+color_scheme: dark
 search_enabled: true
 heading_anchors: true
 # Sort order for navigation links
