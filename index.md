@@ -37,6 +37,28 @@ and the minified js file in your footer,
 ```
 
 If you have an existing `<select/>` field,
+<select id="ex1">
+<option value="">Select an item</option>
+<option value="ps">Pumpkin sushi</option>
+<option value="">Avocado sushi</option>
+<option value="">Tomato sushi</option>
+<option value="cs">Carrot sushi</option>
+</select>
+<select id="ex1-hdd">
+<option value="">Select an item</option>
+<option value="ps">Pumpkin sushi</option>
+<option value="">Avocado sushi</option>
+<option value="">Tomato sushi</option>
+<option value="cs">Carrot sushi</option>
+</select>
+<script type="text/javascript">
+(function(){
+  document.addEventListener('DOMContentLoaded', (e) => {  
+    let sel= document.querySelector('#ex1-hdd');
+    new HybridDropdown(sel,{});
+  })
+})
+</script>
 
 ```html
 <select id="my-list" name="list_field">
