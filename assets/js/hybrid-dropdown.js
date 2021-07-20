@@ -53,7 +53,7 @@ hsProtype.closeSelect - close dropdown list.
     switch(true){
       case elm.nodeName === "SELECT": //select field source.
         if(elm.multiple) lim=-1;
-        elm.style="width:1px;height:1px"; //hide the origial select field.
+        elm.style="visibility:hidden"; //hide the origial select field.
         break;
       default:
         _.isDS = true;// dateset source.
