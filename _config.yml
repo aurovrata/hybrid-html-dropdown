@@ -1,5 +1,5 @@
 title: Hybrid Dropdown
-description: "A better alaternative to &lt;select/&gt; fields"
+description: "A better alaternative to &lt;select&gt; fields"
 remote_theme: pmarsceill/just-the-docs
 baseurl: "/hybrid-html-dropdown" # the subpath of your site, e.g. /blog
 url: "https://aurovrata.github.io" # the base hostname & protocol for your site, e.g. http://example.com
