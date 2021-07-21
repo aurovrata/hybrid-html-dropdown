@@ -229,7 +229,7 @@ hsProtype.closeSelect - close dropdown list.
   hsProtype.colourise = function(elm,inv=false){
     let _ = this;
     if(!_.opt.backgroundColor || !_.opt.color){
-      let found=false, p=_.el, s;
+      let found=false, p=_.hdd, s;
       while(!found && p){
         s = window.getComputedStyle( p, null);
         if(!_.opt.backgroundColor){
