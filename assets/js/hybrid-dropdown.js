@@ -81,6 +81,7 @@ hsProtype.closeSelect - close dropdown list.
           break;
         case 'eventPropagate':
         case 'treeView':
+        case 'negative':
           cnfg[k] = (cnfg[k] == 'true');
           break;
       }
@@ -103,6 +104,7 @@ hsProtype.closeSelect - close dropdown list.
         fieldName: '',
         backgroundColor:'',
         color:'',
+        negative: false,
         tabIndex:tabIdx?tabIdx:0,
         listOption: function(o,i){return true},
         selectedValues:[],
@@ -262,10 +264,9 @@ hsProtype.closeSelect - close dropdown list.
         _.opt.color = _.opt.backgroundColor;
         _.opt.backgroundColor = s;
       }
-    }else{
-      elm.style['background-color']= inv ? _.opt.color :_.opt.backgroundColor;
-      elm.style['color']= inv ? _.opt.backgroundColor:_.opt.color;
     }
+    elm.style['background-color']= inv ? _.opt.color :_.opt.backgroundColor;
+    elm.style['color']= inv ? _.opt.backgroundColor:_.opt.color;
   }
   //method to refresh an existing HybridDropdown object.
   hsProtype.refreshHybrid = function(settings={}){
