@@ -171,50 +171,6 @@ hsProtype.closeSelect - close dropdown list.
       _.listenForBulk = false;
       _.listenModClick = false;
     }
-    //set colour for dd elements.
-    hsProtype.colourise = function(elm,inv=false){
-      let _ = this;
-      if(!_.opt.backgroundColor || !_.opt.color){
-        let found=false, p=_.el, s;
-        while(!found && p){
-          s = window.getComputedStyle( p, null);
-          if(!_.opt.backgroundColor){
-            switch(s['background-color']){ //bg colour;
-              case 'transparent':
-              case '':
-              case 'rgba(0, 0, 0, 0)':
-                p=p.parentElement;
-                break;
-              default:
-                _.opt.backgroundColor = s['background-color'];
-            }
-          }
-          if(!_.opt.color){
-            switch(s['color']){ //bg colour;
-              case 'transparent':
-              case '':
-              case 'rgba(0, 0, 0, 0)':
-                p=p.parentElement;
-                break;
-              default:
-                _.opt.color = s['color'];
-            }
-            if(_.opt.color && _.opt.backgroundColor) found=true;
-          }
-        }
-        if(!found){ //set to default.
-          _.opt.color = _.opt.negative ? '#5d5d5d':'#fff';
-          _.opt.backgroundColor = _.opt.negative ? '#fff':'#5d5d5d';
-        }else if(_.opt.negative){
-          s = _.opt.color;
-          _.opt.color = _.opt.backgroundColor;
-          _.opt.backgroundColor = s;
-        }
-      }else{
-        elm.style['background-color']= inv ? _.opt.color :_.opt.backgroundColor;
-        elm.style['color']= inv ? _.opt.backgroundColor:_.opt.color;
-      }
-    }
     //set style.
     _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
     //build list of options.
@@ -265,6 +221,50 @@ hsProtype.closeSelect - close dropdown list.
       _.modClick = _.optionModClick.bind(_);
       //fire init event.
       _.emit('hybrid-dd-init');
+    }
+  }
+  //set colour for dd elements.
+  hsProtype.colourise = function(elm,inv=false){
+    let _ = this;
+    if(!_.opt.backgroundColor || !_.opt.color){
+      let found=false, p=_.el, s;
+      while(!found && p){
+        s = window.getComputedStyle( p, null);
+        if(!_.opt.backgroundColor){
+          switch(s['background-color']){ //bg colour;
+            case 'transparent':
+            case '':
+            case 'rgba(0, 0, 0, 0)':
+              p=p.parentElement;
+              break;
+            default:
+              _.opt.backgroundColor = s['background-color'];
+          }
+        }
+        if(!_.opt.color){
+          switch(s['color']){ //bg colour;
+            case 'transparent':
+            case '':
+            case 'rgba(0, 0, 0, 0)':
+              p=p.parentElement;
+              break;
+            default:
+              _.opt.color = s['color'];
+          }
+          if(_.opt.color && _.opt.backgroundColor) found=true;
+        }
+      }
+      if(!found){ //set to default.
+        _.opt.color = _.opt.negative ? '#5d5d5d':'#fff';
+        _.opt.backgroundColor = _.opt.negative ? '#fff':'#5d5d5d';
+      }else if(_.opt.negative){
+        s = _.opt.color;
+        _.opt.color = _.opt.backgroundColor;
+        _.opt.backgroundColor = s;
+      }
+    }else{
+      elm.style['background-color']= inv ? _.opt.color :_.opt.backgroundColor;
+      elm.style['color']= inv ? _.opt.backgroundColor:_.opt.color;
     }
   }
   //method to refresh an existing HybridDropdown object.
