@@ -1,0 +1,41 @@
+title: Hybrid Dropdown
+description: "A better alaternative to `<select/>` fields"
+#remote_theme: pmarsceill/just-the-docs
+theme: "just-the-docs"
+baseurl: "/hybrid-html-dropdown" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
+color_scheme: dark
+search_enabled: true
+heading_anchors: true
+# Sort order for navigation links
+# nav_sort: case_insensitive # default, equivalent to nil
+nav_sort: case_sensitive # Capital letters sorted before lowercase
+
+#upper right link
+aux_links:
+  "Hybrid Dropdown on GitHub":
+    - "//github.com/aurovrata/hybrid-html-dropdown"
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: "Copyleft &#127279; 2021 Aurovrata V. Distributed under <a href=\"https://github.com/aurovrata/hybrid-html-dropdown/blob/hybrid-dropdown/LICENSE\">GPL3 license.</a>"
+
+# plugins:
+#   - jekyll-sitemap
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - any_additional_item
+
+
+  # Custom
+  - .github/
