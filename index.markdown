@@ -37,20 +37,12 @@ and the minified js file in your footer,
 ```
 
 If you have an existing `<select/>` field,
-
 <select id="ex1">
-<option value="">Select an item</option>
-<option value="ps">Pumpkin sushi</option>
-<option value="">Avocado sushi</option>
-<option value="">Tomato sushi</option>
-<option value="cs">Carrot sushi</option>
-</select>
-<select id="ex1-hdd">
-<option value="">Select an item</option>
-<option value="ps">Pumpkin sushi</option>
-<option value="">Avocado sushi</option>
-<option value="">Tomato sushi</option>
-<option value="cs">Carrot sushi</option>
+  <option value="">Select an item</option>
+  <option value="ps">Pumpkin sushi</option>
+  <option value="as">Avocado sushi</option>
+  <option value="ts">Tomato sushi</option>
+  <option value="cs">Carrot sushi</option>
 </select>
 
 ```html
@@ -59,6 +51,13 @@ If you have an existing `<select/>` field,
 </select>
 ```
 you can convert it to a hybrid dropdown,
+<select id="ex1-hdd">
+  <option value="">Select an item</option>
+  <option value="ps">Pumpkin sushi</option>
+  <option value="as">Avocado sushi</option>
+  <option value="ts">Tomato sushi</option>
+  <option value="cs">Carrot sushi</option>
+</select>
 
 ```html
 <script type="text/javascript">
@@ -96,7 +95,7 @@ A hybrid dropdown can be instantiated from a json data object embeded within the
 </script>
 ```
 
-## Ccofiguring the hybrid list object.
+## Configuring the hybrid list object.
 
 The `HybridDropdown` object can be configured using settings parsed at the time of object instantiation or as `data-` attributes on the HTML element itself.  Optional functions need to be configured as bbject settings at the time of instantiaion.  See the option page for a full list of configuration settings.
 

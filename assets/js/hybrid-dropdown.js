@@ -253,8 +253,8 @@ hsProtype.closeSelect - close dropdown list.
             default:
               _.opt.color = s['color'];
           }
-          if(_.opt.color && _.opt.backgroundColor) found=true;
         }
+        if(_.opt.color && _.opt.backgroundColor) found=true;
       }
       if(!found){ //set to default.
         _.opt.color = _.opt.negative ? '#5d5d5d':'#fff';
@@ -849,7 +849,7 @@ hsProtype.closeSelect - close dropdown list.
     }
     _.hdd.classList.add('active');
     //adjust width of dropdown.
-    if(0==_.hdd.ddlist.style.width.length) _.hdd.ddlist.style.width=(_.hdd.ddlist.offsetWidth + 10)+"px";
+    if(!_.hdd.ddlist.style['min-width']) _.hdd.ddlist.style['min-width']=(_.hdd.ddlist.offsetWidth + 12)+"px";
 
     //listen for external clicks to close.
     _.event(document, 'add',{

@@ -6,7 +6,7 @@
   min-width: 30px;
   height: 2.5em;
   display: inline-block;
-  vertical-align: top;
+  vertical-align: baseline;
   font-size: 1em;
   border: 1px solid #6f6f6f;
   border-radius: 0.25em;
@@ -91,9 +91,12 @@
 	height: 16px;
 	border: solid 1px;
 	vertical-align: middle;
-	margin-right: 3px;
-	margin-bottom: 3px;
+	margin: 0 3px 3px 2px;
 	display: inline-block;
+	visibility: hidden;
+}
+.hybrid-dropdown.show-cb .hybridddcb {
+	visibility: visible;
 }
 .hybridddcb::before {
 	content: '';
@@ -148,7 +151,7 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   position: relative;
   width: max-content;
   height: 100%;
-  padding: 0.5em 0.5em;
+  padding: 0.4em 3px 0.6em 3px;
   cursor: pointer;
   min-width: 100%;
 }
