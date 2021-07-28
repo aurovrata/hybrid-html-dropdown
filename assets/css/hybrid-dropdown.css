@@ -114,26 +114,25 @@
 	padding: 1px;
 }
 /* COLOURS */
-.hybriddd-option > label{
-	background-color: inherit;
-	color:#5d5d5d
-}
+
 .hybriddd-option.active > label{
 	background: #0466ff;
 	color: #fff;
 }
-.hybriddd-option.active > label:hover{
-	color: #5d5d5d;
-}
+
 input:checked + .hybridddl > .hybridddcb::before{
 	background: white;
 }
 .hybriddd-option.partial > label .hybridddcb::before {
 	background: #a5a5a5;
 }
-:hover > input:checked + .hybridddl > .hybridddcb::before{
+/* :hover > input:checked + .hybridddl > .hybridddcb::before{
 	background: #5d5d5d;
-}
+} */
+/* .hybriddd-option.hover > label,
+.hybriddd-option > label:hover {
+  background: #eaeaea;
+} */
 /* This media query detects devices where the primary
 input mechanism can hover over elements. (e.g. computers with a mouse) */
 @media (hover: hover) {
@@ -176,11 +175,6 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 	-webkit-transition: all 0.15s ease-in-out;
 	transition: all 0.15s ease-in-out;
 	width: 5px;
-}
-
-.hybriddd-option.hover > label,
-.hybriddd-option > label:hover {
-  background: #eaeaea;
 }
 /*
 for horizontal dropdown

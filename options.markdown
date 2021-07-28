@@ -17,6 +17,11 @@ nav_order: 2
 | `tabIndex`       | the tabindex value of the field used for tabbed navigation between the form fields.|
 | `listOption`     | filter functon to determine if a data option is to be included in the dropdonw list.  This is especially useful when needing to display a subset of the options depending on the value of another field in the form. See the section [Filtering Dropdown lists](./#filtering-dropdown-lists) below.|
 | `selectedValues` | `[]` an empty array by default, but can hold existing option values which show as pre-selected when the dropdown is initialised.|
+| `checkboxes`     | `true`&#124;`false`, by default it is set to `false` on dropdowns converted from existing `<select/>` fields and `true` for JSON dataset fields.|
+| `colourise`      | `true` by default, plugin attempts to find the font and background colours of the page and set the dropdown  style properties, using the inverse for highlighted options.  The active option is by default set to white font and `#0466ff` (blue) background.  This can be changed, see the [Styling](./styling.html) page.|
+| `negative`       | `false` by default.  Setting to true will inverse the automatic colour styling applied by the plugin with the above `colourise` option set to true.  So the default font color is applied to the dropdown background and inversely the background to the font.|
+| `color`          | empty by default, can be used to force the plugin to use a specific font colour with the option `colourise` set to true.|
+| `backgroundColor`| empty by default, can be used to force the plugin to use a specific background colour with the option `colourise` set to true.|
 
 ## Selected label function
 
@@ -53,7 +58,7 @@ however, this function can be re-configured when calling the Hybrid Dropdown's m
         "pot": "Potato",
         "car": "Carrot"
       },
-      'fruits":{
+      "fruits":{
         "label":"Fruits",
         "org" " Orange",
         "grp":"Grapes",

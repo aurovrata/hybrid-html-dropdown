@@ -29,7 +29,7 @@ hsProtype.addClass - add class on options.
 hsProtype.clearClass - remove class on options.
 hsProtype.openSelect - open dropdown list.
 hsProtype.closeSelect - close dropdown list.
-
+hsProtype.colourise - seek document colours to colourise font and background.
 */
 
 // global module creation
@@ -47,13 +47,14 @@ hsProtype.closeSelect - close dropdown list.
       throw new Error("HybridDropdown requires a DOM element to intialise.");
     }
 
-    let _ = this, lim=1, tabIdx = elm.getAttribute('tabindex');
+    let _ = this, lim=1, cb=true, tabIdx = elm.getAttribute('tabindex');
     _.isDS = false, cnfg={}; //track source
 
     switch(true){
       case elm.nodeName === "SELECT": //select field source.
         if(elm.multiple) lim=-1;
         elm.style="visibility:hidden"; //hide the origial select field.
+        cb = false; //checkboxes
         break;
       default:
         _.isDS = true;// dateset source.
@@ -105,6 +106,8 @@ hsProtype.closeSelect - close dropdown list.
         backgroundColor:'',
         color:'',
         negative: false,
+        colourise: true,
+        checboxes: cb,
         tabIndex:tabIdx?tabIdx:0,
         listOption: function(o,i){return true},
         selectedValues:[],
@@ -157,7 +160,8 @@ hsProtype.closeSelect - close dropdown list.
       // _.el.parentNode.appendChild(_.hdd);
       //hide original element.
       // _.el.style.display='none';
-      _.hdd.classList.add('hybrid-dropdown')
+      _.hdd.classList.add('hybrid-dropdown');
+      if(_.opt.checboxes)_.hdd.classList.add('show-cb');
       // _.hdd.setAttribute('aria-hidden', true);//hide from readers.
       _.hdd.selected = document.createElement('div');
       _.hdd.appendChild(_.hdd.selected);
@@ -165,7 +169,7 @@ hsProtype.closeSelect - close dropdown list.
       _.hdd.ddlist = document.createElement('ul');
       _.hdd.appendChild(_.hdd.ddlist);
       _.hdd.ddlist.classList.add('hybriddd-options');
-      if(!_.hdd.ddlist.style['background-color']) _.colourise(_.hdd.ddlist);
+      if(!_.hdd.ddlist.style['background-color'] && _.opt.colourise) _.colourise(_.hdd.ddlist);
       _.hdd.options = {};
       _.hindex=[]; //hover indexes used to track shiftkey + drag events.
       _.sindex=[]; //initial index of selected option.
@@ -226,12 +230,16 @@ hsProtype.closeSelect - close dropdown list.
     }
   }
   //set colour for dd elements.
-  hsProtype.colourise = function(elm,inv=false){
+  hsProtype.colourise = function(elm){
     let _ = this;
+    if(_window['hdd']){
+      _.opt.backgroundColor = _window.hdd.bgColor;
+      _.opt.color = _window.hdd.color;
+    }
     if(!_.opt.backgroundColor || !_.opt.color){
       let found=false, p=_.hdd, s;
       while(!found && p){
-        s = window.getComputedStyle( p, null);
+        s = _window.getComputedStyle( p, null);
         if(!_.opt.backgroundColor){
           switch(s['background-color']){ //bg colour;
             case 'transparent':
@@ -265,8 +273,20 @@ hsProtype.closeSelect - close dropdown list.
         _.opt.backgroundColor = s;
       }
     }
-    elm.style['background-color']= inv ? _.opt.color :_.opt.backgroundColor;
-    elm.style['color']= inv ? _.opt.backgroundColor:_.opt.color;
+    elm.style['background-color']= _.opt.backgroundColor;
+    elm.style['color']= _.opt.color;
+    if(!_window['hdd']){
+      _window.hdd={
+        color:elm.style['color'],
+        bgColor:elm.style['background-color']
+      }
+      let active = document.createElement("style")
+      active.type = "text/css"
+      active.innerText = ".hybriddd-option.active > label:hover,.hybriddd-option.hover > label,.hybriddd-option \
+      > label:hover{color: "+elm.style['background-color']+";background-color:"+elm.style['color']+"}:hover > \
+      input:checked + .hybridddl > .hybridddcb::before{color:"+elm.style['color']+"}";
+      document.head.appendChild(active);
+    }
   }
   //method to refresh an existing HybridDropdown object.
   hsProtype.refreshHybrid = function(settings={}){
