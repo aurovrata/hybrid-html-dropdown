@@ -4,7 +4,9 @@ title: "Options & Methods"
 nav_order: 2
 ---
 
-# Hybrid dropdown configuration options
+# Hybrid dropdown configuration
+
+## Options
 
 | option           | description                                                  |
 |:-----------------|:-------------------------------------------------------------|      
@@ -22,6 +24,12 @@ nav_order: 2
 | `negative`       | `false` by default.  Setting to true will inverse the automatic colour styling applied by the plugin with the above `colourise` option set to true.  So the default font color is applied to the dropdown background and inversely the background to the font.|
 | `color`          | empty by default, can be used to force the plugin to use a specific font colour with the option `colourise` set to true.|
 | `backgroundColor`| empty by default, can be used to force the plugin to use a specific background colour with the option `colourise` set to true.|
+
+## Methods
+
+| method           | description                                                  |
+|:-----------------|:-------------------------------------------------------------|      
+| `refresh({})`| used to refresh a dropdown field, destroys the option list and reconstructs it.  The method can have configuration options passed in order to modify the dropdown.  This is especially useful to filter the option list by passing a new filter function.|
 
 ## Selected label function
 

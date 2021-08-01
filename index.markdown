@@ -51,7 +51,7 @@ If you have an existing `<select/>` field,
 </select>
 ```
 you can convert it to a hybrid dropdown,
-<select id="ex1-hdd">
+<select id="ex1-hdd" class="hybrid-list">
   <option value="">Select an item</option>
   <option value="ps">Pumpkin sushi</option>
   <option value="as">Avocado sushi</option>
@@ -79,8 +79,9 @@ A hybrid dropdown can be instantiated from a json data object embeded within the
 <div id="json-field">
   <script type="application/json">
     {
-      "":"Select a value",
-     ...
+      "":"Select a dish",
+      "Sushi":{ "ps":"Pumpkin sushi","as":"Avocado sushi","tc":"Tomato sushi","cs":"Carrot sushi"},
+      "Dosa":{"pd":"Plain dosa","md":"Masala dosa","myd":"Mysore dosa","pr":"Paper roast"}
     }
    </script>
 </div>
@@ -94,6 +95,20 @@ A hybrid dropdown can be instantiated from a json data object embeded within the
   })
 </script>
 ```
+which results in,
+<span id="json-field" class="hybrid-list">
+  <script type="application/json">
+  {
+    "":"Select a dish",
+    "Sushi":{"ps":"Pumpkin sushi","as":"Avocado sushi","tc":"Tomato sushi","cs":"Carrot sushi"},
+    "Dosa":{"pd":"Plain dosa","md":"Masala dosa","myd":"Mysore dosa","pr":"Paper roast"}
+  }
+   </script>
+</span>
+
+The Hybrid Dropdown field offers a very powerful way to display lists and as you can see json dataset lists are automatically listed with checkboxes, although this can be switched off in using the [option](/options.html) settings.
+
+The [examples](/methods.html) page shows how Hybrid Dropdown lists can have [multiple nested groups](/examples.html#hybrid-dropdown-with-multiple-nested-groups), as well treeview structures to ease selection.
 
 ## Configuring the hybrid list object.
 

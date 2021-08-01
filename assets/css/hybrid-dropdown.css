@@ -120,7 +120,7 @@
 	color: #fff;
 }
 
-input:checked + .hybridddl > .hybridddcb::before{
+input:checked + .hybridddcb::before{
 	background: white;
 }
 .hybriddd-option.partial > label .hybridddcb::before {

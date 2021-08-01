@@ -8,7 +8,7 @@
     }
   }
   docReady( (e)=>{
-    let sel= document.querySelector('#ex1-hdd');
-    new HybridDropdown(sel,{});
+    let hl= document.querySelectorAll('.hybrid-list');
+    for(let el of hl) new HybridDropdown(el,{});
   });
 })();

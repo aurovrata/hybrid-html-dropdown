@@ -183,7 +183,8 @@ hsProtype.colourise - seek document colours to colourise font and background.
     let opts = null;
     if(_.isDS){
       _.hdd.classList.add('hybriddd-custom');
-      opts = Object.entries(_.opt.dataSet);
+      if(_.opt.dataSet) opts = Object.entries(_.opt.dataSet);
+      else opts = [["","<em>json error</em>"]];
     }
     else opts = _.el.children;
     opts = _.buildOptionList(opts,0);
@@ -358,7 +359,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
           hso.setAttribute('tabindex','-1');
           hso.innerHTML = '<label class="hybriddd-l'+p+'">'+
             '<input tabindex="-1" class="'+ icl+'" type="'+ t+'" value="'+ val+ '"'+ fname+ checked+ ' />'+
-            '<span class="hybridddl"><span class="hybridddcb"></span>'+ lbl +'</span>' +
+            '<span class="hybridddcb"></span><span class="hybridddl">'+ lbl +'</span>' +
             '</label>';
           hso.classList.value = 'hybriddd-option' + (isSelected ? ' active':'');
           if(!_.isDS) hso.classList.value += o.classList.value; // + (o.value!=''?'hybriddd-'+o.value:'');
@@ -394,7 +395,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
     _.sindex = [];
     if(_.hdd.options['']){
       _.hdd.options[''].classList.add('active');
-      _.value['']=_.hdd.options[''].querySelector('label').innerText;
+      _.value['']=_.hdd.options[''].querySelector('.hybridddl').innerHTML;
       _.hdd.options[''].querySelector('input').checked=true;
       _.sindex.push('');
     }else _.value[''] = _.opt.defaultText;
@@ -767,7 +768,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
     }
     _.value={};
     _.sindex.forEach(v=>{
-      _.value[v]=_.hdd.options[v].querySelector('label').innerText;
+      _.value[v]=_.hdd.options[v].querySelector('.hybridddl').innerHTML;
       _.hdd.options[v].querySelector('input').checked=true;
       _.hdd.options[v].classList.add('active');
     });
@@ -792,7 +793,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
     if(_.sindex.length==0){ //reset to default.
       if('undefined' != typeof _.hdd.options['']){
         _.sindex=[''];
-        _.value={'':_.hdd.options[''].querySelector('label').innerText};
+        _.value={'':_.hdd.options[''].querySelector('.hybridddl').innerHTML};
         _.hdd.options[''].querySelector('input').checked=true;
         _.hdd.options[''].classList.add('active');
       }else _.value={'': _.opt.defaultText};
