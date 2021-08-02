@@ -1,6 +1,7 @@
 ---
 layout: default
 title: "Styling"
+permalink: /styling/
 nav_order: 1
 ---
 

@@ -115,6 +115,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
       settings, //user settings.
       cnfg //element data attribtues.
     );
+    if(_.opt.treeView && 1==_.opt.limitSelection) _.opt.limitSelection=-1; //by default
     _.multi = (_.opt.limitSelection !=1); //flag multi select field.
     //check if we have a field name.
     if(_.isDS){

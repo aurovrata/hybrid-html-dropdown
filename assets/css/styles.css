@@ -3,3 +3,8 @@
 	padding: 5px;
 	text-align: right;
 }
+a[href^="#option-"], a[href^="#method-"] {
+    color: #ffe100;
+    cursor: text;
+    pointer-events: none;
+}
