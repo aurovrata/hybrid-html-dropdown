@@ -934,7 +934,7 @@ class HybridDDError extends Error {
     if(e2){
       if(e2.target.isSameNode(_.el)) return; //in case original element is clicked
       if(_.multi && (e2.ctrlKey || e2.shiftKey)) return; //multiple select w/ ctrl|shift key
-      if(e2.target.parentNode.classList.contains('hybriddd-group')) return;
+      if(e2.target.parentNode.classList && e2.target.parentNode.classList.contains('hybriddd-group')) return;
       if(e2.target.closest('.hybriddd-option')) return;
     }
 
