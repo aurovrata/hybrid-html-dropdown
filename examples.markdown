@@ -4,8 +4,9 @@ title: "Examples"
 permalink: /examples/
 nav_order: 4
 ---
+# Examples
 
-# Hybrid dropdown with multiple nested groups.
+## Hybrid dropdown with multiple nested groups.
 
 Unlike `<select/>` dropdown fields, Hybrid Dropdowns can be constructed with multiple nested groups,  this is especially useful to display hierarchical list such as WordPress taxonomies with multiple branches, however this is only possible using the JSON dataset construct,
 
@@ -128,7 +129,7 @@ which results in,
 
 ## Hybrid Dropdown with multiple limited selections
 
-The Hybrid dropdown can be enabled to allow multiple number of option selection but limited to the limitSelection option value,
+The Hybrid dropdown can be enabled to allow multiple number of option selection but limited to the [`limitSelection`](/hybrid-dropdown/options/#option-limitSelection) option value,
 
 ```html
 <div id="json-field" data-limit-selection="3">
