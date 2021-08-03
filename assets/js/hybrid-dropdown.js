@@ -31,7 +31,13 @@ hsProtype.openSelect - open dropdown list.
 hsProtype.closeSelect - close dropdown list.
 hsProtype.colourise - seek document colours to colourise font and background.
 */
-
+//custom error.
+class HybridDDError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'HybridDropdownError';
+  }
+}
 // global module creation
 (function (factory) {
   typeof define === 'function' && define.amd
@@ -44,7 +50,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
 	let HybridDropdown = (_window.HybridDropdown = function (elm, settings) {
     //verify we have an element and a source
     if(!elm || !(elm instanceof Element)){
-      throw new Error("HybridDropdown requires a DOM element to intialise.");
+      throw new HybridDDError("HybridDropdown requires a DOM element to intialise.");
     }
 
     let _ = this, lim=1, cb=true, tabIdx = elm.getAttribute('tabindex');
@@ -62,7 +68,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
         try{
           cnfg['dataSet'] = JSON.parse(elm.querySelector('script').innerHTML);
         }catch(se){
-          console.log(se);
+          console.log(se.name+":"+se.message);
           console.log("Unable to Hybridise element, missing or malformed json dataset");
         }
 
@@ -188,9 +194,15 @@ hsProtype.colourise - seek document colours to colourise font and background.
       else opts = [["","<em>json error</em>"]];
     }
     else opts = _.el.children;
-    opts = _.buildOptionList(opts,0);
-    _.hdd.ddlist.replaceChildren(...opts);
-    // _.hdd.ddlist.style.width = (_.hdd.ddlist.offsetWidth + 10)+"px";
+    try{
+      opts = _.buildOptionList(opts,0);
+      _.hdd.ddlist.replaceChildren(...opts);
+    }catch(err){
+      if(err instanceof HybridDDError){
+        console.log(err.name+":"+err.message);
+        _.hdd.selected.innerHTML = "<em>json error</em>";
+      }else throw err;
+    }
 
     if(init){
       //bind some events....
@@ -286,7 +298,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
       active.type = "text/css"
       active.innerText = ".hybriddd-option.active > label:hover,.hybriddd-option.hover > label,.hybriddd-option \
       > label:hover{color: "+elm.style['background-color']+";background-color:"+elm.style['color']+"}:hover > \
-      input:checked + .hybridddl > .hybridddcb::before{color:"+elm.style['color']+"}";
+      input:checked + .hybridddl > .hybridddcb::before{color:"+elm.style['color']+"} ul.hybriddd-options::-webkit-scrollbar-track {background:"+elm.style['background-color']+"} ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar {background:"+elm.style['color']+"}";
       document.head.appendChild(active);
     }
   }
@@ -364,6 +376,8 @@ hsProtype.colourise - seek document colours to colourise font and background.
             '</label>';
           hso.classList.value = 'hybriddd-option' + (isSelected ? ' active':'');
           if(!_.isDS) hso.classList.value += o.classList.value; // + (o.value!=''?'hybriddd-'+o.value:'');
+          //make sure not duplicate value.
+          if(_.hdd.options[val]) throw new HybridDDError("Option list has duplicate value: "+val);
           _.hdd.options[val] = hso;
           break;
       }
@@ -591,6 +605,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
           if(_.multi && _.hdd.classList.contains('active')){
             //listen for drag event.
             let o = e.originalTarget;
+            if(!o) o = e.target;
             if(!o.classList.contains('hybriddd-option')) o = o.closest('.hybriddd-option');
             if(o)_.hindex = [o.querySelector('input').value];
             if(!_.listenForBulk){
@@ -641,7 +656,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
   //listen for ctrl|shift + click on multiple dropdown.
   hsProtype.optionModClick = function(e){
     let _ = this, o, i;
-    if(e && e.target){
+    if(e && e.target){ //target only label clicks as they both register on webkit + gekho engines.
       if(!e.ctrlKey && !e.shiftKey){ //ctrl keyup  does not fire after a ctrl+click.
         if(_.listenModClick){
           _.event(_.hdd.ddlist,'remove',{
@@ -664,6 +679,7 @@ hsProtype.colourise - seek document colours to colourise font and background.
         i = o.querySelector('input');
         i.checked = (!i.checked);
         i.dispatchEvent(new Event('hybrid-ddi-change', { 'bubbles': true}));
+        i.classList.add('mod-ctrl');
       }
     }
   }
@@ -687,13 +703,18 @@ hsProtype.colourise - seek document colours to colourise font and background.
   }
   //options input changed.
   hsProtype.inputChange = function(){
-    let _ = this, e = arguments[0], v=[];
+    let _ = this, e = arguments[0], v=[], isCtrl = false;
     if(e && e.target){
+      isCtrl = e.target.classList.contains('mod-ctrl');
+      if('change'==e.type && isCtrl){
+        e.target.classList.remove('mod-ctrl')
+        return false;
+      }
       if(_.hindex.length>0) v = [..._.hindex]; //shift + scroll.
 
       if(e.target.checked && ''==e.target.value){ //clear values.
-        _.removeValue([..._.sindex]); //use array copy else buggy.
-      }else if(_.opt.treeView && _.opt.limitSelection > _.sindex.length){
+        if(!isCtrl) _.removeValue([..._.sindex]); //use array copy else buggy.
+      }else if(_.opt.treeView && (_.opt.limitSelection < 0 || _.opt.limitSelection > _.sindex.length)){
         //toggle all children
         let ai,
           i,
@@ -703,8 +724,10 @@ hsProtype.colourise - seek document colours to colourise font and background.
 
         for (i of ci.values()) {
           i.checked = e.target.checked;
-          if(e.target.checked) v.push(i.value);
-          else _.removeValue([i.value]);
+          if(!isCtrl){
+            if(e.target.checked) v.push(i.value);
+            else _.removeValue([i.value]);
+          }
           i.closest('.hybriddd-option').classList.remove("partial");
         }
 
@@ -724,21 +747,30 @@ hsProtype.colourise - seek document colours to colourise font and background.
             //special case, all children unchecked.
             pl.classList.remove("partial");
             i.checked = false;
-            _.removeValue([i.value]);
+            if(!isCtrl) _.removeValue([i.value]);
           } else if (ci.length > 0 && ai.length != ci.length) {
             pl.classList.add("partial");
-            _.removeValue([i.value]);
+            if(!isCtrl) _.removeValue([i.value]);
           } else pl.classList.remove("partial");
           pl = pl.parentNode.closest('.hybriddd-option');
           start = false;
         }
-        _.addValue(v);
+        if(!isCtrl) _.addValue(v);
       }else{ //just add the current value.
-        v.push(e.target.value);
-        if(e.target.checked) _.addValue(v);
-        else _.removeValue(v);
+        if(!isCtrl) {
+          v.push(e.target.value);
+          if(e.target.checked) _.addValue(v);
+          else _.removeValue(v);
+        }
       }
-      if('hybrid-ddi-change'!= e.type && !e.shiftKey) _.closeSelect(false);
+      switch(true){
+        case 'hybrid-ddi-change'== e.type:
+        case e.shiftKey && e.shiftKey==true:
+          break;
+        default:
+          _.closeSelect(false);
+          break;
+      }
     }
   }
   //toggle values that are hoghlighted.
@@ -762,7 +794,12 @@ hsProtype.colourise - seek document colours to colourise font and background.
           _.hdd.options[''].querySelector('input').checked=false;
           _.sindex=varr;
         }else _.sindex = _.sindex.concat(varr);
-        if(_.opt.limitSelection>0) _.sindex = _.sindex.slice(0,_.opt.limitSelection);
+        if(_.opt.limitSelection>0){
+          for(let j = _.opt.limitSelection; j<_.sindex.length;j++){
+            _.hdd.options[_.sindex[j]].querySelector('input').checked=false;
+          }
+          _.sindex = _.sindex.slice(0,_.opt.limitSelection);
+        }
         _.clearClass('hover');
         _.hindex=[];
         break;

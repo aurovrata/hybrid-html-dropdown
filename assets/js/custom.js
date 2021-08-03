@@ -1,5 +1,4 @@
 (function(){
-  console.log('test....');
   function docReady(fn) {
     if (document.readyState!='loading'){
       fn();

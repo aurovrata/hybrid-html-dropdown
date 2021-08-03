@@ -12,13 +12,13 @@ nav_order: 2
 | option           | description                                                  |
 |:-----------------|:-------------------------------------------------------------|      
 | [`dropdown`](#option-dropdown)       | 'vertical'&#124;'horizontal', default is a vertical dropdown list.|
-| [`limitSelection`](#option-limitSelection) | default 1, -1 for illimited, or an integer value.            |
+| [`limitSelection`](#option-limitSelection) | default 1, -1 for unlimited, or an integer value.            |
 | [`selectedLabel`](#option-selectedLabel)  | a function to display the selected label, see [Selected label function](./#selected-label-function) section below.|
-| [`defaultText`](#option-defaultText)    | if a an empty value option is providded in the data list it will be used by default, else the default selected text will diplay this text value.|
-| [`treeView`](#option-treeView)       | `false` by default, setting this to true allows Tree View selection, see Tree Vien section below.|
+| [`defaultText`](#option-defaultText)    | if a an empty value option is provided in the data list it will be used by default, else the default selected text will display this text value.|
+| [`treeView`](#option-treeView)       | `false` by default, setting this to true allows Tree View selection, see treeView [example](/hybrid-dropdown/examples/#hybrid-dropdonw-with-treeview-selection).|
 | [`fieldName`](#option-fieldName)      | '' the field name to use for the form submission if none are provided in the HTML element used to intialise the dropdown object.|
 | [`tabIndex`](#option-tabIndex)       | the tabindex value of the field used for tabbed navigation between the form fields.|
-| [`listOption`](#option-listOption)     | filter functon to determine if a data option is to be included in the dropdonw list.  This is especially useful when needing to display a subset of the options depending on the value of another field in the form. See the section [Filtering Dropdown lists](./#filtering-dropdown-lists) below.|
+| [`listOption`](#option-listOption)     | filter function to determine if a data option is to be included in the dropdonw list.  This is especially useful when needing to display a subset of the options depending on the value of another field in the form. See the section [Filtering Dropdown lists](./#filtering-dropdown-lists) below.|
 | [`selectedValues`](#option-selectedValues) | `[]` an empty array by default, but can hold existing option values which show as pre-selected when the dropdown is initialised.|
 | [`checkboxes`](#option-checkboxes)     | `true`&#124;`false`, by default it is set to `false` on dropdowns converted from existing `<select/>` fields and `true` for JSON dataset fields.|
 | [`colourise`](#option-colourise)      | `true` by default, plugin attempts to find the font and background colours of the page and set the dropdown  style properties, using the inverse for highlighted options.  The active option is by default set to white font and `#0466ff` (blue) background.  This can be changed, see the [Styling](./styling.html) page.|
@@ -47,7 +47,7 @@ the selected values is an object of value=>text labels, which can have  multiple
 
 ## Filtering Dropdown lists
 
-The Hybrid dropdown builds the lists of options to diplay at the time of initialisation and used the `listOption` configured option to determine if a given option should appear in the list or not.  The default funciton used by the plugin is,
+The Hybrid dropdown builds the lists of options to display at the time of initialisation and used the `listOption` configured option to determine if a given option should appear in the list or not.  The default function used by the plugin is,
 
 ```javascript
 function(o,i){

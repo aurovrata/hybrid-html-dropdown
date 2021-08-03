@@ -8,3 +8,6 @@ a[href^="#option-"], a[href^="#method-"] {
     cursor: text;
     pointer-events: none;
 }
+h3 {
+    color: #ffe100;
+}
