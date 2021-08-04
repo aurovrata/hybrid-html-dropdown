@@ -54,8 +54,14 @@ class HybridDDError extends Error {
     }
 
     let _ = this, lim=1, cb=true, tabIdx = elm.getAttribute('tabindex');
-    _.isDS = false, cnfg={}; //track source
+    _.isDS = false, cnfg = Object.assign({}, elm.dataset); //get any initial settings.
 
+    ['class','id'].forEach(a=>{
+      if(elm.hasAttribute(a)){
+        cnfg[a] = elm.getAttribute(a);
+        elm.removeAttribute(a);
+      }
+    });
     switch(true){
       case elm.nodeName === "SELECT": //select field source.
         if(elm.multiple) lim=-1;
@@ -64,14 +70,13 @@ class HybridDDError extends Error {
         break;
       default:
         _.isDS = true;// dateset source.
-        cnfg = Object.assign({}, elm.dataset); //get any initial settings.
         try{
           cnfg['dataSet'] = JSON.parse(elm.querySelector('script').innerHTML);
         }catch(se){
           console.log(se.name+":"+se.message);
           console.log("Unable to Hybridise element, missing or malformed json dataset");
         }
-
+        if(!cnfg['id'] && cnfg['fieldName']) cnfg['id'] = cnfg['fieldName'];
         elm.classList.add('hybriddd-custom'); //flag the element as custom.
         break;
     }
@@ -89,6 +94,7 @@ class HybridDDError extends Error {
         case 'eventPropagate':
         case 'treeView':
         case 'negative':
+        case 'colourise':
           cnfg[k] = (cnfg[k] == 'true');
           break;
       }
@@ -117,6 +123,8 @@ class HybridDDError extends Error {
         tabIndex:tabIdx?tabIdx:0,
         listOption: function(o,i){return true},
         selectedValues:[],
+        id:'',
+        class:''
       }, //default settings.
       settings, //user settings.
       cnfg //element data attribtues.
@@ -125,8 +133,8 @@ class HybridDDError extends Error {
     _.multi = (_.opt.limitSelection !=1); //flag multi select field.
     //check if we have a field name.
     if(_.isDS){
-      if(_.opt.fieldName.length==0) _.opt.fieldName = _.el.getAttribute('id'); //try to set it to id.
-      if(_.multi && _.opt.fieldName.length>0 && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
+      if(!_.opt.fieldName) _.opt.fieldName = _.opt.id; //try to set it to id.
+      if(_.multi && _.opt.fieldName && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
     }else{
       if(_.opt.fieldName.length==0){
         switch(true){
@@ -161,12 +169,8 @@ class HybridDDError extends Error {
         _.hdd.style['margin-left']='-'+_.el.getBoundingClientRect()['width']+'px';
         _.hdd.setAttribute('tabindex',_.opt.tabIndex);
       }
-      // c.appendChild(_.el);
-      //construct the hybrid-select.
-      // _.hdd = document.createElement('div');
-      // _.el.parentNode.appendChild(_.hdd);
-      //hide original element.
-      // _.el.style.display='none';
+      _.hdd.setAttribute('id',_.opt.id);
+      _.hdd.setAttribute('class',_.opt.class);
       _.hdd.classList.add('hybrid-dropdown');
       if(_.opt.checboxes)_.hdd.classList.add('show-cb');
       // _.hdd.setAttribute('aria-hidden', true);//hide from readers.
@@ -176,16 +180,15 @@ class HybridDDError extends Error {
       _.hdd.ddlist = document.createElement('ul');
       _.hdd.appendChild(_.hdd.ddlist);
       _.hdd.ddlist.classList.add('hybriddd-options');
-      if(!_.hdd.ddlist.style['background-color'] && _.opt.colourise) _.colourise(_.hdd.ddlist);
       _.hdd.options = {};
       _.hindex=[]; //hover indexes used to track shiftkey + drag events.
       _.sindex=[]; //initial index of selected option.
       _.value={}; //initial value.
       _.listenForBulk = false;
       _.listenModClick = false;
+      _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
     }
-    //set style.
-    _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
+    _.colourise();
     //build list of options.
     let opts = null;
     if(_.isDS){
@@ -244,17 +247,17 @@ class HybridDDError extends Error {
     }
   }
   //set colour for dd elements.
-  hsProtype.colourise = function(elm){
-    let _ = this;
-    if(_window['hdd']){
-      _.opt.backgroundColor = _window.hdd.bgColor;
-      _.opt.color = _window.hdd.color;
-    }
-    if(!_.opt.backgroundColor || !_.opt.color){
+  hsProtype.colourise = function(){
+    let _ = this, globalStyle=false;
+
+    if(!_.opt.colourise) return;
+
+    if(!_window['hdd'] && (!_.opt.backgroundColor || !_.opt.color)){
       let found=false, p=_.hdd, s;
+      _window.hdd={};
       while(!found && p){
         s = _window.getComputedStyle( p, null);
-        if(!_.opt.backgroundColor){
+        if(!_window.hdd['bgColor'] && !_.opt.backgroundColor){
           switch(s['background-color']){ //bg colour;
             case 'transparent':
             case '':
@@ -262,10 +265,10 @@ class HybridDDError extends Error {
               p=p.parentElement;
               break;
             default:
-              _.opt.backgroundColor = s['background-color'];
+              _window.hdd['bgColor'] = s['background-color'];
           }
         }
-        if(!_.opt.color){
+        if(!_window.hdd['color'] && !_.opt.color){
           switch(s['color']){ //bg colour;
             case 'transparent':
             case '':
@@ -273,32 +276,45 @@ class HybridDDError extends Error {
               p=p.parentElement;
               break;
             default:
-              _.opt.color = s['color'];
+              _window.hdd['color'] = s['color'];
           }
         }
-        if(_.opt.color && _.opt.backgroundColor) found=true;
+        if(_window.hdd['bgColor'] && _window.hdd['color']) found=true;
+        globalStyle = true;
       }
       if(!found){ //set to default.
-        _.opt.color = _.opt.negative ? '#5d5d5d':'#fff';
-        _.opt.backgroundColor = _.opt.negative ? '#fff':'#5d5d5d';
-      }else if(_.opt.negative){
-        s = _.opt.color;
-        _.opt.color = _.opt.backgroundColor;
-        _.opt.backgroundColor = s;
+        if(!_window.hdd['color']) _window.hdd['color'] = '#fff';
+        if(_window.hdd['bgColor']) _window.hdd['bgColor'] = '#5d5d5d';
       }
     }
-    elm.style['background-color']= _.opt.backgroundColor;
-    elm.style['color']= _.opt.color;
-    if(!_window['hdd']){
-      _window.hdd={
-        color:elm.style['color'],
-        bgColor:elm.style['background-color']
+    //give pred to object settings.
+    let bg = _.opt.backgroundColor ? _.opt.backgroundColor:_window.hdd['bgColor'],
+    cl =_.opt.color ? _.opt.color:_window.hdd['color'];
+
+    _.hdd.style['background-color'] = _.opt.negative? cl:bg;
+    _.hdd.style['color'] = _.opt.negative? bg:cl;
+
+    if(globalStyle){
+      let active = document.createElement("style");
+      active.type = "text/css";
+      active.innerText = `.hybriddd-option.active > label:hover,.hybriddd-option.hover > label,.hybriddd-option \
+      > label:hover{color:${bg};background-color:${cl}}:hover > input:checked + .hybridddl > .hybridddcb::before \ {color:${cl}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
+      ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar{background:${cl}}`;
+      document.head.appendChild(active);
+    }
+    if(_.opt.backgroundColor || _.opt.color || _.opt.negative){
+      if(_.opt.negative){
+        let tmp = bg;
+        bg = cl;
+        cl = bg;
       }
-      let active = document.createElement("style")
-      active.type = "text/css"
-      active.innerText = ".hybriddd-option.active > label:hover,.hybriddd-option.hover > label,.hybriddd-option \
-      > label:hover{color: "+elm.style['background-color']+";background-color:"+elm.style['color']+"}:hover > \
-      input:checked + .hybridddl > .hybridddcb::before{color:"+elm.style['color']+"} ul.hybriddd-options::-webkit-scrollbar-track {background:"+elm.style['background-color']+"} ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar {background:"+elm.style['color']+"}";
+      let active = document.createElement("style"), id = _.hdd.getAttribute('id');
+      active.setAttribute('id',id);
+      active.type = "text/css";
+      active.innerText = `#${id} .hybriddd-option.active > label:hover,#${id} .hybriddd-option.hover > label,#${id} \
+      .hybriddd-option > label:hover{color:${bg};background-color:${cl}}#${id} :hover > input:checked + .hybridddl > \
+      .hybridddcb::before {color:${cl}} #${id} ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
+      #${id} ul.hybriddd-options::-webkit-scrollbar-thumb,#${id} ul.hybriddd-options::-webkit-scrollbar{background:${cl}}`;
       document.head.appendChild(active);
     }
   }

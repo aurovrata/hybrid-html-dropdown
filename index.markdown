@@ -52,7 +52,7 @@ If you have an existing `<select/>` field,
 ```
 you can convert it to a hybrid dropdown,
 <select id="ex1-hdd" class="hybrid-list">
-  <option value="">Select an item</option>
+  <option value="">Select a dish</option>
   <option value="ps">Pumpkin sushi</option>
   <option value="as">Avocado sushi</option>
   <option value="ts">Tomato sushi</option>

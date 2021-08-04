@@ -11,3 +11,64 @@ a[href^="#option-"], a[href^="#method-"] {
 h3 {
     color: #ffe100;
 }
+#make-it-pink .hybriddd-option.active > label {
+    background: pink;
+    color: blue;
+}
+/* dropdown colours*/
+#ex4-hdd.hybrid-dropdown{
+  color:#fff;
+  background-color: darkgreen
+}
+/*hover colours */
+#ex4-hdd .hybriddd-option.active > label:hover,
+#ex4-hdd .hybriddd-option.hover > label,.hybriddd-option > label:hover{
+  color:darkgreen;
+  background-color: #fff
+}
+/*  checkboxes colours */
+#ex4-hdd :hover > input:checked + .hybridddl > .hybridddcb::before{
+  color:#fff
+}
+#ex4-hdd .hybriddd-option input:checked + .hybridddcb::before {
+  background: darkgreen
+}
+/* scrollbar colour */
+#ex4-hdd ul.hybriddd-options::-webkit-scrollbar-track {
+  background:darkgreen
+}
+#ex4-hdd ul.hybriddd-options::-webkit-scrollbar-thumb,
+#ex4-hdd ul.hybriddd-options::-webkit-scrollbar{
+  background:#fff
+}
+#ex4-hdd .hybriddd-option.active > label {
+    background: #fff;
+    color: darkgreen
+}
+.highlight .nt,.highlight .kd {
+    color: #fdddff;
+}
+.highlight .nx {
+    color: #7fc7d8;
+}
+.highlight .s,.highlight .s1,.highlight .mi,.highlight .s2 {
+    color: #05ff98;
+}
+.highlight .c,.highlight .p,.highlight .c1 {
+    color: #e6f9ff;
+}
+.highlight .nl,.highlight .nb {
+    color: #f9e80e;
+}
+.highlight .no,.highlight .kc, .language-css .highlight .m {
+    color: #fd7726;
+}
+.highlight .m {
+    color: #01fd22;
+}
+.highlight .nc {
+    color: #27a6ff;
+}
+.highlight .nd,.highlight .k,.highlight .na {
+    color: #f540ff;
+}

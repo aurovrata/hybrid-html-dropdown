@@ -181,3 +181,8 @@ which results in,
     }
    </script>
 </div>
+
+
+## Visual styling change to reflect field changed
+
+You can use the [`negative`]() option setting along with the refresh method to flip the colour style of the dropdown field when the [`change`]() event is fired.
