@@ -52,13 +52,22 @@ class HybridDDError extends Error {
     if(!elm || !(elm instanceof Element)){
       throw new HybridDDError("HybridDropdown requires a DOM element to intialise.");
     }
+    if(elm.classList.contains('hybridddised') && elm._hybriddd){
+      console.log('WARNING: attempting instantiate element already converted to Hybrid Dropdown');
+      return elm._hybriddd;
+    }
+    if(elm.classList.contains('hybrid-dropdown')){
+      console.log('WARNING: attempting instantiate Hybrid Dropdown element');
+      return elm;
+    }
 
     let _ = this, lim=1, cb=true, tabIdx = elm.getAttribute('tabindex');
     _.isDS = false, cnfg = Object.assign({}, elm.dataset); //get any initial settings.
 
-    ['class','id'].forEach(a=>{
+    ['class','id','name'].forEach(a=>{
       if(elm.hasAttribute(a)){
-        cnfg[a] = elm.getAttribute(a);
+        let opt = a.charAt(0).toUpperCase() + a.slice(1);
+        cnfg[opt] = elm.getAttribute(a);
         elm.removeAttribute(a);
       }
     });
@@ -80,9 +89,9 @@ class HybridDDError extends Error {
         elm.classList.add('hybriddd-custom'); //flag the element as custom.
         break;
     }
-    //if already instanciated, return existing object.
-    if(elm._hybriddd) return elm._hybriddd;
-    elm._hybriddd = _; //expose object in its original DOM element.
+    if(cnfg)
+    //expose object in its original DOM element.
+    elm._hybriddd = _;
     _.el = elm; //keep original element reference.
     _.el.classList.add('hybridddised'); //flag the element as converted.
     // merge user setting with defaults
@@ -91,7 +100,6 @@ class HybridDDError extends Error {
         case 'limitSelection':
           cnfg[k] = parseInt(cnfg[k]);
           break;
-        case 'eventPropagate':
         case 'treeView':
         case 'negative':
         case 'colourise':
@@ -102,7 +110,6 @@ class HybridDDError extends Error {
     _.opt = Object.assign(
       {},//initial target.
       {
-        eventPropagate:true,
         dropdown: 'vertical',
         limitSelection:lim, //default 1, -1 for multiple, or userset.
         optionLabel: function(label){
@@ -114,7 +121,7 @@ class HybridDDError extends Error {
         },
         defaultText:'---',
         treeView:false,
-        fieldName: '',
+        fieldName: 'hybriddd', //we need a field name.
         backgroundColor:'',
         color:'',
         negative: false,
@@ -123,34 +130,23 @@ class HybridDDError extends Error {
         tabIndex:tabIdx?tabIdx:0,
         listOption: null,
         selectedValues:[],
-        id:'',
-        class:''
+        fieldId:'',
+        fieldClass:''
       }, //default settings.
       settings, //user settings.
       cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
-    if( !(_.opt.listOption && _.opt.listOption instanceof Function && 2==_.opt.listOption.length) ){
-      throw new HybridDDError("listOtion setting must be a function with 2 arguments.");
+    if(_.opt.listOption ){  //check we have a function.
+      if( !(_.opt.listOption instanceof Function && 2==_.opt.listOption.length) ){
+        throw new HybridDDError("listOtion setting must be a function with 2 arguments.");
+      }
     }
     if(_.opt.treeView && 1==_.opt.limitSelection) _.opt.limitSelection=-1; //by default
     _.multi = (_.opt.limitSelection !=1); //flag multi select field.
     //check if we have a field name.
-    if(_.isDS){
-      if(!_.opt.fieldName) _.opt.fieldName = _.opt.id; //try to set it to id.
-      if(_.multi && _.opt.fieldName && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
-    }else{
-      if(_.opt.fieldName.length==0){
-        switch(true){
-          case _.el.hasAttribute('name'):
-            _.opt.fieldName = _.el.getAttribute('name');
-            break;
-          case _.el.hasAttribute('id'):
-            _.opt.fieldName = _.el.getAttribute('id');
-            break;
-        }
-      }
-      _.el.setAttribute('name','');
-    }
+    if(!_.opt.fieldName) _.opt.fieldName = _.opt.fieldId; //try to set it to id.
+    if(_.multi && _.opt.fieldName && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
+
     //initialise the hybrid-dd.
     _.init(true, true, true);
     return _;
@@ -172,8 +168,8 @@ class HybridDDError extends Error {
         _.hdd.style['margin-left']='-'+_.el.getBoundingClientRect()['width']+'px';
         _.hdd.setAttribute('tabindex',_.opt.tabIndex);
       }
-      _.hdd.setAttribute('id',_.opt.id);
-      _.hdd.setAttribute('class',_.opt.class);
+      _.hdd.setAttribute('id',_.opt.fieldId);
+      _.hdd.setAttribute('class',_.opt.fieldClass);
       _.hdd.classList.add('hybrid-dropdown');
       // _.hdd.setAttribute('aria-hidden', true);//hide from readers.
       _.hdd.selected = document.createElement('div');
@@ -301,7 +297,8 @@ class HybridDDError extends Error {
     _.hdd.style['color'] = _.opt.negative? bg:cl;
 
     if(globalStyle){
-      let active = document.createElement("style");
+      let active = document.createElement('style');
+      active.setAttribute('id','hybriddd-colours');
       active.type = "text/css";
       active.innerText = `.hybriddd-option.active > label:hover,.hybriddd-option.hover > label,.hybriddd-option \
       > label:hover{color:${bg};background-color:${cl}}:hover > input:checked + .hybridddl > .hybridddcb::before \ {color:${cl}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
@@ -312,10 +309,10 @@ class HybridDDError extends Error {
       if(_.opt.negative){
         let tmp = bg;
         bg = cl;
-        cl = bg;
+        cl = tmp;
       }
       let active = document.createElement("style"), id = _.hdd.getAttribute('id');
-      active.setAttribute('id',id);
+      active.setAttribute('id',id+'-css');
       active.type = "text/css";
       active.innerText = `#${id} .hybriddd-option.active > label:hover,#${id} .hybriddd-option.hover > label,#${id} \
       .hybriddd-option > label:hover{color:${bg};background-color:${cl}}#${id} :hover > input:checked + .hybridddl > \
@@ -327,27 +324,28 @@ class HybridDDError extends Error {
   //method to refresh an existing HybridDropdown object.
   hsProtype.refreshHybrid = function(settings={}){
     let _ = this, build = false, paint = false;
-    if(settings['negative'] || settings['colourise'] || settings['color'] || settings['backgroundColor']){
+    if( settings.hasOwnProperty('negative')  || settings.hasOwnProperty('colourise') || settings['color'] || settings['backgroundColor']){
       paint = true;
       let id = _.el.getAttribute('id');
-      let st = document.querySelector('style#'+id);
+      let st = document.querySelector('style#'+id+'-css');
       if(st) st.remove();
     }
-    if( settings['listOption'] && settings.listOption instanceof Function && 2==settings.listOption.length) ){
+    if( settings['listOption'] ){
       build = true;
-    }else{
-      console.log("Hybriddd refresh error: listOtion setting must be a function with 2 arguments.");
-      settings['listOption'] = null; //reset.
+      if( !(settings.listOption instanceof Function && 2==settings.listOption.length) ){
+        console.log("Hybriddd refresh error: listOtion setting must be a function with 2 arguments.");
+        settings['listOption'] = null; //reset.
+      }
     }
     _.opt = Object.assign({}, _.opt, settings);
-    _.init(false, build, colourise); //invole init function but do not initialise.
+    _.init(false, build, paint); //invole init function but do not initialise.
   }
   //method to initialise options.
   hsProtype.buildOptionList = function(list,p){
     let _ = this,
       opts=[],
       t=(_.multi) ? 'checkbox':'radio',
-      fname = (_.opt.fieldName.length>0 ? ' name="'+_.opt.fieldName+'"':'');
+      fname = (_.opt.fieldName ? ' name="'+_.opt.fieldName+'"':'');
 
     [].forEach.call(list,(o,i) => {
       //TODO: check if o is optgrp, and loop over.
@@ -747,7 +745,7 @@ class HybridDDError extends Error {
       if(_.hindex.length>0) v = [..._.hindex]; //shift + scroll.
 
       if(e.target.checked && ''==e.target.value){ //clear values.
-        if(!isCtrl) _.removeValue([..._.sindex]); //use array copy else buggy.
+        if(!isCtrl) _.removeValue([..._.sindex], true); //use array copy else buggy.
       }else if(_.opt.treeView && (_.opt.limitSelection < 0 || _.opt.limitSelection > _.sindex.length)){
         //toggle all children
         let ai,
@@ -789,12 +787,12 @@ class HybridDDError extends Error {
           pl = pl.parentNode.closest('.hybriddd-option');
           start = false;
         }
-        if(!isCtrl) _.addValue(v);
+        if(!isCtrl) _.addValue(v, true);
       }else{ //just add the current value.
         if(!isCtrl) {
           v.push(e.target.value);
-          if(e.target.checked) _.addValue(v);
-          else _.removeValue(v);
+          if(e.target.checked) _.addValue(v, true);
+          else _.removeValue(v, true);
         }
       }
       switch(true){

@@ -45,8 +45,11 @@ h3 {
     background: #fff;
     color: darkgreen
 }
-.highlight .nt,.highlight .kd {
+.highlight .nt {
     color: #fdddff;
+}
+.highlight .kd {
+    color: #29a7ff;
 }
 .highlight .nx {
     color: #7fc7d8;
@@ -57,8 +60,11 @@ h3 {
 .highlight .c,.highlight .p,.highlight .c1 {
     color: #e6f9ff;
 }
-.highlight .nl,.highlight .nb {
+.highlight .nl {
     color: #f9e80e;
+}
+.highlight .nb {
+    color: #ff0202;
 }
 .highlight .no,.highlight .kc, .language-css .highlight .m {
     color: #fd7726;
@@ -71,4 +77,8 @@ h3 {
 }
 .highlight .nd,.highlight .k,.highlight .na {
     color: #f540ff;
+}
+strong>code {
+    font-weight: bold;
+    color: #ffd500;
 }

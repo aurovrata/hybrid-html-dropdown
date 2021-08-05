@@ -12,11 +12,11 @@
 
     el= document.querySelector('#flip-style');
     if(el){
-      new HybridDropdown(sel,{'negative':false});
-      sel.addEventListener('change', (ce) => {
-        let el = ce.target,
-          hdd = el._hybriddd; //hybrid object is stored on the element on which it was instantiated
-        if( hdd && ""!=hdd.value[0]){ //hybrid value is always an array.
+      new HybridDropdown(el,{'negative':false});
+      el.addEventListener('change', (ce) => {
+        let hdd = ce.target._hybriddd; //hybrid object is stored on the element on which it was instantiated
+        if(!hdd) return; //no hybrid here.
+        if(Object.keys(hdd.value).length>0 && !hdd.value['']){ //hybrid value is always an object of value=>label.
           if(!hdd.opt.negative){ //if previously negative, let's refresh.
             hdd.refresh({'negative':true});
           }

@@ -188,7 +188,7 @@ which results in,
 You can use the [`negative`](/hybrid-dropdown/options/#option-negative) option setting along with the [`refresh()`](/hybrid-dropdown/options/#method-refresh) method to flip the colour style of the dropdown field when the [`change`](/hybrid-dropdown/events/#hybrid-dropdown-change) event is fired.
 
 ```html
-<select id="flip-style" data-negative="true">
+<select id="flip-style">
   <option value="">Select a dish</option>
   <option value="ps">Pumpkin sushi</option>
   <option value="as">Avocado sushi</option>
@@ -205,9 +205,9 @@ You can use the [`negative`](/hybrid-dropdown/options/#option-negative) option s
           'negative':false
         });
       sel.addEventListener('change', (ce) => {
-        let el = ce.target,
-          hdd = el._hybriddd; //hybrid object is stored on the element on which it was instantiated
-        if( hdd && ""!=hdd.value[0]){ //hybrid value is always an array.
+        let hdd = ce.target._hybriddd; //hybrid object is stored on the element on which it was instantiated
+        if(!hdd) return; //no hybrid here.
+        if(Object.keys(hdd.value).length>0 && !hdd.value['']){ //hybrid value is always an object of value=>label.
           if(!hdd.opt.negative){ //if previously negative, let's refresh.
             hdd.refresh({'negative':true});
           }
@@ -217,8 +217,8 @@ You can use the [`negative`](/hybrid-dropdown/options/#option-negative) option s
   })
   </script>
 ```
-which results in the reverse colours,
-<select id="flip-style" class="hybrid-list" data-negative="true">
+which results in a hybrid dropdown which inverts its style if a value is selected,
+<select id="flip-style">
   <option value="">Select a dish</option>
   <option value="ps">Pumpkin sushi</option>
   <option value="as">Avocado sushi</option>
