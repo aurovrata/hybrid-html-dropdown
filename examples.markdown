@@ -185,4 +185,43 @@ which results in,
 
 ## Visual styling change to reflect field changed
 
-You can use the [`negative`]() option setting along with the refresh method to flip the colour style of the dropdown field when the [`change`]() event is fired.
+You can use the [`negative`](/hybrid-dropdown/options/#option-negative) option setting along with the [`refresh()`](/hybrid-dropdown/options/#method-refresh) method to flip the colour style of the dropdown field when the [`change`](/hybrid-dropdown/events/#hybrid-dropdown-change) event is fired.
+
+```html
+<select id="flip-style" data-negative="true">
+  <option value="">Select a dish</option>
+  <option value="ps">Pumpkin sushi</option>
+  <option value="as">Avocado sushi</option>
+  <option value="ts">Tomato sushi</option>
+  <option value="cs">Carrot sushi</option>
+</select>
+<script type="text/javascript">
+  (function(){
+    let sel, hyd;
+    document.addEventListener('DOMContentLoaded', (e) => {  //instantiate on document ready.
+      sel= document.querySelector('#flip-style');
+      new HybridDropdown(sel,
+        {
+          'negative':false
+        });
+      sel.addEventListener('change', (ce) => {
+        let el = ce.target,
+          hdd = el._hybriddd; //hybrid object is stored on the element on which it was instantiated
+        if( hdd && ""!=hdd.value[0]){ //hybrid value is always an array.
+          if(!hdd.opt.negative){ //if previously negative, let's refresh.
+            hdd.refresh({'negative':true});
+          }
+        }else if(hdd.opt.negative) hdd.refresh({'negative':false}); //flip back.
+      })
+    })
+  })
+  </script>
+```
+which results in the reverse colours,
+<select id="flip-style" class="hybrid-list" data-negative="true">
+  <option value="">Select a dish</option>
+  <option value="ps">Pumpkin sushi</option>
+  <option value="as">Avocado sushi</option>
+  <option value="ts">Tomato sushi</option>
+  <option value="cs">Carrot sushi</option>
+</select>

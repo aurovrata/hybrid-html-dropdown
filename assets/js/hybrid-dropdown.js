@@ -121,14 +121,17 @@ class HybridDDError extends Error {
         colourise: true,
         checboxes: cb,
         tabIndex:tabIdx?tabIdx:0,
-        listOption: function(o,i){return true},
+        listOption: null,
         selectedValues:[],
         id:'',
         class:''
       }, //default settings.
       settings, //user settings.
-      cnfg //element data attribtues.
+      cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
+    if( !(_.opt.listOption && _.opt.listOption instanceof Function && 2==_.opt.listOption.length) ){
+      throw new HybridDDError("listOtion setting must be a function with 2 arguments.");
+    }
     if(_.opt.treeView && 1==_.opt.limitSelection) _.opt.limitSelection=-1; //by default
     _.multi = (_.opt.limitSelection !=1); //flag multi select field.
     //check if we have a field name.
@@ -149,13 +152,13 @@ class HybridDDError extends Error {
       _.el.setAttribute('name','');
     }
     //initialise the hybrid-dd.
-    _.init(true);
+    _.init(true, true, true);
     return _;
 	});
   /* Prototyping some methods for HybridDropdown object */
   let hsProtype = HybridDropdown.prototype;
   //initialisation function.
-  hsProtype.init = function(init){
+  hsProtype.init = function(init, build, paint){
     let _ = this;
 
     if(init) {
@@ -172,7 +175,6 @@ class HybridDDError extends Error {
       _.hdd.setAttribute('id',_.opt.id);
       _.hdd.setAttribute('class',_.opt.class);
       _.hdd.classList.add('hybrid-dropdown');
-      if(_.opt.checboxes)_.hdd.classList.add('show-cb');
       // _.hdd.setAttribute('aria-hidden', true);//hide from readers.
       _.hdd.selected = document.createElement('div');
       _.hdd.appendChild(_.hdd.selected);
@@ -188,23 +190,24 @@ class HybridDDError extends Error {
       _.listenModClick = false;
       _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
     }
-    _.colourise();
     //build list of options.
-    let opts = null;
-    if(_.isDS){
-      _.hdd.classList.add('hybriddd-custom');
-      if(_.opt.dataSet) opts = Object.entries(_.opt.dataSet);
-      else opts = [["","<em>json error</em>"]];
-    }
-    else opts = _.el.children;
-    try{
-      opts = _.buildOptionList(opts,0);
-      _.hdd.ddlist.replaceChildren(...opts);
-    }catch(err){
-      if(err instanceof HybridDDError){
-        console.log(err.name+":"+err.message);
-        _.hdd.selected.innerHTML = "<em>json error</em>";
-      }else throw err;
+    if(build){
+      let opts = null;
+      if(_.isDS){
+        _.hdd.classList.add('hybriddd-custom');
+        if(_.opt.dataSet) opts = Object.entries(_.opt.dataSet);
+        else opts = [["","<em>json error</em>"]];
+      }
+      else opts = _.el.children;
+      try{
+        opts = _.buildOptionList(opts,0);
+        _.hdd.ddlist.replaceChildren(...opts);
+      }catch(err){
+        if(err instanceof HybridDDError){
+          console.log(err.name+":"+err.message);
+          _.hdd.selected.innerHTML = "<em>json error</em>";
+        }else throw err;
+      }
     }
 
     if(init){
@@ -245,6 +248,9 @@ class HybridDDError extends Error {
       //fire init event.
       _.emit('hybrid-dd-init');
     }
+    //styling.
+    if(_.opt.checboxes)_.hdd.classList.add('show-cb');
+    if(paint) _.colourise();
   }
   //set colour for dd elements.
   hsProtype.colourise = function(){
@@ -320,9 +326,21 @@ class HybridDDError extends Error {
   }
   //method to refresh an existing HybridDropdown object.
   hsProtype.refreshHybrid = function(settings={}){
-    let _ = this;
+    let _ = this, build = false, paint = false;
+    if(settings['negative'] || settings['colourise'] || settings['color'] || settings['backgroundColor']){
+      paint = true;
+      let id = _.el.getAttribute('id');
+      let st = document.querySelector('style#'+id);
+      if(st) st.remove();
+    }
+    if( settings['listOption'] && settings.listOption instanceof Function && 2==settings.listOption.length) ){
+      build = true;
+    }else{
+      console.log("Hybriddd refresh error: listOtion setting must be a function with 2 arguments.");
+      settings['listOption'] = null; //reset.
+    }
     _.opt = Object.assign({}, _.opt, settings);
-    _.init(false); //invole init function but do not initialise.
+    _.init(false, build, colourise); //invole init function but do not initialise.
   }
   //method to initialise options.
   hsProtype.buildOptionList = function(list,p){
@@ -333,7 +351,7 @@ class HybridDDError extends Error {
 
     [].forEach.call(list,(o,i) => {
       //TODO: check if o is optgrp, and loop over.
-      if(_.opt.listOption(o,i) !== true) return;
+      if(_.opt.listOption && _.opt.listOption(o,i) !== true) return;
 
       let hso = document.createElement('li'),
        isGroup = false, isSelected = false, hasChildren = false,
