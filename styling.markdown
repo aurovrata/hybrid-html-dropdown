@@ -8,7 +8,7 @@ nav_order: 1
 # Styling
 
 ** Important to note **
-- The colours of the dropdown are programmatically set to those of the page, this is the default which can be overridden with the [`colourise`](/hybrid-dropdown/options/#option-negative) option setting (see below for more details).
+- The colours of the dropdown are programmatically set to those of the page, this is the default which can be overridden with the [`colourise`](/hybrid-html-dropdown/options/#option-negative) option setting (see below for more details).
 - The active/selected options in the list are by default set to blue highlight and white font, this can be overridden using CSS, see below for example.
 
 
@@ -50,7 +50,7 @@ There are 3 ways to modify/customise the colours of your dropdown,
 
 ### Setting custom colours: negative effect
 
-You can get the [`negative`](/hybrid-dropdown/options/#option-negative) effect of the current page colours,
+You can get the [`negative`](/hybrid-html-dropdown/options/#option-negative) effect of the current page colours,
 
 ```html
 <select id="ex2-hdd" class="hybrid-list" data-negative="true">
@@ -74,7 +74,7 @@ However, this can be customised as per requirements using the following CSS rule
 
 ### Setting custom colours: custom colours
 
-You can set the [`color`](/hybrid-dropdown/options/#option-color) and [`backgroundColor`](/hybrid-dropdown/options/#option-backgroundColor) at initialisation,
+You can set the [`color`](/hybrid-html-dropdown/options/#option-color) and [`backgroundColor`](/hybrid-html-dropdown/options/#option-backgroundColor) at initialisation,
 
 ```html
 <select id="ex3-hdd" class="hybrid-list" data-color="purple"
@@ -99,7 +99,7 @@ when using the color/backgroundColor options, the plugin will force an `id` attr
 
 ### Setting custom colours: CSS overrules
 
-**It is important to switch off the plugin's automatic colourising functionality** with the [`colourise`](/hybrid-dropdown/options/#option-colourise) option setting,
+**It is important to switch off the plugin's automatic colourising functionality** with the [`colourise`](/hybrid-html-dropdown/options/#option-colourise) option setting,
 
 ```html
 <div id="ex4-hdd" class="hybrid-list" data-colourise="false">

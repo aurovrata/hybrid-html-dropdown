@@ -80,7 +80,7 @@ The plugin allows overriding functions to be parsed in the settings at the time 
 
 ### Malformed `listOption` function
 
-the [`listOption`](/hybrid-dropdown/options/#option-listOption) option expects a function with 2 arguments.  The following malformed function
+the [`listOption`](/hybrid-html-dropdown/options/#option-listOption) option expects a function with 2 arguments.  The following malformed function
 
 ```javascript
 let sel = document.querySelector('#my-list'); //el = 'undefined'
@@ -102,7 +102,7 @@ the plugin exit with an error.
 
 ### Malformed `selectedLabel` function
 
-the [`selectedLabel`](/hybrid-dropdown/options/#option-selectedLabel) option expects a function with 1 argument.  The following malformed function
+the [`selectedLabel`](/hybrid-html-dropdown/options/#option-selectedLabel) option expects a function with 1 argument.  The following malformed function
 
 ```javascript
 let sel = document.querySelector('#my-list'); //el = 'undefined'
@@ -124,7 +124,7 @@ the plugin will exit with an error.
 
 ### Malformed `optionLabel` function
 
-the [`optionLabel`](/hybrid-dropdown/options/#option-optionLabel) option expects a function with 1 argument.  The following malformed function
+the [`optionLabel`](/hybrid-html-dropdown/options/#option-optionLabel) option expects a function with 1 argument.  The following malformed function
 
 ```javascript
 let sel = document.querySelector('#my-list'); //el = 'undefined'

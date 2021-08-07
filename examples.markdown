@@ -8,14 +8,14 @@ nav_order: 4
 
 Here is a list of examples you will find below,
 
-- [Hybrid dropdown with multiple nested groups](/hybrid-dropdown/examples/#hybrid-dropdown-with-multiple-nested-groups)
-- [Hybrid dropdown with treeview selection](/hybrid-dropdown/examples/#hybrid-dropdown-with-treeview-selection)
-- [Hybrid Dropdown with multiple limited selections](/hybrid-dropdown/examples/#hybrid-dropdown-with-multiple-limited-selections)
-- [Visual styling change to reflect field update](/hybrid-dropdown/examples/#visual-styling-change-to-reflect-field-update)
-- [Filtering list of options to display](/hybrid-dropdown/examples/#filtering-list-of-options-to-display)
-- [Pre-filled/pre-selected hybrid dropdown](/hybrid-dropdown/examples/#pre-filledpre-selected-hybrid-dropdown)
-- [Customise the selected text label and default option](/hybrid-dropdown/examples/#customise-the-selected-text-label-and-default-option)
-- [Using keyboard navigation between form fields](/hybrid-dropdown/examples/#using-keyboard-navigation-between-form-fields)
+- [Hybrid dropdown with multiple nested groups](/hybrid-html-dropdown/examples/#hybrid-dropdown-with-multiple-nested-groups)
+- [Hybrid dropdown with treeview selection](/hybrid-html-dropdown/examples/#hybrid-dropdown-with-treeview-selection)
+- [Hybrid Dropdown with multiple limited selections](/hybrid-html-dropdown/examples/#hybrid-dropdown-with-multiple-limited-selections)
+- [Visual styling change to reflect field update](/hybrid-html-dropdown/examples/#visual-styling-change-to-reflect-field-update)
+- [Filtering list of options to display](/hybrid-html-dropdown/examples/#filtering-list-of-options-to-display)
+- [Pre-filled/pre-selected hybrid dropdown](/hybrid-html-dropdown/examples/#pre-filledpre-selected-hybrid-dropdown)
+- [Customise the selected text label and default option](/hybrid-html-dropdown/examples/#customise-the-selected-text-label-and-default-option)
+- [Using keyboard navigation between form fields](/hybrid-html-dropdown/examples/#using-keyboard-navigation-between-form-fields)
 
 ## Hybrid dropdown with multiple nested groups.
 
@@ -77,7 +77,7 @@ Unlike `<select/>` dropdown fields, Hybrid Dropdowns can be constructed with mul
 and enables selection of the parent option.  Excluding the `"label"` keyword would simply group the child branch with the parent as title.
 
 ## Hybrid dropdown with treeview selection
-Using the same example as above, but adding a `"label"` keywords for the top most parent, we enable the [treeView](/hybrid-dropdown/options/#option-treeView) option
+Using the same example as above, but adding a `"label"` keywords for the top most parent, we enable the [treeView](/hybrid-html-dropdown/options/#option-treeView) option
 ```html
 <div id="json-field" data-tree-view="true">
   <script type="application/json">
@@ -143,7 +143,7 @@ which results in,
 
 ## Hybrid Dropdown with multiple limited selections
 
-The Hybrid dropdown can be enabled to allow multiple number of option selection but limited to the [`limitSelection`](/hybrid-dropdown/options/#option-limitSelection) option value,
+The Hybrid dropdown can be enabled to allow multiple number of option selection but limited to the [`limitSelection`](/hybrid-html-dropdown/options/#option-limitSelection) option value,
 
 ```html
 <div id="json-field" data-limit-selection="3">
@@ -199,7 +199,7 @@ which results in,
 
 ## Visual styling change to reflect field update.
 
-You can use the [`negative`](/hybrid-dropdown/options/#option-negative) option setting along with the [`refresh()`](/hybrid-dropdown/options/#method-refresh) method to flip the colour style of the dropdown field when the [`change`](/hybrid-dropdown/events/#hybrid-dropdown-change) event is fired.
+You can use the [`negative`](/hybrid-html-dropdown/options/#option-negative) option setting along with the [`refresh()`](/hybrid-html-dropdown/options/#method-refresh) method to flip the colour style of the dropdown field when the [`change`](/hybrid-html-dropdown/events/#hybrid-dropdown-change) event is fired.
 
 ```html
 <select id="flip-style">
@@ -301,7 +301,7 @@ re.addEventListener('change', (ce) => { //listen for bubbling change events
 ```
 ## Pre-filled/pre-selected hybrid dropdown
 
-You can use the [`selectedValues`](/hybrid-dropdown/options/#option-selectedValues) option to pre-fill/pre-select values in a dropdown field,
+You can use the [`selectedValues`](/hybrid-html-dropdown/options/#option-selectedValues) option to pre-fill/pre-select values in a dropdown field,
 
 ```html
 <div id="pre-fill">
@@ -365,7 +365,7 @@ resulting in,
 
 ## Customise the selected text label and default option
 
-In the above example, you will note that the mulitple selection in the list results in a selected text being truncated in order to limit the size of the field.  This can be customised using the [`selectedLabel`](/hybrid-dropdown/options/#option-selectedLabel) option setting, while the default option can be set using the [`defaultText`](/hybrid-dropdown/options/#option-defaultText) option setting,
+In the above example, you will note that the mulitple selection in the list results in a selected text being truncated in order to limit the size of the field.  This can be customised using the [`selectedLabel`](/hybrid-html-dropdown/options/#option-selectedLabel) option setting, while the default option can be set using the [`defaultText`](/hybrid-html-dropdown/options/#option-defaultText) option setting,
 
 ```html
 <div id="defaults" style="max-width:200px">
