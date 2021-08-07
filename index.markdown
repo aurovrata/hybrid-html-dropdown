@@ -8,7 +8,7 @@ permalink: /
 
 # Hybrid HTML Dropdown field
 
-This is an HTML dropdown widget that can replace a `<select/>` field or built using a JSON object which can be fully customised using css.  This is inspired by an original [idea](https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/) by Sandrina Pereira (@sandrina-p). This plugin is written in pure JavaScript and has evolved considerably from the initial idea.
+This is an HTML dropdown widget that can replace a `<select/>` field or built using a JSON object which can be fully customised using css.  
 
 The main features are
 
