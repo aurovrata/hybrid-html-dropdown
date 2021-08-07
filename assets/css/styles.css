@@ -82,3 +82,32 @@ strong>code {
     font-weight: bold;
     color: #ffd500;
 }
+form#tabnav {
+    max-width: 470px;
+}
+form#tabnav >div>label>input, form#tabnav textarea{
+  min-height: 34px;
+  border-radius: 5px;
+  border: 1px solid #e6e1e8;
+  background: #27262b;
+  color: #e6e1e8;
+  margin-left: 3px;
+}
+form#tabnav >div>label {
+    font-weight: bold;
+}
+form#tabnav > div {
+    margin-bottom: 10px;
+}
+div#row1 input {
+    max-width: 174px;
+}
+div#row2 input {
+    width: 413px;
+}
+form#tabnav > div {
+    margin-bottom: 10px;
+}
+div#row4 textarea {
+    width: 459px;
+}

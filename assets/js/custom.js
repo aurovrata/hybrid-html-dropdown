@@ -23,5 +23,44 @@
         }else if(hdd.opt.negative) hdd.refresh({'negative':false}); //flip back.
       })
     }
-  });
+    let fe = document.querySelector('#filter-list'),
+     re = document.querySelector('#radio-filter');
+    if(fe){
+      let hdd =new HybridDropdown(fe,
+        {
+          'listOption':function(o,i){
+            if(o.classList.contains('vegetarian')) return true;
+            return false;
+          }
+        }
+      );
+      re.addEventListener('change', (ce) => {
+        hdd.refresh({
+          'listOption':function(o,i){
+            if(o.classList.contains(ce.target.value)) return true;
+            return false;
+          }
+        }
+      );
+      })
+    }
+    //defaults
+    fe = document.querySelector('#defaults');
+    if(fe){
+      new HybridDropdown(fe,
+        {
+          'limitSelection': -1,
+          'fieldName':'dishes[]',
+          'defaultText': '---dishes---',
+          'selectedLabel':function(v){ //is a value=>label object.
+            let k =  Object.keys(v),
+                s='';
+            k.forEach(i=>{
+              s+=`<span>${v[i].trim()}</span>,&nbsp;`;
+            });
+            return s.slice(0,-7);
+          }
+        });
+    }
+  })
 })();

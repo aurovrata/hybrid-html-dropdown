@@ -57,7 +57,7 @@ class HybridDDError extends Error {
       return elm._hybriddd;
     }
     if(elm.classList.contains('hybrid-dropdown')){
-      console.log('WARNING: attempting instantiate Hybrid Dropdown element');
+      console.log('WARNING: attempting instantiate Hybrid Dropdown element.');
       return elm;
     }
 
@@ -136,9 +136,15 @@ class HybridDDError extends Error {
       settings, //user settings.
       cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
+    //nake sure we have proper functions
+    ['selectedLabel','optionLabel'].forEach(s=>{
+      if(!_.opt[s] || !(_.opt[s] instanceof Function) && 1==_.opt[s].length){
+        throw new HybridDDError(`${s} setting must be a function with 1 argument.`);
+      }
+    });
     if(_.opt.listOption ){  //check we have a function.
       if( !(_.opt.listOption instanceof Function && 2==_.opt.listOption.length) ){
-        throw new HybridDDError("listOtion setting must be a function with 2 arguments.");
+        throw new HybridDDError("listOption setting must be a function with 2 arguments.");
       }
     }
     if(_.opt.treeView && 1==_.opt.limitSelection) _.opt.limitSelection=-1; //by default
@@ -178,10 +184,6 @@ class HybridDDError extends Error {
       _.hdd.ddlist = document.createElement('ul');
       _.hdd.appendChild(_.hdd.ddlist);
       _.hdd.ddlist.classList.add('hybriddd-options');
-      _.hdd.options = {};
-      _.hindex=[]; //hover indexes used to track shiftkey + drag events.
-      _.sindex=[]; //initial index of selected option.
-      _.value={}; //initial value.
       _.listenForBulk = false;
       _.listenModClick = false;
       _.hdd.classList.add('hybriddd-'+_.opt.dropdown);
@@ -189,6 +191,10 @@ class HybridDDError extends Error {
     //build list of options.
     if(build){
       let opts = null;
+      _.hdd.options = {};
+      _.hindex=[]; //hover indexes used to track shiftkey + drag events.
+      _.sindex=[]; //initial index of selected option.
+      _.value={}; //initial value.
       if(_.isDS){
         _.hdd.classList.add('hybriddd-custom');
         if(_.opt.dataSet) opts = Object.entries(_.opt.dataSet);
@@ -333,7 +339,7 @@ class HybridDDError extends Error {
     if( settings['listOption'] ){
       build = true;
       if( !(settings.listOption instanceof Function && 2==settings.listOption.length) ){
-        console.log("Hybriddd refresh error: listOtion setting must be a function with 2 arguments.");
+        console.log("Hybriddd refresh error: listOption setting must be a function with 2 arguments.");
         settings['listOption'] = null; //reset.
       }
     }
@@ -360,7 +366,7 @@ class HybridDDError extends Error {
         switch(true){
           case typeof o[1] === 'object':
             hasChildren = isGroup = true;
-            if('undefined' != typeof o[1]['label']){
+            if(o[1]['label']){
               val = o[0];
               lbl = o[1]['label'];
               kids = Object.entries(o[1]).slice(1);
@@ -402,12 +408,9 @@ class HybridDDError extends Error {
           //preserve select options attributes.
           // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
           hso.setAttribute('tabindex','-1');
-          hso.innerHTML = '<label class="hybriddd-l'+p+'">'+
-            '<input tabindex="-1" class="'+ icl+'" type="'+ t+'" value="'+ val+ '"'+ fname+ checked+ ' />'+
-            '<span class="hybridddcb"></span><span class="hybridddl">'+ lbl +'</span>' +
-            '</label>';
+          hso.innerHTML = `<label class="hybriddd-l${p}"><input tabindex="-1" class="${icl}" type="${t}" value="${val}" ${fname}${checked}/><span class="hybridddcb"></span><span class="hybridddl">${lbl}</span></label>`;
           hso.classList.value = 'hybriddd-option' + (isSelected ? ' active':'');
-          if(!_.isDS) hso.classList.value += o.classList.value; // + (o.value!=''?'hybriddd-'+o.value:'');
+          if(!_.isDS) hso.classList.value += ` ${o.classList.value}`; // + (o.value!=''?'hybriddd-'+o.value:'');
           //make sure not duplicate value.
           if(_.hdd.options[val]) throw new HybridDDError("Option list has duplicate value: "+val);
           _.hdd.options[val] = hso;
@@ -817,7 +820,7 @@ class HybridDDError extends Error {
     let _ = this;
     switch(_.opt.limitSelection){
       case 1:
-        _.hdd.options[_.sindex[0]].classList.remove('active');
+        if(_.sindex.length>0) _.hdd.options[_.sindex[0]].classList.remove('active');
         _.sindex=varr;
         break;
       default:
@@ -861,7 +864,7 @@ class HybridDDError extends Error {
       }
     });
     if(_.sindex.length==0){ //reset to default.
-      if('undefined' != typeof _.hdd.options['']){
+      if(_.hdd.options['']){
         _.sindex=[''];
         _.value={'':_.hdd.options[''].querySelector('.hybridddl').innerHTML};
         _.hdd.options[''].querySelector('input').checked=true;

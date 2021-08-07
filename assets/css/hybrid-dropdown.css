@@ -4,7 +4,7 @@
   position: relative;
   width: max-content;
   min-width: 30px;
-  height: 2.5em;
+  min-height: 2.5em;
   display: inline-block;
   vertical-align: baseline;
   font-size: 1em;
@@ -159,9 +159,10 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   padding: 0.4em 3px 0.6em 3px;
   cursor: pointer;
   min-width: 100%;
+	max-width: inherit;
 }
 
-.hybrid-dropdown::after {
+.hybriddd-selected::after {
 	border-bottom: 2px solid #90a1b5;
 	border-right: 2px solid #90a1b5;
 	content: '';
@@ -170,7 +171,7 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
 	margin-top: -4px;
 	pointer-events: none;
 	position: absolute;
-	right: 12px;
+	right: -12px;
 	top: 50%;
 	-webkit-transform-origin: 66% 66%;
 	-ms-transform-origin: 66% 66%;
