@@ -34,6 +34,9 @@ remote_theme: pmarsceill/just-the-docs
 url: "https://aurovrata.github.io"
 ###########################
 
+aux_links:
+  "Hybrid Dropdown on GitHub":
+    - "//github.com/aurovrata/hybrid-html-dropdown"
 # Back to top link
 back_to_top: true
 back_to_top_text: "Back to top"
