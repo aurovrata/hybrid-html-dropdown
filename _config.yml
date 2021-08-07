@@ -28,10 +28,15 @@ twitter_username: aurovrata
 github_username:  aurovrata
 
 # Build settings
-theme: "just-the-docs"
+# theme: "just-the-docs"
+remote-theme: "just-the-docs"
 color_scheme: dark
 plugins:
   - jekyll-feed
+
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -41,8 +46,28 @@ plugins:
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
-# exclude:
+exclude:
   - .sass-cache/
   - .jekyll-cache/
   - Gemfile
   - Gemfile.lock
+
+footer_content: "Copyleft &#127279; 2021 Aurovrata V. Distributed by a <a href=\"https://github.com/aurovrata/hybrid-html-dropdown/blob/hybrid-dropdown/LICENSE\">GPLv3 license.</a>"
+
+# Footer last edited timestamp
+last_edit_timestamp: true # show or hide edit time - page must have `last_modified_date` defined in the frontmatter
+last_edit_time_format: "%b %e %Y at %I:%M %p" # uses ruby's time format: https://ruby-doc.org/stdlib-2.7.0/libdoc/time/rdoc/Time.html
+
+
+# Footer "Edit this page on GitHub" link text
+gh_edit_link: true # show or hide edit this page link
+gh_edit_link_text: "Edit this page on GitHub"
+gh_edit_repository: "https://github.com/aurovrata/hybrid-html-dropdown/" # the github URL for your repo
+gh_edit_branch: "gh-pages" # the branch that your docs is served from
+# gh_edit_source: docs # the source that your files originate from
+gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
+
+# Google Analytics Tracking (optional)
+# e.g, UA-1234567-89
+ga_tracking: UA-2709176-10
+ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings (true/nil by default)

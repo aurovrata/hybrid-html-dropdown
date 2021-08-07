@@ -156,7 +156,7 @@ input mechanism can hover over elements. (e.g. computers with a mouse) */
   position: relative;
   width: max-content;
   height: 100%;
-  padding: 0.4em 3px 0.6em 3px;
+  padding: 0.4em 3px;
   cursor: pointer;
   min-width: 100%;
 	max-width: inherit;
