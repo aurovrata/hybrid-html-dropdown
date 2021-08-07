@@ -27,7 +27,7 @@ github_username:  aurovrata
 
 # LOCAL settings ######
 # theme: "just-the-docs"
-#url: ""
+# url: ""
 #######################
 # LIVE settings ###############
 remote_theme: pmarsceill/just-the-docs
