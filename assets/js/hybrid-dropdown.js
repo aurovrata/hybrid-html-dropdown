@@ -347,7 +347,7 @@ class HybridDDError extends Error {
     _.init(false, build, paint); //invole init function but do not initialise.
   }
   //method to initialise options.
-  hsProtype.buildOptionList = function(list,p){
+  hsProtype.buildOptionList = function(list,p, tree=''){
     let _ = this,
       opts=[],
       t=(_.multi) ? 'checkbox':'radio',
@@ -368,6 +368,7 @@ class HybridDDError extends Error {
             hasChildren = isGroup = true;
             if(o[1]['label']){
               val = o[0];
+              icl = 'hybridddis';
               lbl = o[1]['label'];
               kids = Object.entries(o[1]).slice(1);
               isGroup = false;
@@ -408,16 +409,17 @@ class HybridDDError extends Error {
           //preserve select options attributes.
           // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
           hso.setAttribute('tabindex','-1');
-          hso.innerHTML = `<label class="hybriddd-l${p}"><input tabindex="-1" class="${icl}" type="${t}" value="${val}" ${fname}${checked}/><span class="hybridddcb"></span><span class="hybridddl">${lbl}</span></label>`;
+          hso.innerHTML = `<label class="hybriddd-l${p}"><input tabindex="-1" class="${icl}" type="${t}" value="${tree}${val}" ${fname}${checked}/><span class="hybridddcb"></span><span class="hybridddl">${lbl}</span></label>`;
           hso.classList.value = 'hybriddd-option' + (isSelected ? ' active':'');
           if(!_.isDS) hso.classList.value += ` ${o.classList.value}`; // + (o.value!=''?'hybriddd-'+o.value:'');
           //make sure not duplicate value.
-          if(_.hdd.options[val]) throw new HybridDDError("Option list has duplicate value: "+val);
-          _.hdd.options[val] = hso;
+          if(_.hdd.options[(tree+val)]) throw new HybridDDError("Option list has duplicate value: "+val);
+          _.hdd.options[(tree+val)] = hso;
           break;
       }
       if(hasChildren){
-        let cos = _.buildOptionList(kids, p+1),
+        if(_.opt.treeView) tree+=val+'/';
+        let cos = _.buildOptionList(kids, p+1, tree),
           ul = document.createElement('ul');
         ul.replaceChildren(...cos);
         hso.appendChild(ul);

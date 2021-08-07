@@ -117,16 +117,16 @@ which results in,
           "md":"Masala dosa",
           "myd":"Mysore dosa",
           "pr":"Paper roast"
-        },
-        "france":{
-          "label":"France",
-          "crepe":{
-            "label":"Cr&ecirc;pe",
-            "cps":"Cr&ecirc;pe sucr&eacute;e",
-            "cpz":"Cr&ecirc;pe suzette",
-            "cpn":"Cr&ecirc;pe banane",
-            "cpn":"Cr&ecirc;pe nutella"
-          }
+        }
+      },
+      "france":{
+        "label":"France",
+        "crepe":{
+          "label":"Cr&ecirc;pe",
+          "cps":"Cr&ecirc;pe sucr&eacute;e",
+          "cpz":"Cr&ecirc;pe suzette",
+          "cpn":"Cr&ecirc;pe banane",
+          "cpn":"Cr&ecirc;pe nutella"
         }
       }
     }
@@ -136,7 +136,9 @@ which results in,
 **Note**
 - `new HybridDropdown(el,{treeView:true})` enables selection of whole branches when the parent option is selected.
 - treeView also indicates a parent is partially selected when not all options in the branch are selected.
+- partially selected parent options are not submitted.
 - treeView automatically activates multiple selection, and if limitSelection is not set then it is automatically set to `-1`, unlimited.
+- treeView options' values are constructed by concatenating them with their parent value, this allows submitted treeView fields to preserve their branch selection.
 
 ## Hybrid Dropdown with multiple limited selections
 
@@ -178,15 +180,15 @@ which results in,
           "md":"Masala dosa",
           "myd":"Mysore dosa",
           "pr":"Paper roast"
-        },
-        "France":{
-          "crepe":{
-            "label":"Cr&ecirc;pe",
-            "cps":"Cr&ecirc;pe sucr&eacute;e",
-            "cpz":"Cr&ecirc;pe suzette",
-            "cpn":"Cr&ecirc;pe banane",
-            "cpn":"Cr&ecirc;pe nutella"
-          }
+        }
+      },
+      "France":{
+        "crepe":{
+          "label":"Cr&ecirc;pe",
+          "cps":"Cr&ecirc;pe sucr&eacute;e",
+          "cpz":"Cr&ecirc;pe suzette",
+          "cpn":"Cr&ecirc;pe banane",
+          "cpn":"Cr&ecirc;pe nutella"
         }
       }
     }
