@@ -87,6 +87,7 @@ Using the same example as above, but adding a `"label"` keywords for the top mos
         "label":"Japan",
         "sushi":{
           "label":"Sushi",
+          "ps":"Pumpkin sushi",
           ...
         }
       }
@@ -138,7 +139,7 @@ which results in,
 - treeView also indicates a parent is partially selected when not all options in the branch are selected.
 - partially selected parent options are not submitted.
 - treeView automatically activates multiple selection, and if limitSelection is not set then it is automatically set to `-1`, unlimited.
-- treeView options' values are constructed by concatenating them with their parent value, this allows submitted treeView fields to preserve their branch selection.
+- treeView options' values are constructed by concatenating them with their parent value, this allows submitted treeView fields to preserve their branch selection, so in the above example, the first branch option 'Pumkin Suchi' which has a value of 'ps' will be submitted as `japan/sushi/ps` to reflect that it is a child of 'Sushi' which itself is a child of 'Japan'.
 
 ## Hybrid Dropdown with multiple limited selections
 

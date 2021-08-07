@@ -16,6 +16,7 @@ nav_order: 2
 | [`selectedLabel`](#option-selectedLabel)  | a function to display the selected label, see [Selected label function](./#selected-label-function) section below.|
 | [`defaultText`](#option-defaultText)    | if a an empty value option is provided in the data list it will be used by default, else the default selected text will display this text value.|
 | [`treeView`](#option-treeView)       | `false` by default, setting this to true allows Tree View selection, see treeView [example](/hybrid-dropdown/examples/#hybrid-dropdonw-with-treeview-selection).|
+| [`treeGlue`](#option-treeGlue)       | '/' by default, use to concatenate branch values in treeView mode.|
 | [`fieldName`](#option-fieldName)      | '' the field name to use for the form submission if none are provided in the HTML element used to intialise the dropdown object.|
 | [`tabIndex`](#option-tabIndex)       | the tabindex value of the field used for tabbed navigation between the form fields.|
 | [`listOption`](#option-listOption)     | filter function to determine if a data option is to be included in the dropdonw list.  This is especially useful when needing to display a subset of the options depending on the value of another field in the form. See the section [Filtering Dropdown lists](./#filtering-dropdown-lists) below.|

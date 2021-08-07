@@ -121,6 +121,7 @@ class HybridDDError extends Error {
         },
         defaultText:'---',
         treeView:false,
+        treeGlue:'/',
         fieldName: 'hybriddd', //we need a field name.
         backgroundColor:'',
         color:'',
@@ -418,7 +419,7 @@ class HybridDDError extends Error {
           break;
       }
       if(hasChildren){
-        if(_.opt.treeView) tree+=val+'/';
+        if(_.opt.treeView && val) tree+=val+_.opt.treeGlue;
         let cos = _.buildOptionList(kids, p+1, tree),
           ul = document.createElement('ul');
         ul.replaceChildren(...cos);
