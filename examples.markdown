@@ -16,6 +16,7 @@ Here is a list of examples you will find below,
 - [Pre-filled/pre-selected hybrid dropdown](/hybrid-html-dropdown/examples/#pre-filledpre-selected-hybrid-dropdown)
 - [Customise the selected text label and default option](/hybrid-html-dropdown/examples/#customise-the-selected-text-label-and-default-option)
 - [Using keyboard navigation between form fields](/hybrid-html-dropdown/examples/#using-keyboard-navigation-between-form-fields)
+- [Dropdown list with images using `optionLabel` setting](/hybrid-html-dropdown/examples/#dropdown-list-with-images-using-optionlabel-setting)
 
 ## Hybrid dropdown with multiple nested groups.
 
@@ -467,3 +468,64 @@ Use,
   <textarea tabindex=5 placeholder="type your message here"></textarea>
 </div>
 </form>
+
+
+## Dropdown list with images using `optionLabel` setting.
+The plugin is built to provide flexible customisation of the dropdown list.  Constructing the list from a JSON dataset allows you to add additional attributes or HTML constructs to your dropdown list.  Using the following JSON dataset to add images to my dropdown list,
+```html
+<div id="with-images" data-limit-selection="1" >
+  <script type="application/json">
+    {
+      "Sushi":{
+        "ps":["Pumpkin sushi", "/images/ps.jpg"],
+        "as":["Avocado sushi", "/images/as.jpg"],
+        "tc":["Tomato sushi", "/images/tc.jpg"],
+        "cs":["Carrot sushi", "/images/cs.jpg"]
+      }
+    }
+    </script>
+ </div>
+ ```
+ and make use of the [`optionLabel`](/hybrid-html-dropdown/options/#option-optionLabel) option setting to customise the option label HTML construct,
+
+ ```javascript
+ let wi = document.querySelector('#with-images');
+ new HybridDropdown(wi,
+   {
+     'fieldName':'dishes',
+     'defaultText': '---Sushis---',
+     'checkboxes': false,
+     'dropdown':'landscape',
+     'optionLabel':function(lbl){ //is a value=>label object.
+       return `<figure><img src="${lbl[1]}" alt="${lbl[0]}" /><figcaption>${lbl[0]}</figcaption></figure>`;
+     }
+   }
+ );
+ ```
+ **NOTE:**
+- switch off the checkboxes, as the images will act as checkboxes.
+- the 'landscape' mode which forces the list in a horizontal (inline) display.
+
+The CSS is tweaked to ensure caption display over the bottom of the images,
+
+```css
+#with-images figcaption {
+	margin-top: -40px;
+	background: #232323a8;
+	width: 100%;
+}
+```
+resulting in,
+
+ <div id="with-images" data-limit-selection="1" data-default-text="---Sushis---" data-field-name="dishes" data-checkboxes="false" data-dropdown="landscape">
+   <script type="application/json">
+     {
+       "Sushi":{
+         "ps":["Pumpkin sushi", "../assets/images/ps.jpg"],
+         "as":["Avocado sushi", "../assets/images/as.jpg"],
+         "ts":["Tomato sushi", "../assets/images/ts.jpg"],
+         "cs":["Carrot sushi", "../assets/images/cs.jpg"]
+       }
+     }
+     </script>
+  </div>

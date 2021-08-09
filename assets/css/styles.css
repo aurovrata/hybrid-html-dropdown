@@ -1,3 +1,21 @@
+#with-images figcaption {
+	margin-top: -40px;
+	background: #232323a8;
+	width: 100%;
+}
+#with-images .hybriddd-group > ul {
+	display: inline-block;
+	margin-left: 31px;
+}
+#with-images .hybriddd-group > span {
+	transform: rotate(-90deg);
+	position: absolute;
+	top: 72px;
+	left: -56px;
+	border: solid 1px;
+	height: 30px;
+	padding: 0 48px;
+}
 #search-input {
 	color: inherit;
 }
@@ -98,10 +116,10 @@ form#tabnav > div {
     margin-bottom: 10px;
 }
 div#row1 input {
-    max-width: 174px;
+    max-width: 159px;
 }
 div#row2 input {
-    width: 413px;
+    width: 456px;
 }
 form#tabnav > div {
     margin-bottom: 10px;

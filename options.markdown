@@ -11,8 +11,9 @@ nav_order: 2
 
 | option           | description                                                  |
 |:-----------------|:-------------------------------------------------------------|      
-| [`dropdown`](#option-dropdown)       | 'vertical'&#124;'horizontal', default is a vertical dropdown list.|
+| [`dropdown`](#option-dropdown)       | 'portrait'&#124;'landscape', default is a vertical dropdown list (portrait), see this [demo](/hybrid-html-dropdown/examples/#dropdown-list-with-images-using-optionlabel-setting) in the Examples section.|
 | [`limitSelection`](#option-limitSelection) | default 1, -1 for unlimited, or an integer value, see the example [Hybrid Dropdown with multiple limited selections](/hybrid-html-dropdown/examples/#hybrid-dropdown-with-multiple-limited-selections).            |
+| [`optionLabel`](#option-optionLabel)  | a function to display the inner HTML label of each options in the list which by default wraps text labels in a span element.  However, this setting is useful to customise additional attributes for each label such as displaying images, see the example [Dropdown list with images using `optionLabel` setting](/hybrid-html-dropdown/examples/#dropdown-list-with-images-using-optionlabel-setting).|
 | [`selectedLabel`](#option-selectedLabel)  | a function to display the selected label, see the example [Customise the selected text label and default option](/hybrid-html-dropdown/examples/#customise-the-selected-text-label-and-default-option).|
 | [`defaultText`](#option-defaultText)    | if a an empty value option is provided in the data list it will be used by default, else the default selected text will display this text value, see the example [Customise the selected text label and default option](/hybrid-html-dropdown/examples/#customise-the-selected-text-label-and-default-option).|
 | [`treeView`](#option-treeView)       | `false` by default, setting this to true allows Tree View selection, see treeView [example](/hybrid-html-dropdown/examples/#hybrid-dropdonw-with-treeview-selection).|

@@ -62,5 +62,16 @@
           }
         });
     }
+    //with images
+    let wi = document.querySelector('#with-images');
+    if(wi){
+      new HybridDropdown(wi,
+        {
+          'optionLabel':function(lbl){ //is a value=>label object.
+            return `<figure><img src="${lbl[1]}" alt="${lbl[0]}" /><figcaption>${lbl[0]}</figcaption></figure>`;
+          }
+        }
+      )
+    }
   })
 })();
