@@ -1,6 +1,6 @@
 /*
 Hybrid Dropdown JavaScript plugin insprired from an original idea by Sandrina Pereira (twitter:@a_sandrina_p)
-Version: 2.0rc1
+Version: 2.1
 Authors: Aurovrata Venet
 Twitter: @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
@@ -378,7 +378,7 @@ class HybridDDError extends Error {
           default:
             icl = 'hybridddis';
             val = o[0];
-            lbl = o[1];
+            lbl = _.opt.optionLabel(o[1]);
             isSelected = _.opt.selectedValues.indexOf(val) >=0;
         }
       }else{
