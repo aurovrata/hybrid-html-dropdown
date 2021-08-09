@@ -26,16 +26,16 @@ twitter_username: aurovrata
 github_username:  aurovrata
 
 # LOCAL settings ######
-theme: "just-the-docs"
-url: ""
+# theme: "just-the-docs"
+# url: ""
 #######################
 # LIVE settings ###############
-# remote_theme: pmarsceill/just-the-docs
-# url: "https://aurovrata.github.io"
-# Google Analytics Tracking (optional)
-# e.g, UA-1234567-89
-# ga_tracking: UA-204369310-1
-# ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings (true/nil by default)
+remote_theme: pmarsceill/just-the-docs
+url: "https://aurovrata.github.io"
+Google Analytics Tracking (optional)
+e.g, UA-1234567-89
+ga_tracking: UA-204369310-1
+ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings (true/nil by default)
 ###########################
 
 aux_links:
