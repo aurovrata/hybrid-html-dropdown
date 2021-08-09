@@ -15,7 +15,7 @@
   background:inherit;
 }
 
-.hybriddd-option::before {
+.hybriddd-option::before, .hybriddd-group::before {
   display: none !important;
 	content: none;
 	margin: 0;
@@ -50,7 +50,11 @@
   display: block;
 }
 /*include any border styling in the box-sizing of our hybrid select.*/
-.hybrid-dropdown * {
+.hybrid-dropdown *,
+.hybrid-dropdown .hybriddd-options .hybriddd-option,
+.hybrid-dropdown .hybriddd-options .hybriddd-option ul,
+.hybrid-dropdown .hybriddd-options .hybriddd-group,
+.hybrid-dropdown .hybriddd-options .hybriddd-group ul{
 	box-sizing: border-box;
   cursor: default;
 	margin: 0;
