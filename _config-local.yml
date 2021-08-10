@@ -1,0 +1,74 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+#
+# If you need help with YAML syntax, here are some quick references for you:
+# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
+# https://learnxinyminutes.com/docs/yaml/
+#
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+
+title: Hybrid HTML Dropdown
+email: vrata@syllogic.in
+description: A better `<select/>` field.
+baseurl: "/hybrid-html-dropdown" # the subpath of your site, e.g. /blog
+twitter_username: aurovrata
+github_username:  aurovrata
+
+# LOCAL settings ######
+theme: "just-the-docs"
+url: ""
+#######################
+# LIVE settings ###############
+# remote_theme: pmarsceill/just-the-docs
+# url: "https://aurovrata.github.io"
+# Google Analytics Tracking (optional)
+# e.g, UA-1234567-89
+# ga_tracking: UA-204369310-1
+# ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings (true/nil by default)
+###########################
+
+aux_links:
+  "Hybrid Dropdown on GitHub":
+    - "//github.com/aurovrata/hybrid-html-dropdown"
+# Back to top link
+back_to_top: true
+back_to_top_text: "Back to top"
+
+color_scheme: dark
+
+
+footer_content: "Copyleft &#127279; 2021 Aurovrata V. Distributed by a <a href=\"https://github.com/aurovrata/hybrid-html-dropdown/blob/hybrid-dropdown/LICENSE\">GPLv3 license.</a>"
+
+# Footer last edited timestamp
+last_edit_timestamp: true # show or hide edit time - page must have `last_modified_date` defined in the frontmatter
+last_edit_time_format: "%b %e %Y at %I:%M %p" # uses ruby's time format: https://ruby-doc.org/stdlib-2.7.0/libdoc/time/rdoc/Time.html
+
+
+# Footer "Edit this page on GitHub" link text
+gh_edit_link: true # show or hide edit this page link
+gh_edit_link_text: "Edit this page on GitHub"
+gh_edit_repository: "https://github.com/aurovrata/hybrid-html-dropdown/" # the github URL for your repo
+gh_edit_branch: "gh-pages" # the branch that your docs is served from
+# gh_edit_source: docs # the source that your files originate from
+gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
+
+
+plugins:
+  - jekyll-feed
+
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - Gemfile
+  - Gemfile.lock
