@@ -1,6 +1,6 @@
 /*
 Hybrid Dropdown JavaScript plugin insprired from an original idea by Sandrina Pereira (twitter:@a_sandrina_p)
-Version: 2.1
+Version: 2.0.1
 Authors: Aurovrata Venet
 Twitter: @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
@@ -66,7 +66,7 @@ class HybridDDError extends Error {
 
     ['class','id','name'].forEach(a=>{
       if(elm.hasAttribute(a)){
-        let opt = a.charAt(0).toUpperCase() + a.slice(1);
+        let opt = 'field'+a.charAt(0).toUpperCase() + a.slice(1);
         cnfg[opt] = elm.getAttribute(a);
         elm.removeAttribute(a);
       }
@@ -103,6 +103,7 @@ class HybridDDError extends Error {
         case 'treeView':
         case 'negative':
         case 'colourise':
+        case 'checkboxes':
           cnfg[k] = (cnfg[k] == 'true');
           break;
       }
@@ -127,7 +128,7 @@ class HybridDDError extends Error {
         color:'',
         negative: false,
         colourise: true,
-        checboxes: cb,
+        checkboxes: cb,
         tabIndex:tabIdx?tabIdx:0,
         listOption: null,
         selectedValues:[],
@@ -196,14 +197,17 @@ class HybridDDError extends Error {
       _.hindex=[]; //hover indexes used to track shiftkey + drag events.
       _.sindex=[]; //initial index of selected option.
       _.value={}; //initial value.
-      if(_.isDS){
-        _.hdd.classList.add('hybriddd-custom');
-        if(_.opt.dataSet) opts = Object.entries(_.opt.dataSet);
-        else opts = [["","<em>json error</em>"]];
-      }
-      else opts = _.el.children;
       try{
-        opts = _.buildOptionList(opts,0);
+        if(_.isDS){
+          _.hdd.classList.add('hybriddd-custom');
+          if(_.opt.dataSet){
+            opts = _.buildOptionList(Object.entries(_.opt.dataSet),0);
+          }else{
+            _.hdd.selected.innerHTML = "<em>json error</em>";
+            opts = [];
+          }
+        }
+        else opts = _.buildOptionList(_.el.children,0);
         _.hdd.ddlist.replaceChildren(...opts);
       }catch(err){
         if(err instanceof HybridDDError){
@@ -252,7 +256,7 @@ class HybridDDError extends Error {
       _.emit('hybrid-dd-init');
     }
     //styling.
-    if(_.opt.checboxes)_.hdd.classList.add('show-cb');
+    if(_.opt.checkboxes)_.hdd.classList.add('show-cb');
     if(paint) _.colourise();
   }
   //set colour for dd elements.
@@ -365,7 +369,8 @@ class HybridDDError extends Error {
         lbl = o[0];
         val=null;
         switch(true){
-          case typeof o[1] === 'object':
+          case o[1] instanceof Object && !o[1].length: //object but not array.
+          case 0===p && o[1] instanceof Array:
             hasChildren = isGroup = true;
             if(o[1]['label']){
               val = o[0];
@@ -405,7 +410,7 @@ class HybridDDError extends Error {
           if(isSelected){
             _.value[val] = lbl;
             _.sindex.push(val);
-            checked = ' checked'
+            checked = ' checked';
           }
           //preserve select options attributes.
           // for(let k in o.dataset) hso.dataset[k]=o.dataset[k];
