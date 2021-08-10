@@ -497,7 +497,7 @@ The plugin is built to provide flexible customisation of the dropdown list.  Con
      'checkboxes': false,
      'dropdown':'landscape',
      'optionLabel':function(lbl){ //is a value=>label object.
-       return `<figure><img src="${lbl[1]}" alt="${lbl[0]}" /><figcaption>${lbl[0]}</figcaption></figure>`;
+       return `<div><img src="${lbl[1]}" alt="${lbl[0]}" /><p>${lbl[0]}</p></div>`;
      }
    }
  );
@@ -509,10 +509,41 @@ The plugin is built to provide flexible customisation of the dropdown list.  Con
 The CSS is tweaked to ensure caption display over the bottom of the images,
 
 ```css
-#with-images figcaption {
-	margin-top: -40px;
-	background: #232323a8;
-	width: 100%;
+#with-images .hybridddl img {
+	width: auto;
+	height: auto;
+}
+#with-images .hybridddl img + p,
+#with-images .hybriddd-selected img + p{
+	position: absolute;
+	top: 0;
+	width: 140px;
+	height: ;
+	text-align: center;
+	background: #2e2e2ead;
+	margin: 57px 5px;
+	padding: 12px 0;
+	line-height: 1;
+	border: solid 1px white;
+	border-radius: 4px;
+  display: none;
+  color: #fff;
+}
+#with-images .hybriddd-option:hover > label img+p,
+#with-images .hybriddd-selected img + p{ display:block}
+#with-images .hybriddd-group > ul {
+	display: inline-block;
+	margin-left: 31px;
+}
+#with-images .hybriddd-group{line-height: 1;}
+#with-images .hybriddd-group > span {
+	transform: rotate(-90deg);
+	position: absolute;
+	top: 61px;
+	left: -56px;
+	border: solid 1px;
+	height: auto;
+	padding: 5px 47px;
 }
 ```
 resulting in,

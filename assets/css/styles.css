@@ -2,7 +2,8 @@
 	width: auto;
 	height: auto;
 }
-#with-images .hybridddl img + p {
+#with-images .hybridddl img + p,
+#with-images .hybriddd-selected img + p{
 	position: absolute;
 	top: 0;
 	width: 140px;
@@ -17,7 +18,9 @@
   display: none;
   color: #fff;
 }
-#with-images .hybriddd-option:hover > label img+p{ display:block}
+#with-images .hybriddd-option:hover > label img+p,
+#with-images .hybriddd-selected img + p{ display:block}
+#with-images .hybriddd-options{overflow: hidden}
 #with-images .hybriddd-group > ul {
 	display: inline-block;
 	margin-left: 31px;

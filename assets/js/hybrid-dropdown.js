@@ -951,8 +951,7 @@ class HybridDDError extends Error {
     }
     _.hdd.classList.add('active');
     //adjust width of dropdown.
-    if(!_.hdd.ddlist.style['min-width']) _.hdd.ddlist.style['min-width']=(_.hdd.ddlist.offsetWidth + 12)+"px";
-
+    if(!_.hdd.ddlist.style['min-width']) _.hdd.ddlist.style['min-width']=`${_.hdd.ddlist.offsetWidth+12}px`;
     //listen for external clicks to close.
     _.event(document, 'add',{
       click: _.close
