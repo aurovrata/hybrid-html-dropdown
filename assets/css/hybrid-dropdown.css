@@ -120,22 +120,22 @@ ul.hybriddd-options::-webkit-scrollbar-track {
 }
 /* Make sure the custom select does not mess with the layout*/
 .hybriddd-l0{
-	padding: 0 1em;
+	padding: 0 0.5em;
 }
 .hybriddd-l1{
-	padding: 0 1em 0 2em;
+	padding: 0 1em 0 1em;
 }
 .hybriddd-l2{
-	padding: 0 1em 0 3em;
+	padding: 0 1em 0 1.5em;
 }
 .hybriddd-l3{
-	padding: 0 1em 0 4em;
+	padding: 0 1em 0 2em;
 }
 .hybriddd-l4{
-	padding: 0 1em 0 5em;
+	padding: 0 1em 0 2.5em;
 }
 .hybriddd-l5{
-	padding: 0 1em 0 6em;
+	padding: 0 1em 0 3em;
 }
 .hybriddd-group > span{
 	padding: 0 0.5em;

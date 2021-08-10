@@ -16,7 +16,7 @@ Here is a list of examples you will find below,
 - [Pre-filled/pre-selected hybrid dropdown](/hybrid-html-dropdown/examples/#pre-filledpre-selected-hybrid-dropdown)
 - [Customise the selected text label and default option](/hybrid-html-dropdown/examples/#customise-the-selected-text-label-and-default-option)
 - [Using keyboard navigation between form fields](/hybrid-html-dropdown/examples/#using-keyboard-navigation-between-form-fields)
-- [Dropdown list with images using `optionLabel` setting](/hybrid-html-dropdown/examples/#dropdown-list-with-images-using-optionlabel-setting)
+- [Dropdown list with with custom labels with images](/hybrid-html-dropdown/examples/#dropdown-list-with-with-custom-labels-with-images)
 
 ## Hybrid dropdown with multiple nested groups.
 
@@ -470,7 +470,7 @@ Use,
 </form>
 
 
-## Dropdown list with images using `optionLabel` setting.
+## Dropdown list with with custom labels with images.
 The plugin is built to provide flexible customisation of the dropdown list.  Constructing the list from a JSON dataset allows you to add additional attributes or HTML constructs to your dropdown list.  Using the following JSON dataset to add images to my dropdown list,
 ```html
 <div id="with-images" data-limit-selection="1" >

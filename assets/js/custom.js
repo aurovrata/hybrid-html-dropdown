@@ -68,7 +68,7 @@
       new HybridDropdown(wi,
         {
           'optionLabel':function(lbl){ //is a value=>label object.
-            return `<figure><img src="${lbl[1]}" alt="${lbl[0]}" /><figcaption>${lbl[0]}</figcaption></figure>`;
+            return `<div><img src="${lbl[1]}" alt="${lbl[0]}" /><p>${lbl[0]}</p></div>`;
           }
         }
       )

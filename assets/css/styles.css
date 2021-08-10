@@ -1,20 +1,36 @@
-#with-images figcaption {
-	margin-top: -40px;
-	background: #232323a8;
-	width: 100%;
+#with-images .hybridddl img {
+	width: auto;
+	height: auto;
 }
+#with-images .hybridddl img + p {
+	position: absolute;
+	top: 0;
+	width: 140px;
+	height: ;
+	text-align: center;
+	background: #2e2e2ead;
+	margin: 57px 5px;
+	padding: 12px 0;
+	line-height: 1;
+	border: solid 1px white;
+	border-radius: 4px;
+  display: none;
+  color: #fff;
+}
+#with-images .hybriddd-option:hover > label img+p{ display:block}
 #with-images .hybriddd-group > ul {
 	display: inline-block;
 	margin-left: 31px;
 }
+#with-images .hybriddd-group{line-height: 1;}
 #with-images .hybriddd-group > span {
 	transform: rotate(-90deg);
 	position: absolute;
-	top: 72px;
+	top: 61px;
 	left: -56px;
 	border: solid 1px;
-	height: 30px;
-	padding: 0 48px;
+	height: auto;
+	padding: 5px 47px;
 }
 #search-input {
 	color: inherit;
