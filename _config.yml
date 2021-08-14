@@ -32,8 +32,8 @@ github_username:  aurovrata
 # LIVE settings ###############
 remote_theme: pmarsceill/just-the-docs
 url: "https://aurovrata.github.io"
-Google Analytics Tracking (optional)
-e.g, UA-1234567-89
+# Google Analytics Tracking (optional)
+# e.g, UA-1234567-89
 ga_tracking: UA-204369310-1
 ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings (true/nil by default)
 ###########################
