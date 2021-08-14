@@ -375,7 +375,7 @@ class HybridDDError extends Error {
             if(o[1]['label']){
               val = o[0];
               icl = 'hybridddis';
-              lbl = o[1]['label'];
+              lbl = _.opt.optionLabel(o[1]['label']);
               kids = Object.entries(o[1]).slice(1);
               isGroup = false;
             }else kids = Object.entries(o[1]);
