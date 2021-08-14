@@ -7,6 +7,8 @@ see the [examples](https://aurovrata.github.io/hybrid-html-dropdown/examples/) o
 For detailed documentation see the [GitHub Page](https://aurovrata.github.io/hybrid-html-dropdown/)
 
 ## Changelog
+### v2.0.2
+* fix optionLabel function parsing for group options with 'label' keyword.
 ### v2.0.1
 * make use of `optionLabel` for dataset lists.
 * added demo example on how to build image checkbox lists.
