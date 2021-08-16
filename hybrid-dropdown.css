@@ -14,7 +14,7 @@
   cursor: pointer;
   background:inherit;
 }
-
+.hybrid-dropdown:focus {box-shadow: 1px 1px 3px}
 .hybriddd-option::before, .hybriddd-group::before {
   display: none !important;
 	content: none;
@@ -67,6 +67,8 @@
   cursor: pointer;
   min-width: 100%;
 	max-width: inherit;
+  display: inline-block;
+	z-index: 2;
 }
 
 .hybriddd-selected::after {

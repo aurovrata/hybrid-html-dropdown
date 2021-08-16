@@ -79,11 +79,19 @@ class HybridDDError extends Error {
         break;
       default:
         _.isDS = true;// dateset source.
-        try{
-          cnfg['dataSet'] = JSON.parse(elm.querySelector('script').innerHTML);
-        }catch(se){
-          console.log(se.name+":"+se.message);
-          console.log("Unable to Hybridise element, missing or malformed json dataset");
+        if(!settings['dataSet']){ //json object parsed or in HTML
+          let is = elm.querySelector('script');
+          if(is){
+            try{
+              cnfg['dataSet'] = JSON.parse(elm.querySelector('script').innerHTML);
+            }catch(se){
+              console.log(se.name+":"+se.message);
+              console.log("HybridDropdown ERROR: missing or malformed json dataset");
+            }
+          }else{
+            console.log("HybridDropdown ERROR: missing json dataset");
+            cnfg['dataSet'] = null;
+          }
         }
         if(!cnfg['id'] && cnfg['fieldName']) cnfg['id'] = cnfg['fieldName'];
         elm.classList.add('hybriddd-custom'); //flag the element as custom.
@@ -94,6 +102,7 @@ class HybridDDError extends Error {
     elm._hybriddd = _;
     _.el = elm; //keep original element reference.
     _.el.classList.add('hybridddised'); //flag the element as converted.
+    // let pl = _.el.closest('label');
     // merge user setting with defaults
     Object.keys(cnfg).forEach(k=>{
       switch(k){
@@ -140,19 +149,19 @@ class HybridDDError extends Error {
     );
     //nake sure we have proper functions
     ['selectedLabel','optionLabel'].forEach(s=>{
-      if(!_.opt[s] || !(_.opt[s] instanceof Function) && 1==_.opt[s].length){
+      if(!_.opt[s] || !(_.opt[s] instanceof Function) || 1!=_.opt[s].length){
         throw new HybridDDError(`${s} setting must be a function with 1 argument.`);
       }
     });
     if(_.opt.listOption ){  //check we have a function.
-      if( !(_.opt.listOption instanceof Function && 2==_.opt.listOption.length) ){
+      if( !(_.opt.listOption instanceof Function) || 2!=_.opt.listOption.length ){
         throw new HybridDDError("listOption setting must be a function with 2 arguments.");
       }
     }
     if(_.opt.treeView && 1==_.opt.limitSelection) _.opt.limitSelection=-1; //by default
     _.multi = (_.opt.limitSelection !=1); //flag multi select field.
     //check if we have a field name.
-    if(!_.opt.fieldName) _.opt.fieldName = _.opt.fieldId; //try to set it to id.
+    if(!_.opt.fieldId) _.opt.fieldId = _.opt.fieldName;
     if(_.multi && _.opt.fieldName && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
 
     //initialise the hybrid-dd.
@@ -177,6 +186,8 @@ class HybridDDError extends Error {
         _.hdd.setAttribute('tabindex',_.opt.tabIndex);
       }
       _.hdd.setAttribute('id',_.opt.fieldId);
+      let pl = _.el.closest('label');
+      if(pl) pl.setAttribute('for',_.opt.fieldId);
       _.hdd.setAttribute('class',_.opt.fieldClass);
       _.hdd.classList.add('hybrid-dropdown');
       // _.hdd.setAttribute('aria-hidden', true);//hide from readers.
@@ -373,11 +384,13 @@ class HybridDDError extends Error {
           case 0===p && o[1] instanceof Array:
             hasChildren = isGroup = true;
             if(o[1]['label']){
+              isGroup = false;
               val = o[0];
               icl = 'hybridddis';
               lbl = _.opt.optionLabel(o[1]['label']);
-              kids = Object.entries(o[1]).slice(1);
-              isGroup = false;
+              kids = Object.entries(o[1]);
+              kids.splice(Object.keys(o[1]).indexOf('label'));
+              hasChildren = (kids.length>0);
             }else kids = Object.entries(o[1]);
             break;
           default:
