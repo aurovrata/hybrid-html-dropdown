@@ -212,7 +212,7 @@ class HybridDDError extends Error {
         if(_.isDS){
           _.hdd.classList.add('hybriddd-custom');
           if(_.opt.dataSet){
-            opts = _.buildOptionList(Object.entries(_.opt.dataSet),0);
+            opts = _.buildOptionList(Object.entries(_.opt.dataSet).reverse(),0);
           }else{
             _.hdd.selected.innerHTML = "<em>json error</em>";
             opts = [];
