@@ -129,7 +129,7 @@ and to setup the following CSS rules,
   background-color: #fff
 }
 /* checkboxes colours */
-:hover > input:checked + .hybridddl > .hybridddcb::before{
+:hover > input:checked + .hybridddcb::before{
   color:#fff
 }
 .hybriddd-option input:checked + .hybridddcb::before {
