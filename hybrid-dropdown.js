@@ -1,6 +1,6 @@
 /*
 Hybrid Dropdown JavaScript plugin insprired from an original idea by Sandrina Pereira (twitter:@a_sandrina_p)
-Version: 2.0.1
+Version: 2.0.2
 Authors: Aurovrata Venet
 Twitter: @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
@@ -323,7 +323,8 @@ class HybridDDError extends Error {
       active.setAttribute('id','hybriddd-colours');
       active.type = "text/css";
       active.innerText = `.hybriddd-option.active > label:hover,.hybriddd-option.hover > label,.hybriddd-option \
-      > label:hover{color:${bg};background-color:${cl}}:hover > input:checked + .hybridddl > .hybridddcb::before \ {color:${cl}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
+      > label:hover{color:${bg};background-color:${cl}}:hover > input:checked+.hybridddcb::before \
+      {background-color:${bg}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
       ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar{background:${cl}}`;
       document.head.appendChild(active);
     }

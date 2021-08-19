@@ -191,12 +191,10 @@ ul.hybriddd-options::-webkit-scrollbar-track {
 	padding: 1px;
 }
 /* COLOURS */
-
 .hybriddd-option.active > label{
 	background: #0466ff;
 	color: #fff;
 }
-
 input:checked + .hybridddcb::before{
 	background: white;
 }
