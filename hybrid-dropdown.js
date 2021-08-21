@@ -147,6 +147,8 @@ class HybridDDError extends Error {
       settings, //user settings.
       cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
+    //make sure selectedValues are strings...
+    if(_.opt.selectedValues) _.opt.selectedValues = _.opt.selectedValues.map(String);
     //nake sure we have proper functions
     ['selectedLabel','optionLabel'].forEach(s=>{
       if(!_.opt[s] || !(_.opt[s] instanceof Function) || 1!=_.opt[s].length){
@@ -392,6 +394,7 @@ class HybridDDError extends Error {
               kids = Object.entries(o[1]);
               kids.splice(Object.keys(o[1]).indexOf('label'));
               hasChildren = (kids.length>0);
+              isSelected = _.opt.selectedValues.indexOf(val) >=0;
             }else kids = Object.entries(o[1]);
             break;
           default:
