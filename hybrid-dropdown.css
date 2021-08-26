@@ -14,8 +14,10 @@
   cursor: pointer;
   background:inherit;
 }
-select.hybrid-select{
+select.hybridddised{
   visibility:hidden !important;
+	width:0 !important;
+	height: 0 !important;
 }
 .hybrid-dropdown:focus {box-shadow: 1px 1px 3px}
 .hybriddd-option::before, .hybriddd-group::before {
@@ -41,7 +43,7 @@ select.hybrid-select{
 	padding: 0;
 	list-style: none !important;
 	display: none;
-	z-index: 1;
+	z-index: 7777;
 	margin: 0;
 	padding: 0;
 	left: -1px;
@@ -71,7 +73,7 @@ select.hybrid-select{
   min-width: 100%;
 	max-width: inherit;
   display: inline-block;
-	z-index: 2;
+	z-index: 7;
 }
 
 .hybriddd-selected::after {

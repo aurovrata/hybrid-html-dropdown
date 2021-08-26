@@ -68,7 +68,10 @@ class HybridDDError extends Error {
       if(elm.hasAttribute(a)){
         let opt = 'field'+a.charAt(0).toUpperCase() + a.slice(1);
         cnfg[opt] = elm.getAttribute(a);
-        elm.removeAttribute(a);
+        switch(a){
+          case 'name':
+            elm.removeAttribute(a);
+        }
       }
     });
     switch(true){
@@ -76,6 +79,7 @@ class HybridDDError extends Error {
         if(elm.multiple) lim=-1;
         // elm.style="visibility:hidden"; //hide the origial select field.
         cb = false; //checkboxes
+        if(cnfg.fieldId) cnfg.fieldId += '-hdd';
         break;
       default:
         _.isDS = true;// dateset source.
