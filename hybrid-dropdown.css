@@ -14,6 +14,9 @@
   cursor: pointer;
   background:inherit;
 }
+select.hybrid-select{
+  visibility:hidden !important;
+}
 .hybrid-dropdown:focus {box-shadow: 1px 1px 3px}
 .hybriddd-option::before, .hybriddd-group::before {
   display: none !important;

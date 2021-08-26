@@ -1,6 +1,6 @@
 /*
 Hybrid Dropdown JavaScript plugin insprired from an original idea by Sandrina Pereira (twitter:@a_sandrina_p)
-Version: 2.0.2
+Version: 2.0.3
 Authors: Aurovrata Venet
 Twitter: @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
@@ -74,7 +74,7 @@ class HybridDDError extends Error {
     switch(true){
       case elm.nodeName === "SELECT": //select field source.
         if(elm.multiple) lim=-1;
-        elm.style="visibility:hidden"; //hide the origial select field.
+        // elm.style="visibility:hidden"; //hide the origial select field.
         cb = false; //checkboxes
         break;
       default:
@@ -98,7 +98,7 @@ class HybridDDError extends Error {
         break;
     }
     if(cnfg)
-    //expose object in its original DOM element.
+    //expose object in original DOM element.
     elm._hybriddd = _;
     _.el = elm; //keep original element reference.
     _.el.classList.add('hybridddised'); //flag the element as converted.
@@ -348,7 +348,7 @@ class HybridDDError extends Error {
   }
   //method to refresh an existing HybridDropdown object.
   hsProtype.refreshHybrid = function(settings={}){
-    let _ = this, build = false, paint = false;
+    let _ = this, build = true, paint = false;
     if( settings.hasOwnProperty('negative')  || settings.hasOwnProperty('colourise') || settings['color'] || settings['backgroundColor']){
       paint = true;
       let id = _.el.getAttribute('id');
@@ -356,7 +356,7 @@ class HybridDDError extends Error {
       if(st) st.remove();
     }
     if( settings['listOption'] ){
-      build = true;
+      // build = true; //keep build by default
       if( !(settings.listOption instanceof Function && 2==settings.listOption.length) ){
         console.log("Hybriddd refresh error: listOption setting must be a function with 2 arguments.");
         settings['listOption'] = null; //reset.

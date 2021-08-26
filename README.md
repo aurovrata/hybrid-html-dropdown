@@ -7,6 +7,9 @@ see the [examples](https://aurovrata.github.io/hybrid-html-dropdown/examples/) o
 For detailed documentation see the [GitHub Page](https://aurovrata.github.io/hybrid-html-dropdown/)
 
 ## Changelog
+### v2.0.3
+* make refresh() method rebuild by default.
+* fix styling on select fields.
 ### v2.0.2
 * fix optionLabel function parsing for group options with 'label' keyword.
 * fix styling
