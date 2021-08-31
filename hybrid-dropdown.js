@@ -253,6 +253,11 @@ class HybridDDError extends Error {
       _.event(_.hdd, 'add',{
         click: _.open
       });
+      //listen for fomr reset.
+      let f = _.el.closest('form');
+      _.event(f,'add',{
+        reset:_.reset.bind(_)
+      })
       //create a close function.
       _.close = _.closeSelect.bind(_, true);
       //blur function
@@ -472,12 +477,16 @@ class HybridDDError extends Error {
   hsProtype.reset = function(){
     let _ = this;
     _.sindex = [];
+    _.value = {};
+    // _.clearClass('hover');
+    _.clearClass('active');
     if(_.hdd.options['']){
       _.hdd.options[''].classList.add('active');
       _.value['']=_.hdd.options[''].querySelector('.hybridddl').innerHTML;
       _.hdd.options[''].querySelector('input').checked=true;
       _.sindex.push('');
     }else _.value[''] = _.opt.defaultText;
+    _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
   }
   //method to add event listeners.
   hsProtype.event = function (ele, type, args) {
