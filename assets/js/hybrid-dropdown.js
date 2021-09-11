@@ -152,7 +152,7 @@ class HybridDDError extends Error {
       cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
     //make sure selectedValues are strings...
-    if(_.opt.selectedValues) _.opt.selectedValues = _.opt.selectedValues.map(String);
+    if(_.opt.selectedValues.length>0) _.opt.selectedValues = _.opt.selectedValues.map(String);
     //nake sure we have proper functions
     ['selectedLabel','optionLabel'].forEach(s=>{
       if(!_.opt[s] || !(_.opt[s] instanceof Function) || 1!=_.opt[s].length){
