@@ -119,6 +119,10 @@ class HybridDDError extends Error {
         case 'checkboxes':
           cnfg[k] = (cnfg[k] == 'true');
           break;
+        case 'selectedValues':
+          if(cnfg[k].indexOf('[')>=0) cnfg[k] = JSON.parse(cnfg[k]);
+          else cnfg[k] = [cnfg[k]];
+          break;
       }
     });
     _.opt = Object.assign(
