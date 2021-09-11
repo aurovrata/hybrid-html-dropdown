@@ -7,10 +7,10 @@
     }
   }
   docReady( (e)=>{
-    let el, hl= document.querySelectorAll('.hybrid-list');
-    for(el of hl) new HybridDropdown(el,{});
+    let hlist= document.querySelectorAll('.hybrid-list');
+    for(let ele of hlist) new HybridDropdown(ele,{});
 
-    el= document.querySelector('#flip-style');
+    let el= document.querySelector('#flip-style');
     if(el){
       new HybridDropdown(el,{'negative':false});
       el.addEventListener('change', (ce) => {

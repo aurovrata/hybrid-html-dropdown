@@ -79,6 +79,7 @@ class HybridDDError extends Error {
         if(elm.multiple) lim=-1;
         // elm.style="visibility:hidden"; //hide the origial select field.
         cb = false; //checkboxes
+        if(!cnfg.fieldName && cnfg.fieldId) cnfg.fieldName = cnfg.fieldId;
         if(cnfg.fieldId) cnfg.fieldId += '-hdd';
         break;
       default:
@@ -97,11 +98,11 @@ class HybridDDError extends Error {
             cnfg['dataSet'] = null;
           }
         }
-        if(!cnfg['id'] && cnfg['fieldName']) cnfg['id'] = cnfg['fieldName'];
+        if(!cnfg['fieldId'] && cnfg['fieldName']) cnfg['fieldId'] = cnfg['fieldName'];
+        if(!cnfg['fieldName'] && cnfg['fieldId']) cnfg['fieldName'] = cnfg['fieldId'];
         elm.classList.add('hybriddd-custom'); //flag the element as custom.
         break;
     }
-    if(cnfg)
     //expose object in original DOM element.
     elm._hybriddd = _;
     _.el = elm; //keep original element reference.
@@ -362,7 +363,7 @@ class HybridDDError extends Error {
       .hybriddd-option > label:hover{color:${bg};background-color:${cl}}#${id} :hover > input:checked + .hybridddl > \
       .hybridddcb::before {color:${cl}} #${id} ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
       #${id} ul.hybriddd-options::-webkit-scrollbar-thumb,#${id} ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
-      #${id} ul.hybriddd-options{scrollbar-color:${cl} ${bg}`;
+      #${id} ul.hybriddd-options{scrollbar-color:${cl} ${bg};`;
       document.head.appendChild(active);
     }
   }
