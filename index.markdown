@@ -41,7 +41,7 @@ and the minified js file in your footer,
 
 If you have an existing `<select/>` field,
 <select id="ex1">
-  <option value="">Select an item</option>
+  <option value="">Select a dish</option>
   <option value="ps">Pumpkin sushi</option>
   <option value="as">Avocado sushi</option>
   <option value="ts">Tomato sushi</option>
