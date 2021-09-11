@@ -31,27 +31,26 @@ select.hybridddised{
   background: #ccc;
 	color: grey;
 }
-.hybrid-dropdown.wide,.hybrid-dropdown.wide .hybriddd-options {
-  min-width: 100%;
+.hybrid-dropdown .hybriddd-wrapper {
+	overflow: hidden;
+	z-index: 7777;
+	position: absolute;
+	left: 0;
+	max-height: 34vh;
+	min-width: max-content;
+  display: none;
 }
 .hybrid-dropdown ul.hybriddd-options {
-	position: absolute;
-	min-width: max-content;
 	border: 1px solid #6f6f6f;
 	border-radius: 0.25em;
-	background-color: inherit;
-	padding: 0;
 	list-style: none !important;
-	display: none;
-	z-index: 7777;
-	margin: 0;
-	padding: 0;
-	left: -1px;
-	max-height: 33vh;
+	margin: 0 !important;
+	padding: 0 !important;
 	overflow-y: auto;
 	scrollbar-width: thin;
+	height: 100%;
 }
-.hybrid-dropdown.active > .hybriddd-options{
+.hybrid-dropdown.active > .hybriddd-wrapper{
   display: block;
 }
 /*include any border styling in the box-sizing of our hybrid select.*/

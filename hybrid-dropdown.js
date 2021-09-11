@@ -200,8 +200,11 @@ class HybridDDError extends Error {
       _.hdd.selected = document.createElement('div');
       _.hdd.appendChild(_.hdd.selected);
       _.hdd.selected.classList.add('hybriddd-selected');
+      _.hdd.listwrap = document.createElement('div');
+      _.hdd.appendChild(_.hdd.listwrap);
       _.hdd.ddlist = document.createElement('ul');
-      _.hdd.appendChild(_.hdd.ddlist);
+      _.hdd.listwrap.appendChild(_.hdd.ddlist);
+      _.hdd.listwrap.classList.add('hybriddd-wrapper');
       _.hdd.ddlist.classList.add('hybriddd-options');
       _.listenForBulk = false;
       _.listenModClick = false;
@@ -336,7 +339,8 @@ class HybridDDError extends Error {
       active.innerText = `.hybriddd-option.active > label:hover,.hybriddd-option.hover > label,.hybriddd-option \
       > label:hover{color:${bg};background-color:${cl}}:hover > input:checked+.hybridddcb::before \
       {background-color:${bg}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
-      ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar{background:${cl}}`;
+      ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
+      ul.hybriddd-options{scrollbar-color:${cl} ${bg};background-color:${bg}}`;
       document.head.appendChild(active);
     }
     if(_.opt.backgroundColor || _.opt.color || _.opt.negative){
@@ -351,7 +355,8 @@ class HybridDDError extends Error {
       active.innerText = `#${id} .hybriddd-option.active > label:hover,#${id} .hybriddd-option.hover > label,#${id} \
       .hybriddd-option > label:hover{color:${bg};background-color:${cl}}#${id} :hover > input:checked + .hybridddl > \
       .hybridddcb::before {color:${cl}} #${id} ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
-      #${id} ul.hybriddd-options::-webkit-scrollbar-thumb,#${id} ul.hybriddd-options::-webkit-scrollbar{background:${cl}}`;
+      #${id} ul.hybriddd-options::-webkit-scrollbar-thumb,#${id} ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
+      #${id} ul.hybriddd-options{scrollbar-color:${cl} ${bg};background-color:${bg}}`;
       document.head.appendChild(active);
     }
   }
@@ -981,7 +986,12 @@ class HybridDDError extends Error {
     }
     _.hdd.classList.add('active');
     //adjust width of dropdown.
+    //setup wrapper height and width.
     if(!_.hdd.ddlist.style['min-width']) _.hdd.ddlist.style['min-width']=(_.hdd.ddlist.offsetWidth + 12)+"px";
+    if(!_.hdd.listwrap.style['height']){
+      _.hdd.listwrap.style['height']=_.hdd.ddlist.offsetHeight+"px";
+      _.hdd.listwrap.style['width']="100%";
+    }
 
     //listen for external clicks to close.
     _.event(document, 'add',{
