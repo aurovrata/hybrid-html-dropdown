@@ -326,13 +326,13 @@ let fe = document.querySelector('#pre-fill');
 new HybridDropdown(fe,
   {
     'multiple': true,
-    'selectedValues':['ps','as','pd'],
+    'selectedValues':['"ps","as","pd"],
     'fieldName':'dishes[]'
   }
 );
 ```
 resulting in,
-<div class="hybrid-list" data-multiple="true" name="dishes[]" data-selected-values="['ps','as','pd']">
+<div class="hybrid-list" data-multiple="true" name="dishes[]" data-selected-values='["ps","as","pd"]'>
   <script type="application/json">
     {
       "":"Select any dish",
