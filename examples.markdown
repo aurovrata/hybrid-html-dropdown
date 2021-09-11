@@ -97,7 +97,7 @@ Using the same example as above, but adding a `"label"` keywords for the top mos
 </div>
 ```
 which results in,
-<div id="json-field" class="hybrid-list" data-tree-view="true">
+<div id="json-field-2" class="hybrid-list" data-tree-view="true">
   <script type="application/json">
     {
       "":"Select a dish",
@@ -162,7 +162,7 @@ The Hybrid dropdown can be enabled to allow multiple number of option selection 
 </div>
 ```
 which results in,
-<div id="json-field" class="hybrid-list" data-limit-selection="3">
+<div id="json-field-3" class="hybrid-list" data-limit-selection="3">
   <script type="application/json">
     {
       "":"Select up to 3 dish",

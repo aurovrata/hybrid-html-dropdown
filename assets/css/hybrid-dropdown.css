@@ -39,6 +39,7 @@ select.hybridddised{
 	max-height: 34vh;
 	min-width: max-content;
   display: none;
+	background-color: inherit;
 }
 .hybrid-dropdown ul.hybriddd-options {
 	border: 1px solid #6f6f6f;
@@ -49,6 +50,7 @@ select.hybridddised{
 	overflow-y: auto;
 	scrollbar-width: thin;
 	height: 100%;
+	background-color: inherit;
 }
 .hybrid-dropdown.active > .hybriddd-wrapper{
   display: block;

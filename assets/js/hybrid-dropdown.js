@@ -225,7 +225,7 @@ class HybridDDError extends Error {
         if(_.isDS){
           _.hdd.classList.add('hybriddd-custom');
           if(_.opt.dataSet){
-            opts = _.buildOptionList(Object.entries(_.opt.dataSet).reverse(),0);
+            opts = _.buildOptionList(Object.entries(_.opt.dataSet),0);
           }else{
             _.hdd.selected.innerHTML = "<em>json error</em>";
             opts = [];
@@ -346,7 +346,7 @@ class HybridDDError extends Error {
       > label:hover{color:${bg};background-color:${cl}}:hover > input:checked+.hybridddcb::before \
       {background-color:${bg}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
       ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
-      ul.hybriddd-options{scrollbar-color:${cl} ${bg};background-color:${bg}}`;
+      ul.hybriddd-options{scrollbar-color:${cl} ${bg}}`;
       document.head.appendChild(active);
     }
     if(_.opt.backgroundColor || _.opt.color || _.opt.negative){
@@ -362,7 +362,7 @@ class HybridDDError extends Error {
       .hybriddd-option > label:hover{color:${bg};background-color:${cl}}#${id} :hover > input:checked + .hybridddl > \
       .hybridddcb::before {color:${cl}} #${id} ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
       #${id} ul.hybriddd-options::-webkit-scrollbar-thumb,#${id} ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
-      #${id} ul.hybriddd-options{scrollbar-color:${cl} ${bg};background-color:${bg}}`;
+      #${id} ul.hybriddd-options{scrollbar-color:${cl} ${bg}`;
       document.head.appendChild(active);
     }
   }
@@ -412,7 +412,7 @@ class HybridDDError extends Error {
               icl = 'hybridddis';
               lbl = _.opt.optionLabel(o[1]['label']);
               kids = Object.entries(o[1]);
-              kids.splice(Object.keys(o[1]).indexOf('label'));
+              kids.splice(Object.keys(o[1]).indexOf('label'),1); //remove label
               hasChildren = (kids.length>0);
               isSelected = _.opt.selectedValues.indexOf(val) >=0;
             }else kids = Object.entries(o[1]);
