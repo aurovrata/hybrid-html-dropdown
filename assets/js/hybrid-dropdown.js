@@ -1,6 +1,6 @@
 /*
 Hybrid Dropdown JavaScript plugin insprired from an original idea by Sandrina Pereira (twitter:@a_sandrina_p)
-Version: 2.1
+Version: 2.0.5
 Authors: Aurovrata Venet
 Twitter: @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
@@ -68,32 +68,45 @@ class HybridDDError extends Error {
       if(elm.hasAttribute(a)){
         let opt = 'field'+a.charAt(0).toUpperCase() + a.slice(1);
         cnfg[opt] = elm.getAttribute(a);
-        elm.removeAttribute(a);
+        switch(a){
+          case 'name':
+            elm.removeAttribute(a);
+        }
       }
     });
     switch(true){
       case elm.nodeName === "SELECT": //select field source.
         if(elm.multiple) lim=-1;
-        elm.style="visibility:hidden"; //hide the origial select field.
+        // elm.style="visibility:hidden"; //hide the origial select field.
         cb = false; //checkboxes
+        if(cnfg.fieldId) cnfg.fieldId += '-hdd';
         break;
       default:
         _.isDS = true;// dateset source.
-        try{
-          cnfg['dataSet'] = JSON.parse(elm.querySelector('script').innerHTML);
-        }catch(se){
-          console.log(se.name+":"+se.message);
-          console.log("Unable to Hybridise element, missing or malformed json dataset");
+        if(!settings['dataSet']){ //json object parsed or in HTML
+          let is = elm.querySelector('script');
+          if(is){
+            try{
+              cnfg['dataSet'] = JSON.parse(elm.querySelector('script').innerHTML);
+            }catch(se){
+              console.log(se.name+":"+se.message);
+              console.log("HybridDropdown ERROR: missing or malformed json dataset");
+            }
+          }else{
+            console.log("HybridDropdown ERROR: missing json dataset");
+            cnfg['dataSet'] = null;
+          }
         }
         if(!cnfg['id'] && cnfg['fieldName']) cnfg['id'] = cnfg['fieldName'];
         elm.classList.add('hybriddd-custom'); //flag the element as custom.
         break;
     }
     if(cnfg)
-    //expose object in its original DOM element.
+    //expose object in original DOM element.
     elm._hybriddd = _;
     _.el = elm; //keep original element reference.
     _.el.classList.add('hybridddised'); //flag the element as converted.
+    // let pl = _.el.closest('label');
     // merge user setting with defaults
     Object.keys(cnfg).forEach(k=>{
       switch(k){
@@ -138,21 +151,23 @@ class HybridDDError extends Error {
       settings, //user settings.
       cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
+    //make sure selectedValues are strings...
+    if(_.opt.selectedValues) _.opt.selectedValues = _.opt.selectedValues.map(String);
     //nake sure we have proper functions
     ['selectedLabel','optionLabel'].forEach(s=>{
-      if(!_.opt[s] || !(_.opt[s] instanceof Function) && 1==_.opt[s].length){
+      if(!_.opt[s] || !(_.opt[s] instanceof Function) || 1!=_.opt[s].length){
         throw new HybridDDError(`${s} setting must be a function with 1 argument.`);
       }
     });
     if(_.opt.listOption ){  //check we have a function.
-      if( !(_.opt.listOption instanceof Function && 2==_.opt.listOption.length) ){
+      if( !(_.opt.listOption instanceof Function) || 2!=_.opt.listOption.length ){
         throw new HybridDDError("listOption setting must be a function with 2 arguments.");
       }
     }
     if(_.opt.treeView && 1==_.opt.limitSelection) _.opt.limitSelection=-1; //by default
     _.multi = (_.opt.limitSelection !=1); //flag multi select field.
     //check if we have a field name.
-    if(!_.opt.fieldName) _.opt.fieldName = _.opt.fieldId; //try to set it to id.
+    if(!_.opt.fieldId) _.opt.fieldId = _.opt.fieldName;
     if(_.multi && _.opt.fieldName && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
 
     //initialise the hybrid-dd.
@@ -177,14 +192,19 @@ class HybridDDError extends Error {
         _.hdd.setAttribute('tabindex',_.opt.tabIndex);
       }
       _.hdd.setAttribute('id',_.opt.fieldId);
+      let pl = _.el.closest('label');
+      if(pl) pl.setAttribute('for',_.opt.fieldId);
       _.hdd.setAttribute('class',_.opt.fieldClass);
       _.hdd.classList.add('hybrid-dropdown');
       // _.hdd.setAttribute('aria-hidden', true);//hide from readers.
       _.hdd.selected = document.createElement('div');
       _.hdd.appendChild(_.hdd.selected);
       _.hdd.selected.classList.add('hybriddd-selected');
+      _.hdd.listwrap = document.createElement('div');
+      _.hdd.appendChild(_.hdd.listwrap);
       _.hdd.ddlist = document.createElement('ul');
-      _.hdd.appendChild(_.hdd.ddlist);
+      _.hdd.listwrap.appendChild(_.hdd.ddlist);
+      _.hdd.listwrap.classList.add('hybriddd-wrapper');
       _.hdd.ddlist.classList.add('hybriddd-options');
       _.listenForBulk = false;
       _.listenModClick = false;
@@ -201,7 +221,7 @@ class HybridDDError extends Error {
         if(_.isDS){
           _.hdd.classList.add('hybriddd-custom');
           if(_.opt.dataSet){
-            opts = _.buildOptionList(Object.entries(_.opt.dataSet),0);
+            opts = _.buildOptionList(Object.entries(_.opt.dataSet).reverse(),0);
           }else{
             _.hdd.selected.innerHTML = "<em>json error</em>";
             opts = [];
@@ -236,6 +256,11 @@ class HybridDDError extends Error {
       _.event(_.hdd, 'add',{
         click: _.open
       });
+      //listen for fomr reset.
+      let f = _.el.closest('form');
+      _.event(f,'add',{
+        reset:_.reset.bind(_)
+      })
       //create a close function.
       _.close = _.closeSelect.bind(_, true);
       //blur function
@@ -312,8 +337,10 @@ class HybridDDError extends Error {
       active.setAttribute('id','hybriddd-colours');
       active.type = "text/css";
       active.innerText = `.hybriddd-option.active > label:hover,.hybriddd-option.hover > label,.hybriddd-option \
-      > label:hover{color:${bg};background-color:${cl}}:hover > input:checked + .hybridddl > .hybridddcb::before \ {color:${cl}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
-      ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar{background:${cl}}`;
+      > label:hover{color:${bg};background-color:${cl}}:hover > input:checked+.hybridddcb::before \
+      {background-color:${bg}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
+      ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
+      ul.hybriddd-options{scrollbar-color:${cl} ${bg};background-color:${bg}}`;
       document.head.appendChild(active);
     }
     if(_.opt.backgroundColor || _.opt.color || _.opt.negative){
@@ -328,13 +355,14 @@ class HybridDDError extends Error {
       active.innerText = `#${id} .hybriddd-option.active > label:hover,#${id} .hybriddd-option.hover > label,#${id} \
       .hybriddd-option > label:hover{color:${bg};background-color:${cl}}#${id} :hover > input:checked + .hybridddl > \
       .hybridddcb::before {color:${cl}} #${id} ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
-      #${id} ul.hybriddd-options::-webkit-scrollbar-thumb,#${id} ul.hybriddd-options::-webkit-scrollbar{background:${cl}}`;
+      #${id} ul.hybriddd-options::-webkit-scrollbar-thumb,#${id} ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
+      #${id} ul.hybriddd-options{scrollbar-color:${cl} ${bg};background-color:${bg}}`;
       document.head.appendChild(active);
     }
   }
   //method to refresh an existing HybridDropdown object.
   hsProtype.refreshHybrid = function(settings={}){
-    let _ = this, build = false, paint = false;
+    let _ = this, build = true, paint = false;
     if( settings.hasOwnProperty('negative')  || settings.hasOwnProperty('colourise') || settings['color'] || settings['backgroundColor']){
       paint = true;
       let id = _.el.getAttribute('id');
@@ -342,7 +370,7 @@ class HybridDDError extends Error {
       if(st) st.remove();
     }
     if( settings['listOption'] ){
-      build = true;
+      // build = true; //keep build by default
       if( !(settings.listOption instanceof Function && 2==settings.listOption.length) ){
         console.log("Hybriddd refresh error: listOption setting must be a function with 2 arguments.");
         settings['listOption'] = null; //reset.
@@ -373,11 +401,14 @@ class HybridDDError extends Error {
           case 0===p && o[1] instanceof Array:
             hasChildren = isGroup = true;
             if(o[1]['label']){
+              isGroup = false;
               val = o[0];
               icl = 'hybridddis';
-              lbl = o[1]['label'];
-              kids = Object.entries(o[1]).slice(1);
-              isGroup = false;
+              lbl = _.opt.optionLabel(o[1]['label']);
+              kids = Object.entries(o[1]);
+              kids.splice(Object.keys(o[1]).indexOf('label'));
+              hasChildren = (kids.length>0);
+              isSelected = _.opt.selectedValues.indexOf(val) >=0;
             }else kids = Object.entries(o[1]);
             break;
           default:
@@ -451,12 +482,16 @@ class HybridDDError extends Error {
   hsProtype.reset = function(){
     let _ = this;
     _.sindex = [];
+    _.value = {};
+    // _.clearClass('hover');
+    _.clearClass('active');
     if(_.hdd.options['']){
       _.hdd.options[''].classList.add('active');
       _.value['']=_.hdd.options[''].querySelector('.hybridddl').innerHTML;
       _.hdd.options[''].querySelector('input').checked=true;
       _.sindex.push('');
     }else _.value[''] = _.opt.defaultText;
+    _.hdd.selected.innerHTML = _.opt.selectedLabel(_.value);
   }
   //method to add event listeners.
   hsProtype.event = function (ele, type, args) {
@@ -951,7 +986,13 @@ class HybridDDError extends Error {
     }
     _.hdd.classList.add('active');
     //adjust width of dropdown.
-    if(!_.hdd.ddlist.style['min-width']) _.hdd.ddlist.style['min-width']=`${_.hdd.ddlist.offsetWidth+12}px`;
+    //setup wrapper height and width.
+    if(!_.hdd.ddlist.style['min-width']) _.hdd.ddlist.style['min-width']=(_.hdd.ddlist.offsetWidth + 12)+"px";
+    if(!_.hdd.listwrap.style['height']){
+      _.hdd.listwrap.style['height']=_.hdd.ddlist.offsetHeight+"px";
+      _.hdd.listwrap.style['width']="100%";
+    }
+
     //listen for external clicks to close.
     _.event(document, 'add',{
       click: _.close

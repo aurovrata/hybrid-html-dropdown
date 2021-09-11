@@ -14,7 +14,12 @@
   cursor: pointer;
   background:inherit;
 }
-
+select.hybridddised{
+  visibility:hidden !important;
+	width:0 !important;
+	height: 0 !important;
+}
+.hybrid-dropdown:focus {box-shadow: 1px 1px 3px}
 .hybriddd-option::before, .hybriddd-group::before {
   display: none !important;
 	content: none;
@@ -26,27 +31,26 @@
   background: #ccc;
 	color: grey;
 }
-.hybrid-dropdown.wide,.hybrid-dropdown.wide .hybriddd-options {
-  min-width: 100%;
+.hybrid-dropdown .hybriddd-wrapper {
+	overflow: hidden;
+	z-index: 7777;
+	position: absolute;
+	left: 0;
+	max-height: 34vh;
+	min-width: max-content;
+  display: none;
 }
 .hybrid-dropdown ul.hybriddd-options {
-	position: absolute;
-	min-width: max-content;
 	border: 1px solid #6f6f6f;
 	border-radius: 0.25em;
-	background-color: inherit;
-	padding: 0;
 	list-style: none !important;
-	display: none;
-	z-index: 1;
-	margin: 0;
-	padding: 0;
-	left: -1px;
-	max-height: 43vh;
+	margin: 0 !important;
+	padding: 0 !important;
 	overflow-y: auto;
 	scrollbar-width: thin;
+	height: 100%;
 }
-.hybrid-dropdown.active > .hybriddd-options{
+.hybrid-dropdown.active > .hybriddd-wrapper{
   display: block;
 }
 /*include any border styling in the box-sizing of our hybrid select.*/
@@ -67,6 +71,8 @@
   cursor: pointer;
   min-width: 100%;
 	max-width: inherit;
+  display: inline-block;
+	z-index: 7;
 }
 
 .hybriddd-selected::after {
@@ -189,12 +195,10 @@ ul.hybriddd-options::-webkit-scrollbar-track {
 	padding: 1px;
 }
 /* COLOURS */
-
 .hybriddd-option.active > label{
 	background: #0466ff;
 	color: #fff;
 }
-
 input:checked + .hybridddcb::before{
 	background: white;
 }
