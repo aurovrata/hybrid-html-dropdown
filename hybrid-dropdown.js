@@ -79,6 +79,7 @@ class HybridDDError extends Error {
         if(elm.multiple) lim=-1;
         // elm.style="visibility:hidden"; //hide the origial select field.
         cb = false; //checkboxes
+        if(!cnfg.fieldName && cnfg.fieldId) cnfg.fieldName = cnfg.fieldId;
         if(cnfg.fieldId) cnfg.fieldId += '-hdd';
         break;
       default:
@@ -97,11 +98,11 @@ class HybridDDError extends Error {
             cnfg['dataSet'] = null;
           }
         }
-        if(!cnfg['id'] && cnfg['fieldName']) cnfg['id'] = cnfg['fieldName'];
+        if(!cnfg['fieldId'] && cnfg['fieldName']) cnfg['fieldId'] = cnfg['fieldName'];
+        if(!cnfg['fieldName'] && cnfg['fieldId']) cnfg['fieldName'] = cnfg['fieldId'];
         elm.classList.add('hybriddd-custom'); //flag the element as custom.
         break;
     }
-    if(cnfg)
     //expose object in original DOM element.
     elm._hybriddd = _;
     _.el = elm; //keep original element reference.
@@ -118,6 +119,10 @@ class HybridDDError extends Error {
         case 'colourise':
         case 'checkboxes':
           cnfg[k] = (cnfg[k] == 'true');
+          break;
+        case 'selectedValues':
+          if(cnfg[k].indexOf('[')>=0) cnfg[k] = JSON.parse(cnfg[k]);
+          else cnfg[k] = [cnfg[k]];
           break;
       }
     });
@@ -152,7 +157,7 @@ class HybridDDError extends Error {
       cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
     //make sure selectedValues are strings...
-    if(_.opt.selectedValues) _.opt.selectedValues = _.opt.selectedValues.map(String);
+    if(_.opt.selectedValues.length>0) _.opt.selectedValues = _.opt.selectedValues.map(String);
     //nake sure we have proper functions
     ['selectedLabel','optionLabel'].forEach(s=>{
       if(!_.opt[s] || !(_.opt[s] instanceof Function) || 1!=_.opt[s].length){
@@ -221,7 +226,7 @@ class HybridDDError extends Error {
         if(_.isDS){
           _.hdd.classList.add('hybriddd-custom');
           if(_.opt.dataSet){
-            opts = _.buildOptionList(Object.entries(_.opt.dataSet).reverse(),0);
+            opts = _.buildOptionList(Object.entries(_.opt.dataSet),0);
           }else{
             _.hdd.selected.innerHTML = "<em>json error</em>";
             opts = [];
@@ -256,11 +261,13 @@ class HybridDDError extends Error {
       _.event(_.hdd, 'add',{
         click: _.open
       });
-      //listen for fomr reset.
+      //listen for form reset.
       let f = _.el.closest('form');
-      _.event(f,'add',{
-        reset:_.reset.bind(_)
-      })
+      if(f){
+        _.event(f,'add',{
+          reset:_.reset.bind(_)
+        })
+      }
       //create a close function.
       _.close = _.closeSelect.bind(_, true);
       //blur function
@@ -340,7 +347,7 @@ class HybridDDError extends Error {
       > label:hover{color:${bg};background-color:${cl}}:hover > input:checked+.hybridddcb::before \
       {background-color:${bg}}ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
       ul.hybriddd-options::-webkit-scrollbar-thumb, ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
-      ul.hybriddd-options{scrollbar-color:${cl} ${bg};background-color:${bg}}`;
+      ul.hybriddd-options{scrollbar-color:${cl} ${bg}}`;
       document.head.appendChild(active);
     }
     if(_.opt.backgroundColor || _.opt.color || _.opt.negative){
@@ -356,7 +363,7 @@ class HybridDDError extends Error {
       .hybriddd-option > label:hover{color:${bg};background-color:${cl}}#${id} :hover > input:checked + .hybridddl > \
       .hybridddcb::before {color:${cl}} #${id} ul.hybriddd-options::-webkit-scrollbar-track {background:${bg}} \
       #${id} ul.hybriddd-options::-webkit-scrollbar-thumb,#${id} ul.hybriddd-options::-webkit-scrollbar{background:${cl}} \
-      #${id} ul.hybriddd-options{scrollbar-color:${cl} ${bg};background-color:${bg}}`;
+      #${id} ul.hybriddd-options{scrollbar-color:${cl} ${bg};`;
       document.head.appendChild(active);
     }
   }
@@ -406,7 +413,7 @@ class HybridDDError extends Error {
               icl = 'hybridddis';
               lbl = _.opt.optionLabel(o[1]['label']);
               kids = Object.entries(o[1]);
-              kids.splice(Object.keys(o[1]).indexOf('label'));
+              kids.splice(Object.keys(o[1]).indexOf('label'),1); //remove label
               hasChildren = (kids.length>0);
               isSelected = _.opt.selectedValues.indexOf(val) >=0;
             }else kids = Object.entries(o[1]);
