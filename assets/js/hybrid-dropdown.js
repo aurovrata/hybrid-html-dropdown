@@ -256,11 +256,13 @@ class HybridDDError extends Error {
       _.event(_.hdd, 'add',{
         click: _.open
       });
-      //listen for fomr reset.
+      //listen for form reset.
       let f = _.el.closest('form');
-      _.event(f,'add',{
-        reset:_.reset.bind(_)
-      })
+      if(f){
+        _.event(f,'add',{
+          reset:_.reset.bind(_)
+        })
+      }
       //create a close function.
       _.close = _.closeSelect.bind(_, true);
       //blur function
