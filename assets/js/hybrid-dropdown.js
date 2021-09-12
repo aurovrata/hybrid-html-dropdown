@@ -273,7 +273,7 @@ class HybridDDError extends Error {
       _.close = _.closeSelect.bind(_, true);
       //blur function
       _.blur = _.blurField.bind(_);
-      //trach hover for multi fields.
+      //track hover for multi fields.
       _.hover = _.optionHover.bind(_);
       //navigate with keys.
       _.keyNav = _.keyboardNavigate.bind(_);
