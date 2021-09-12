@@ -10,6 +10,7 @@ For detailed documentation see the [GitHub Page](https://aurovrata.github.io/hyb
 ### v2.0.5
 * improve overflow auto scrollbar
 * fix duplicate name issue.
+* stop overscrolling in srcolled-enabled dropdown
 ### v2.0.4
 * enable field resest on form reset.
 ### v2.0.3

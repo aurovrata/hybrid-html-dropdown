@@ -51,6 +51,7 @@ select.hybridddised{
 	scrollbar-width: thin;
 	height: 100%;
 	background-color: inherit;
+  overscroll-behavior:contain;
 }
 .hybrid-dropdown.active > .hybriddd-wrapper{
   display: block;
