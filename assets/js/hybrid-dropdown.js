@@ -98,8 +98,8 @@ class HybridDDError extends Error {
             cnfg['dataSet'] = null;
           }
         }
-        if(!cnfg['fieldId'] && cnfg['fieldName']) cnfg['fieldId'] = cnfg['fieldName'];
-        if(!cnfg['fieldName'] && cnfg['fieldId']) cnfg['fieldName'] = cnfg['fieldId'];
+        // if(!cnfg.fieldId && cnfg['fieldName']) cnfg['fieldId'] = cnfg['fieldName'];
+        if(!cnfg.fieldName && cnfg.fieldId) cnfg.fieldName = cnfg.fieldId; //setup default fieldName
         elm.classList.add('hybriddd-custom'); //flag the element as custom.
         break;
     }
@@ -117,6 +117,7 @@ class HybridDDError extends Error {
         case 'treeView':
         case 'negative':
         case 'colourise':
+        case 'multiple':
         case 'checkboxes':
           cnfg[k] = (cnfg[k] == 'true');
           break;
@@ -169,10 +170,10 @@ class HybridDDError extends Error {
         throw new HybridDDError("listOption setting must be a function with 2 arguments.");
       }
     }
-    if(_.opt.treeView && 1==_.opt.limitSelection) _.opt.limitSelection=-1; //by default
+    if( (_.opt.treeView || _.opt.multiple) && _.opt.limitSelection<2) _.opt.limitSelection=-1; //by default
     _.multi = (_.opt.limitSelection !=1); //flag multi select field.
     //check if we have a field name.
-    if(!_.opt.fieldId) _.opt.fieldId = _.opt.fieldName;
+    // if(!_.opt.fieldId) _.opt.fieldId = _.opt.fieldName;
     if(_.multi && _.opt.fieldName && _.opt.fieldName.indexOf('[]')<0) _.opt.fieldName +='[]';
 
     //initialise the hybrid-dd.

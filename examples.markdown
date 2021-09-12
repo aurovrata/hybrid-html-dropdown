@@ -326,7 +326,7 @@ let fe = document.querySelector('#pre-fill');
 new HybridDropdown(fe,
   {
     'multiple': true,
-    'selectedValues':['"ps","as","pd"],
+    'selectedValues':'["ps","as","pd"]',
     'fieldName':'dishes[]'
   }
 );
@@ -382,14 +382,14 @@ In the above example, you will note that the mulitple selection in the list resu
   </script>
 </div>
 ```
-let's maintain the maximum with at 200px, and use the following construction,
+let's maintain the maximum width at 200px, and use the following construction,
 
 ```javascript
 let de = document.querySelector('#defaults');
 new HybridDropdown(de,
   {
     'limitSelection': -1, //no limits
-    'fieldName':'dishes[]',
+    'fieldName':'dishes-img',
     'defaultText': '---dishes---',
     'selectedLabel':function(v){ //is a value=>label object.
       let k =  Object.keys(v),
@@ -457,7 +457,7 @@ Use,
   <label> Email <input type="email" tabindex=3> </label>&nbsp;
 </div>
 <div id="row3">
-  <select class="hybrid-list" tabindex=4>
+  <select class="hybrid-list" tabindex=4 name="subject">
     <option value="">I wish to</option>
     <option value="work">enquire about a job</option>
     <option value="prod">enquire about a product</option>
@@ -492,7 +492,7 @@ The plugin is built to provide flexible customisation of the dropdown list.  Con
  let wi = document.querySelector('#with-images');
  new HybridDropdown(wi,
    {
-     'fieldName':'dishes',
+     'fieldName':'dishes-img',
      'defaultText': '---Sushis---',
      'checkboxes': false,
      'dropdown':'landscape',
@@ -548,7 +548,7 @@ The CSS is tweaked to ensure caption display over the bottom of the images,
 ```
 resulting in,
 
- <div id="with-images" data-limit-selection="1" data-default-text="---Sushis---" data-field-name="dishes" data-checkboxes="false" data-dropdown="landscape">
+ <div id="with-images" data-limit-selection="1" data-default-text="---Sushis---" data-field-name="dishes-img" data-checkboxes="false" data-dropdown="landscape">
    <script type="application/json">
      {
        "Sushi":{
