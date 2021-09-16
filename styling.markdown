@@ -187,3 +187,55 @@ resulting in,
   }
  </script>
 </span>
+
+## Dropdown location
+
+the dropdown list opens by default below and aligned to the left of the field.  Tt is possible to force the dropdown to open aligned to the right, or even above, using classes inserted in the field element.  This is useful when you field is at the bottom of a form or on the right side of a page, either cases may result in the default dropdown list not being fully visible.
+
+### Force the dropdown right aligned.
+
+add the class `hybriddd-right` to the field element,
+
+```html
+<select class="hybrid-list hybriddd-right">...</select>
+```
+
+<select id="make-it-pink" class="hybrid-list hybriddd-right">
+  <option value="">I am right aligned</option>
+  <option value="ps">Pumpkin sushi from vegan Japan</option>
+  <option value="as">Avocado sushi from Peru</option>
+  <option value="ts">Tomato sushi form Italy</option>
+  <option value="cs">Carrot sushi from France</option>
+</select>
+
+### Force the dropdown top open above.
+
+add the class `hybriddd-top` to the field element,
+
+```html
+<select class="hybrid-list hybriddd-top">...</select>
+```
+
+<select id="make-it-pink" class="hybrid-list hybriddd-top">
+  <option value="">I slide up</option>
+  <option value="ps">Pumpkin sushi from vegan Japan</option>
+  <option value="as">Avocado sushi from Peru</option>
+  <option value="ts">Tomato sushi form Italy</option>
+  <option value="cs">Carrot sushi from France</option>
+</select>
+
+### Force dropdown above and right aligned.
+
+add the classes `hybriddd-right hybriddd-top` to the field element, to get both effects combined,
+
+```html
+<select class="hybrid-list hybriddd-right hybriddd-top">...</select>
+```
+
+<select id="make-it-pink" class="hybrid-list hybriddd-right hybriddd-top">
+  <option value="">I slide up and right aligned</option>
+  <option value="ps">Pumpkin sushi from vegan Japan</option>
+  <option value="as">Avocado sushi from Peru</option>
+  <option value="ts">Tomato sushi form Italy</option>
+  <option value="cs">Carrot sushi from France</option>
+</select>

@@ -1,6 +1,6 @@
 /*
 Hybrid Dropdown JavaScript plugin insprired from an original idea by Sandrina Pereira (twitter:@a_sandrina_p)
-Version: 2.0.5
+Version: 2.0.6
 Authors: Aurovrata Venet
 Twitter: @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
@@ -273,7 +273,7 @@ class HybridDDError extends Error {
       _.close = _.closeSelect.bind(_, true);
       //blur function
       _.blur = _.blurField.bind(_);
-      //track hover for multi fields.
+      //trach hover for multi fields.
       _.hover = _.optionHover.bind(_);
       //navigate with keys.
       _.keyNav = _.keyboardNavigate.bind(_);
@@ -992,6 +992,8 @@ class HybridDDError extends Error {
       _.closeSelect();
       return;
     }
+    //set the height of the wrapper for placing it on top.
+    _.hdd.listwrap.style.setProperty('--hybriddd-top',_.hdd.offsetHeight+'px');
     _.hdd.classList.add('active');
     //adjust width of dropdown.
     //setup wrapper height and width.
