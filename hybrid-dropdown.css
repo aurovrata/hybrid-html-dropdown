@@ -44,7 +44,7 @@ select.hybridddised{
 .hybrid-dropdown.hybriddd-top .hybriddd-wrapper{
   bottom:var(--hybriddd-top);
 }
-.hybrid-dropdown.hybriddd-left .hybriddd-wrapper{
+.hybrid-dropdown.hybriddd-right .hybriddd-wrapper{
 	right:0;
 	left:auto;
 }

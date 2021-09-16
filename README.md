@@ -7,10 +7,12 @@ see the [examples](https://aurovrata.github.io/hybrid-html-dropdown/examples/) o
 For detailed documentation see the [GitHub Page](https://aurovrata.github.io/hybrid-html-dropdown/)
 
 ## Changelog
+### v2.0.6
+* enable dropdown list opening above or right aligned.
 ### v2.0.5
 * improve overflow auto scrollbar
 * fix duplicate name issue.
-* stop overscrolling in srcolled-enabled dropdown
+* stop overscrolling in scrolled-enabled dropdown
 ### v2.0.4
 * enable field resest on form reset.
 ### v2.0.3
