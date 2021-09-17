@@ -1,4 +1,4 @@
-# hybrid-html-dropdown 2.0
+# hybrid-html-dropdown 2
 A hybrid HTML select fully customisable and emulating all navigational functions of a select element based on an initial [idea](https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/) by @sandrina-p
 
 ## Demo
