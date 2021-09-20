@@ -7,6 +7,8 @@ see the [examples](https://aurovrata.github.io/hybrid-html-dropdown/examples/) o
 For detailed documentation see the [GitHub Page](https://aurovrata.github.io/hybrid-html-dropdown/)
 
 ## Changelog
+### v2.1.0
+* enable no dropdown fields for image grids
 ### v2.0.6
 * enable dropdown list opening above or right aligned.
 ### v2.0.5
