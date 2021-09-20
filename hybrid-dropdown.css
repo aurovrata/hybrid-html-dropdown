@@ -14,6 +14,10 @@
   cursor: pointer;
   background:inherit;
 }
+.hybriddd-none {
+	width: unset;
+	padding: 0;
+}
 select.hybridddised{
   visibility:hidden !important;
 	width:0 !important;
@@ -41,6 +45,16 @@ select.hybridddised{
   display: none;
 	background-color: inherit;
 }
+.hybrid-dropdown.hybriddd-none .hybriddd-wrapper {
+	display: block;
+	position: static;
+	max-width: 100%;
+	max-height: none;
+	min-width: auto;
+}
+.hybrid-dropdown.hybriddd-none .hybriddd-options > li {
+	display: inline-block;
+}
 .hybrid-dropdown.hybriddd-top .hybriddd-wrapper{
   bottom:var(--hybriddd-top);
 }
@@ -48,7 +62,7 @@ select.hybridddised{
 	right:0;
 	left:auto;
 }
-.hybrid-dropdown ul.hybriddd-options {
+.hybrid-dropdown:not() ul.hybriddd-options {
 	border: 1px solid #6f6f6f;
 	border-radius: 0.25em;
 	list-style: none !important;
@@ -59,6 +73,17 @@ select.hybridddised{
 	height: 100%;
 	background-color: inherit;
   overscroll-behavior:contain;
+}
+.hybrid-dropdown:not(.hybriddd-none) ul.hybriddd-options {
+	list-style: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+.hybrid-dropdown.hybriddd-none .hybriddd-options {
+	display: block;
+	width: auto;
+	margin: 0;
+	padding: 0;
 }
 .hybrid-dropdown.active > .hybriddd-wrapper{
   display: block;
@@ -84,7 +109,9 @@ select.hybridddised{
   display: inline-block;
 	z-index: 7;
 }
-
+.hybriddd-none .hybriddd-selected {
+	display: none;
+}
 .hybriddd-selected::after {
 	border-bottom: 2px solid #90a1b5;
 	border-right: 2px solid #90a1b5;
@@ -165,6 +192,10 @@ ul.hybriddd-options::-webkit-scrollbar-track {
   -moz-user-select: none; /* Gecko (Firefox) */
   -webkit-user-select: none; /* Webkit (Safari, Chrome) */
   display:block;
+}
+.hybriddd-none .hybriddd-option label {
+	padding: 0;
+	position: relative;
 }
 .hybriddd-option label > *{
 	display: inline-block;
