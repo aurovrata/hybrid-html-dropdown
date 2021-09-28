@@ -62,12 +62,9 @@ select.hybridddised{
 	right:0;
 	left:auto;
 }
-.hybrid-dropdown:not() ul.hybriddd-options {
+.hybrid-dropdown ul.hybriddd-options {
 	border: 1px solid #6f6f6f;
 	border-radius: 0.25em;
-	list-style: none !important;
-	margin: 0 !important;
-	padding: 0 !important;
 	overflow-y: auto;
 	scrollbar-width: thin;
 	height: 100%;
