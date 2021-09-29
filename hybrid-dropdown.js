@@ -31,6 +31,8 @@ hsProtype.openSelect - open dropdown list.
 hsProtype.closeSelect - close dropdown list.
 hsProtype.colourise - seek document colours to colourise font and background.
 */
+
+
 //custom error.
 class HybridDDError extends Error {
   constructor(message) {
@@ -117,6 +119,7 @@ class HybridDDError extends Error {
     Object.keys(cnfg).forEach(k=>{
       switch(k){
         case 'limitSelection':
+        case 'gridColumns':
           cnfg[k] = parseInt(cnfg[k]);
           break;
         case 'treeView':
@@ -136,6 +139,7 @@ class HybridDDError extends Error {
       {},//initial target.
       {
         dropdown: 'vertical',
+        gridColumns: false,
         limitSelection:lim, //default 1, -1 for multiple, or userset.
         optionLabel: function(label){
           return '<span>'+label+'</span>';
@@ -163,6 +167,8 @@ class HybridDDError extends Error {
       cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
     if('none' == _.opt.dropdown) _.hasDd = false;
+    //check if gridColumns is a ppositive integer.
+    if(!Number.isInteger(_.opt.gridColumns) || _.opt.gridColumns<1) _.opt.gridColumns = false;
     //make sure selectedValues are strings...
     if(_.opt.selectedValues.length>0) _.opt.selectedValues = _.opt.selectedValues.map(String);
     //nake sure we have proper functions
@@ -250,6 +256,14 @@ class HybridDDError extends Error {
     }
 
     if(init){
+      //insert grid variables.
+      if(_.opt.gridColumns){
+        _.hdd.listwrap.classList.add('hybriddd-grid');
+        _.hdd.listwrap.style.setProperty('--hybriddd-col',_.opt.gridColumns);
+        if(_.hdd.ddlist.children[1]){
+          _.hdd.listwrap.style.setProperty('--hybriddd-item',_.hdd.ddlist.children[1].offsetWidth+'px');
+        }
+      }
       //bind some events....
       if(!_.isDS){
         //listen for 'change' on the original select.
