@@ -73,5 +73,13 @@
         }
       )
     }
+    //grid.
+    let ig = document.querySelector('#grid-layout');
+    new HybridDropdown(ig,{
+      fieldName:'painting',
+      optionLabel: function(lbl){
+        return `<div><img src="${lbl[4]}" alt="${lbl[0]}-${lbl[1]}" /><p><span class="painter">${lbl[0]}</span> ${lbl[1]} </p></div>`;
+      }
+    })
   })
 })();

@@ -17,6 +17,7 @@ Here is a list of examples you will find below,
 - [Customise the selected text label and default option](/hybrid-html-dropdown/examples/#customise-the-selected-text-label-and-default-option)
 - [Using keyboard navigation between form fields](/hybrid-html-dropdown/examples/#using-keyboard-navigation-between-form-fields)
 - [Dropdown list with with custom labels with images](/hybrid-html-dropdown/examples/#dropdown-list-with-with-custom-labels-with-images)
+- [Image grid field, no dropdown](/hybrid-html-dropdown/examples/#image-grid-no-dropdown)
 
 ## Hybrid dropdown with multiple nested groups.
 
@@ -506,9 +507,12 @@ The plugin is built to provide flexible customisation of the dropdown list.  Con
 - switch off the checkboxes, as the images will act as checkboxes.
 - the 'landscape' mode which forces the list in a horizontal (inline) display.
 
-The CSS is tweaked to ensure caption display over the bottom of the images,
-
-```css
+<details>
+<summary>You'll need some custom CSS Styling</summary>
+<div class="language-css highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>
 #with-images .hybridddl img {
 	width: auto;
 	height: auto;
@@ -545,7 +549,8 @@ The CSS is tweaked to ensure caption display over the bottom of the images,
 	height: auto;
 	padding: 5px 47px;
 }
-```
+</code></pre></div></div></details>
+
 resulting in,
 
  <div id="with-images" data-limit-selection="1" data-default-text="---Sushis---" data-field-name="dishes-img" data-checkboxes="false" data-dropdown="landscape">
@@ -560,3 +565,104 @@ resulting in,
      }
      </script>
   </div>
+
+
+## Image grid, no dropdown.
+the plugin can be initialised with the [`dropdown`](http://localhost:4000/hybrid-html-dropdown/options/#option-dropdown) option set to `none`.  In this mode the field has no dropdown and the fields are visible on the onset.  In addition, setting the [`gridColumns`](/hybrid-html-dropdown/options/#option-grid-columns) option to specific the number of columns will force the option list to be displayed as a grid.
+
+```html
+<div id="grid-layout" data-dropdown="none" data-grid-columns="4">
+  <script type="application/json">
+    {...}
+  </script>
+</div>
+```
+```javascript
+let ig = document.querySelector('#grid-layout');
+new HybridDropdown(ig,{
+  fieldName:'painting',
+  optionLabel: function(lbl){
+    return `<img src="${lbl[4]}" alt="${lbl[0]}-${lbl[1]}" /><p><span class="painter">${lbl[0]}</span> - ${lbl[1]} </p>`;
+  }
+})
+```
+
+<details>
+<summary>You'll need some custom CSS Styling</summary>
+<div class="language-css highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight">
+      <code>
+#grid-layout .hybriddd-wrapper.hybriddd-grid {
+	--hybriddd-gap: 2px;
+	width: calc( calc(var(--hybriddd-item) + var(--hybriddd-gap)) * var(--hybriddd-col));
+}
+#grid-layout.hybriddd-none .hybriddd-option > label > input {
+	position: absolute;
+}
+#grid-layout .hybriddd-option p {
+	position: absolute;
+	width: 150px;
+	padding: 2px 5px;
+	bottom: 0;
+	line-height: normal;
+	background: #0000008c;
+	color: white;
+	text-align: center;
+	margin: auto;
+	font-size: 13px;
+}
+#grid-layout .hybriddd-option p span {
+	font-size: 15px;
+	font-weight: bold;
+}
+#grid-layout  input:checked + .hybridddcb {
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+	visibility: visible;
+	border-radius: 50%;
+	z-index: 7;
+	background: #000000a6;
+}
+#grid-layout .hybridddcb {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 4px;
+}
+#grid-layout input:checked + .hybridddcb::before {
+	width: 10px;
+	height: 10px;
+	margin: 4px auto;
+	background: white;
+	border-radius: 50%;
+}
+#grid-layout .hybridddcb::before {
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	margin: 0;
+}
+#grid-layout .hybridddl div{
+	position: relative;
+	width: 150px;
+	height: 150px;
+}
+#grid-layout .hybriddd-grid .hybriddd-option > label:hover {
+	transform: scale(96%);
+}</code></pre></div></div>
+
+NOTE: the plugins creates handy variables when the `gridColumns` option is set, allowing for automatic scaling of the CSS rules above, regardless of the size of the thumbnails.
+</details>
+
+resulting in,
+<div id="grid-layout" data-dropdown="none" data-grid-columns="4">
+  <script type="application/json">
+    {"1":{"label":["Auguste Renoir","Flowers In A Vase","auguste-renoir","1866","../assets/images/Auguste-Renoir-flowers_in_a_vase_1866-150x150.jpg"]},"2":{"label":["Auguste Renoir","Mademoiselle Sicot","auguste-renoir","1865","../assets/images/Auguste-Renoir-mademoiselle_sicot_1865-150x150.jpg"]},"3":{"label":["Berthe Morisot","The Artists Sister At A Window","berthe-morisot","1869","../assets/images/Berthe-Morisot-the_artists_sister_at_a_window_1869-150x150.jpg"]},"4":{"label":["Camille Pissarro","A Creek In St. Thomas Virgin Islands","camille-pissarro","1856","../assets/images/Camille_Pissarro-a_creek_in_st._thomas_virgin_islands_1856-150x150.jpg"]},"5":{"label":["Camille Pissarro","Two Women Chatting By The Sea St. Thomas","camille-pissarro","1856","../assets/images/Camille_Pissarro-two_women_chatting_by_the_sea_st._thomas_1856-150x150.jpg"]},"6":{"label":["Claude Monet","Bazille And Camille Study For Dejeuner Sur Lherbe","claude-monet","1865","../assets/images/Claude-Monet-bazille_and_camille_study_for__dejeuner_sur_lherbe__1865-150x150.jpg"]},"7":{"label":["Claude Monet","Interior After Dinner","claude-monet","1868","../assets/images/Claude-Monet-interior_after_dinner_1868-150x150.jpg"]},"8":{"label":["Claude Monet","Still Life With Bottle Carafe Bread And Wine","claude-monet","1863","../assets/images/Claude-Monet-still_life_with_bottle_carafe_bread_and_wine_1863-150x150.jpg"]},"9":{"label":["Edgar Degas","Achille De Gas In The Uniform Of A Cadet","edgar-degas","1856","../assets/images/Edgar_Degas-achille_de_gas_in_the_uniform_of_a_cadet_1856-150x150.jpg"]},"10":{"label":["Edgar Degas","Girl In Red","edgar-degas","1866","../assets/images/Edgar-Degas-girl_in_red_1866-150x150.jpg"]},"11":{"label":["Edgar Degas","Rene De Gas","edgar-degas","1855","../assets/images/Edgar_Degas-rene_de_gas_1855-150x150.jpg"]},"12":{"label":["Edgar Degas","Scene From The Steeplechase The Fallen Jockey","edgar-degas","1866","../assets/images/Edgar-Degas-scene_from_the_steeplechase__the_fallen_jockey_1866-150x150.jpg"]}}
+  </script>
+</div>
+
+images courtesy of the [National Gallery of Art](https://www.nga.gov/), Washington, USA.

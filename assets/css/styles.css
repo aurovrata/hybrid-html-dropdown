@@ -1,3 +1,72 @@
+details > summary {
+	text-decoration: underline;
+	font-weight: bold;
+}
+.nav-list-link.active {
+	color: #fe00fe;
+}
+#short-menu-hdd .hybriddd-wrapper{max-height: calc(var(--hybriddd-item-height) * 2)}
+#grid-layout .hybriddd-wrapper.hybriddd-grid {
+	--hybriddd-gap: 2px;
+	width: calc( calc(var(--hybriddd-item) + var(--hybriddd-gap)) * var(--hybriddd-col));
+}
+#grid-layout.hybriddd-none .hybriddd-option > label > input {
+	position: absolute;
+}
+#grid-layout .hybriddd-option p {
+	position: absolute;
+	width: 150px;
+	padding: 2px 5px;
+	bottom: 0;
+	line-height: normal;
+	background: #0000008c;
+	color: white;
+	text-align: center;
+	margin: auto;
+	font-size: 13px;
+}
+#grid-layout .hybriddd-option p span {
+	font-size: 15px;
+	font-weight: bold;
+}
+#grid-layout  input:checked + .hybridddcb {
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+	visibility: visible;
+	border-radius: 50%;
+	z-index: 7;
+	background: #000000a6;
+}
+#grid-layout .hybridddcb {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 4px;
+}
+#grid-layout input:checked + .hybridddcb::before {
+	width: 10px;
+	height: 10px;
+	margin: 4px auto;
+	background: white;
+	border-radius: 50%;
+}
+#grid-layout .hybridddcb::before {
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	margin: 0;
+}
+#grid-layout .hybridddl div{
+	position: relative;
+	width: 150px;
+	height: 150px;
+}
+#grid-layout .hybriddd-grid .hybriddd-option > label:hover {
+	transform: scale(96%);
+}
 #with-images .hybridddl img {
 	width: auto;
 	height: auto;
@@ -46,7 +115,8 @@ a[href^="#option-"], a[href^="#method-"] {
 h3 {
     color: #ffe100;
 }
-#make-it-pink .hybriddd-option.active > label {
+#make-it-pink-hdd .hybriddd-option.active > label,
+#make-it-pink-hdd .hybriddd-option > label:hover {
     background: pink;
     color: blue;
 }

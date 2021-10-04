@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hybrid Select</title>
+    <link rel="stylesheet" href="./css/page.css" media="all">
+    <link rel="stylesheet" href="./hybrid-dropdown.css" media="all">
+    <script src="./hybrid-dropdown.js" type="text/javascript" defer=""></script>
+  </head>
+  <body>
+
+<!-- Article: https://css-tricks.com/striking-a-balance-between-native-and-custom-select-elements/ -->
+<h1 class="title">Custom Select: "Hybrid Select"</h1>
+<div class="card">
+  <p class="inst">Try to select an option with whatever tool you are using (e.g. mouse, touch, keyboard, etc...)<p>
+      <div class="test-form">
+        <form>
+          <label for="name-field">Filter</label>
+          <input type="text" id="filter-field" name="filter_field" tabindex="1"/>
+          <label class="select-label" for="single"> Grocery selection</label>
+          <select id="single" tabindex="2" class="select-native js-select-native" name="select_field" aria-labelledby="jobLabel">
+            <option value="" disabled="" selected=""> Select single</span>
+            <optgroup label="Vegetables">
+              <option value="fbn">French beans</option>
+              <option value="pot">Potatoes</option>
+              <option value="chl">Red chillis</option>
+              <option value="bgr">Bitter gourd</option>
+              <option value="oni">Onions</option>
+            </optgroup>
+            <optgroup label="Fruits">
+              <option value="org">Oranges</option>
+              <option value="app">Apples</option>
+              <option value="bnn">Bananas</option>
+              <option value="sfr">Star fruit</option>
+              <option value="csp">Custard apple</option>
+            </optgroup>
+          </select>
+          <select class="select-native" tabindex="3" name="select_multiple[]" multiple aria-labelledby="jobLabel">
+            <option value="" disabled="" selected=""> Select multiple</span>
+            <optgroup label="Vegetables">
+              <option value="fbn">French beans</option>
+              <option value="pot">Potatoes</option>
+              <option value="chl">Red chillis</option>
+              <option value="bgr">Bitter gourd</option>
+              <option value="oni">Onions</option>
+            </optgroup>
+            <optgroup label="Fruits">
+              <option value="org">Oranges</option>
+              <option value="app">Apples</option>
+              <option value="bnn">Bananas</option>
+              <option value="sfr">Star fruit</option>
+              <option value="csp">Custard apple</option>
+            </optgroup>
+          </select>
+          <div id="hotel-field" tabindex="4">
+            <script type="application/json">
+             {
+              "":"Choose a hotel",
+              "Paris": {
+                "5-star":{
+                  "lr" : "Le Ritz",
+                  "rm": "Le Royal Manceau"
+                },
+                "4-star":{
+                  "hb":"Hotel Brighton",
+                  "he":"Hotel Edmond"
+                },
+                "3-star":{
+                  "lp":"Le Presbytere",
+                  "ll":"Les 3 Lions"
+                }
+              },
+              "London": {
+                "5-star":{
+                  "lml":"Le Meridien",
+                  "rz" : "The Ritz"
+                },
+                "4-star":{
+                  "cr":"The Carlton Hotel",
+                  "rs":"The Royal Star"
+                },
+                "3-star":{
+                  "ts":"The 3 Star",
+                  "lc":"The Lancaster"
+                }
+              },
+              "Delhi": {
+                "5-star":{
+                  "lm":"Le Meridien",
+                  "tlp":"The Lila Palace"
+                },
+                "4-star":{
+                  "sh":"The Shangrila",
+                  "ph":"The Plaza Hotel"
+                },
+                "3-star":{
+                  "tr": "The Raj",
+                  "f1":"Formula 1"
+                }
+              }
+            }
+            </script>
+          </div>
+          <div id="hotel-field2" data-limit-selection="3" data-tree-view="true" tabindex="5">
+            <script type="application/json">
+            {
+              "":"Choose 3 hotels",
+              "paris": {
+                "label":"Paris",
+                "p5-star":{
+                  "label":"5 Stars",
+                    "lr" : "Le Ritz",
+                    "rm": "Le Royal Manceau"
+                },
+                "p4-star":{
+                  "label":"4 Stars",
+                    "hb":"Hotel Brighton",
+                    "he":"Hotel Edmond"
+                },
+                "p3-star":{
+                  "label":"3 Stars",
+                    "lp":"Le Presbytere",
+                    "ll":"Les 3 Lions"
+                }
+              },
+              "london": {
+                "label":"London",
+                "l5-star":{
+                  "label":"5 Stars",
+                    "lml":"Le Meridien",
+                    "rz" : "The Ritz"
+                },
+                "l4-star":{
+                  "label":"4 Stars",
+                    "cr":"The Carlton Hotel",
+                    "rs":"The Royal Star"
+                },
+                "l3-star":{
+                  "label":"3 Stars",
+                    "ts":"The 3 Star",
+                    "lc":"The Lancaster"
+                }
+              },
+              "delhi": {
+              "label":"Delhi",
+                "d5-star":{
+                  "label":"5 Stars",
+                    "lm":"Le Meridien",
+                    "tlp":"The Lila Palace"
+                },
+                "d4-star":{
+                  "label":"4 Stars",
+                    "sh":"The Shangrila",
+                    "ph":"The Plaza Hotel"
+                },
+                "d3-star":{
+                  "label":"3 Stars",
+                    "tr": "The Raj",
+                    "f1":"Formula 1"
+                }
+              }
+            }
+            </script>
+          </div>
+          <div id="grid-layout" data-dropdown="none">
+            <script type="application/json">
+              {"1":{"label":["Auguste Renoir","Flowers In A Vase","auguste-renoir","1866","./img/Auguste-Renoir-flowers_in_a_vase_1866-150x150.jpg"]},"2":{"label":["Auguste Renoir","Mademoiselle Sicot","auguste-renoir","1865","./img/Auguste-Renoir-mademoiselle_sicot_1865-150x150.jpg"]},"3":{"label":["Berthe Morisot","The Artists Sister At A Window","berthe-morisot","1869","./img/Berthe-Morisot-the_artists_sister_at_a_window_1869-150x150.jpg"]},"4":{"label":["Camille Pissarro","A Creek In St. Thomas Virgin Islands","camille-pissarro","1856","./img/Camille_Pissarro-a_creek_in_st._thomas_virgin_islands_1856-150x150.jpg"]},"5":{"label":["Camille Pissarro","Two Women Chatting By The Sea St. Thomas","camille-pissarro","1856","./img/Camille_Pissarro-two_women_chatting_by_the_sea_st._thomas_1856-150x150.jpg"]},"6":{"label":["Claude Monet","Bazille And Camille Study For Dejeuner Sur Lherbe","claude-monet","1865","./img/Claude-Monet-bazille_and_camille_study_for__dejeuner_sur_lherbe__1865-150x150.jpg"]},"7":{"label":["Claude Monet","Interior After Dinner","claude-monet","1868","./img/Claude-Monet-interior_after_dinner_1868-150x150.jpg"]},"8":{"label":["Claude Monet","Still Life With Bottle Carafe Bread And Wine","claude-monet","1863","./img/Claude-Monet-still_life_with_bottle_carafe_bread_and_wine_1863-150x150.jpg"]},"9":{"label":["Edgar Degas","Achille De Gas In The Uniform Of A Cadet","edgar-degas","1856","./img/Edgar_Degas-achille_de_gas_in_the_uniform_of_a_cadet_1856-150x150.jpg"]},"10":{"label":["Edgar Degas","Girl In Red","edgar-degas","1866","./img/Edgar-Degas-girl_in_red_1866-150x150.jpg"]},"11":{"label":["Edgar Degas","Rene De Gas","edgar-degas","1855","./img/Edgar_Degas-rene_de_gas_1855-150x150.jpg"]},"12":{"label":["Edgar Degas","Scene From The Steeplechase The Fallen Jockey","edgar-degas","1866","./img/Edgar-Degas-scene_from_the_steeplechase__the_fallen_jockey_1866-150x150.jpg"]},"13":{"label":["Edgar Degas","Self-Portrait With White Collar","edgar-degas","1857","./img/Edgar_Degas-self-portrait_with_white_collar_1857-150x150.jpg"]},"14":{"label":["Edgar Degas","The Dance Class","edgar-degas","1873","./img/Edgar-Degas-the_dance_class_1873-150x150.jpg"]},"15":{"label":["Edouard Manet","Oysters","edouard-manet","1862","./img/Edouard-Manet-oysters_1862-150x150.jpg"]},"16":{"label":["Edouard Manet","The Dead Toreador","edouard-manet","1864","./img/Edouard-Manet-the_dead_toreador_1864-150x150.jpg"]},"17":{"label":["Edouard Manet","The Old Musician","edouard-manet","1862","./img/Edouard-Manet-the_old_musician_1862-150x150.jpg"]},"18":{"label":["Eugene Boudin","Bathing Time At Deauville","eugene-boudin","1865","./img/Eugene-Boudin-bathing_time_at_deauville_1865-150x150.jpg"]},"19":{"label":["Eugene Boudin","Beach At Trouville","eugene-boudin","1865","./img/Eugene-Boudin-beach_at_trouville_1865-150x150.jpg"]},"20":{"label":["Eugene Boudin","Beach Scene","eugene-boudin","1862","./img/Eugene-Boudin-beach_scene_1862-150x150.jpg"]},"21":{"label":["Eugene Boudin","Beach Scene At Trouville","eugene-boudin","1863","./img/Eugene-Boudin-beach_scene_at_trouville_1863-150x150.jpg"]},"22":{"label":["Eugene Boudin","Concert At The Casino Of Deauville","eugene-boudin","1865","./img/Eugene-Boudin-concert_at_the_casino_of_deauville_1865-150x150.jpg"]},"23":{"label":["Eugene Boudin","Jetty And Wharf At Trouville","eugene-boudin","1863","./img/Eugene-Boudin-jetty_and_wharf_at_trouville_1863-150x150.jpg"]},"24":{"label":["Eugene Boudin","The Beach At Villerville","eugene-boudin","1864","./img/Eugene-Boudin-the_beach_at_villerville_1864-150x150.jpg"]},"25":{"label":["Frederic Bazille","Edmond Maitre","frederic-bazille","1869","./img/Frederic-Bazille-edmond_maitre_1869-150x150.jpg"]},"26":{"label":["Henri Fantin-Latour","Self-Portrait","henri-fantin-latour","1865","./img/Henri_FantinLatour-self-portrait_1865-150x150.jpg"]},"27":{"label":["Henri Fantin-Latour","Self-Portrait","henri-fantin-latour","1856","./img/Henri_FantinLatour-self-portrait_1856-150x150.jpg"]},"28":{"label":["Henri Fantin-Latour","Still Life","henri-fantin-latour","1866","./img/Henri-Fantin-Latour-still_life_1866-150x150.jpg"]},"29":{"label":["Henri Fantin-Latour","Still Life With Mustard Pot","henri-fantin-latour","1860","./img/Henri-Fantin-Latour-still_life_with_mustard_pot_1860-150x150.jpg"]},"30":{"label":["Paul Cezanne","The Artists Father Reading Levenement","paul-cezanne","1866","./img/Paul-Cezanne-the_artists_father_reading__levenement__1866-150x150.jpg"]}}
+            </script>
+            <style>
+            #grid-layout .hybridddl {max-width: 150px;}
+            </style>
+          </div>
+          <div style="height:36px"><a href="JavaScript:void(0);" class="button">submit</a></div>
+        </form>
+      </div>
+
+</div>
+
+  <footer>
+     <script type="text/javascript">
+     (function(){
+       let sel;
+       document.addEventListener('DOMContentLoaded', (e) => {
+         sel= document.querySelectorAll('.select-native');
+         sel.forEach((s)=>{
+           new HybridDropdown(s,{
+             // dropdown: 'landscape'
+           });
+         });
+         sel = document.querySelector('#hotel-field');
+         new HybridDropdown(sel,{
+           fieldName:'hotels',
+         });
+         sel = document.querySelector('#hotel-field2');
+         new HybridDropdown(sel,{
+           fieldName:'hotels2',
+         })
+         sel = document.querySelector('#grid-layout');
+         new HybridDropdown(sel,{
+           fieldName:'painting',
+           optionLabel: function(lbl){
+             return `<img src="${lbl[4]}" alt="${lbl[0]}-${lbl[1]}" /><p><span class="painter">${lbl[0]}</span> - ${lbl[1]} </p>`;
+           }
+         })
+       });
+       document.querySelector('.button').addEventListener('click', (e)=>{
+         let form = e.target.closest('form'), fd = new FormData( form );
+         for(let f of fd.keys()) console.log(f+'='+fd.getAll(f));
+       })
+       document.querySelector('#filter-field').addEventListener('change', (e)=>{
+         let filterField = e.target, show=false;
+         sel._hybridd.refresh({
+           listOption: function(o,i){
+             if(filterField.value.trim()=='') return true;
+             if(i==0) return true;
+             if(o.nodeName == 'OPTGROUP'){
+               if(o.label == filterField.value) show = true;
+               else show = false;
+             }
+             return show;
+           }
+         });
+       })
+     })()
+     </script>
+  </footer>
+  </body>
+</html>
