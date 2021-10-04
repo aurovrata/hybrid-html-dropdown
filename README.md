@@ -8,7 +8,10 @@ For detailed documentation see the [GitHub Page](https://aurovrata.github.io/hyb
 
 ## Changelog
 ### v2.1.0
-* enable no dropdown fields for image grids
+* enable no-dropdown mode
+* enable grid display for no-dropdown mode
+* improve styling with plugin css variables
+* add more examples in github pages.
 ### v2.0.6
 * enable dropdown list opening above or right aligned.
 ### v2.0.5

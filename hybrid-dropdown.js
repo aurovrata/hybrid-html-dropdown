@@ -166,7 +166,10 @@ class HybridDDError extends Error {
       settings, //user settings.
       cnfg //element data attribtues, precede over others to allow HTML script overrides.
     );
-    if('none' == _.opt.dropdown) _.hasDd = false;
+    if('none' == _.opt.dropdown){
+      _.hasDd = false;
+      if(!Number.isInteger(_.opt.gridColumns) || _.opt.gridColumns<1) _.opt.gridColumns=1;
+    }
     //check if gridColumns is a ppositive integer.
     if(!Number.isInteger(_.opt.gridColumns) || _.opt.gridColumns<1) _.opt.gridColumns = false;
     //make sure selectedValues are strings...
@@ -260,8 +263,8 @@ class HybridDDError extends Error {
       if(_.opt.gridColumns){
         _.hdd.listwrap.classList.add('hybriddd-grid');
         _.hdd.listwrap.style.setProperty('--hybriddd-col',_.opt.gridColumns);
-        if(_.hdd.ddlist.children[1]){
-          _.hdd.listwrap.style.setProperty('--hybriddd-item',_.hdd.ddlist.children[1].offsetWidth+'px');
+        if(_.hdd.ddlist.children[1] && _.opt.gridColumns >1){
+          _.hdd.listwrap.style.setProperty('--hybriddd-item',_.hdd.ddlist.children[1].offsetWidth + 'px');
         }
       }
       //bind some events....
@@ -1025,6 +1028,10 @@ class HybridDDError extends Error {
     if(!_.hdd.listwrap.style['height']){
       _.hdd.listwrap.style['height']=_.hdd.ddlist.offsetHeight+"px";
       _.hdd.listwrap.style['width']="100%";
+      if(_.hdd.ddlist.children[1]){
+        let l = _.hdd.ddlist.children[1].querySelector('label');
+        _.hdd.listwrap.style.setProperty('--hybriddd-item-height',l.offsetHeight+'px');
+      }
     }
 
     //listen for external clicks to close.
