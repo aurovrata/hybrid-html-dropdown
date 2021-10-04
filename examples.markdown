@@ -568,7 +568,7 @@ resulting in,
 
 
 ## Image grid, no dropdown.
-the plugin can be initialised with the [`dropdown`](http://localhost:4000/hybrid-html-dropdown/options/#option-dropdown) option set to `none`.  In this mode the field has no dropdown and the fields are visible on the onset.  In addition, setting the [`gridColumns`](/hybrid-html-dropdown/options/#option-grid-columns) option to specific the number of columns will force the option list to be displayed as a grid.
+the plugin can be initialised with the [`dropdown`](/hybrid-html-dropdown/options/#option-dropdown) option set to `none`.  In this mode the field has no dropdown and the fields are visible on the onset.  In addition, setting the [`gridColumns`](/hybrid-html-dropdown/options/#option-grid-columns) option to specific the number of columns will force the option list to be displayed as a grid.
 
 ```html
 <div id="grid-layout" data-dropdown="none" data-grid-columns="4">

@@ -22,7 +22,7 @@ Here is a list of custom styling examples,
 - [Dropdown menu: combine above and right](/hybrid-html-dropdown/styling/#force-dropdown-above-and-right-aligned)
 - [Dropdown menu: restricting its size](/hybrid-html-dropdown/styling/#restrict-the-dropdown-menu-size)
 - [No dropdown: show the fields by default](/hybrid-html-dropdown/styling/#display-the-fields-as-a-grid-without-a-dropdown)
-- [2-column grid without a dropdown](http://localhost:4000/hybrid-html-dropdown/styling/#display-the-fields-as-a-2-column-grid-without-a-dropdown)
+- [2-column grid without a dropdown](/hybrid-html-dropdown/styling/#display-the-fields-as-a-2-column-grid-without-a-dropdown)
 
 ## Changing colours of the Hybrid dropdown field.
 
@@ -269,7 +269,7 @@ The above style uses the plugin created variable `--hybriddd-item-height` which 
 
 ### Display the fields as a grid without a dropdown.
 
-The plugin also has the ability to disable the [`dropdown`](http://localhost:4000/hybrid-html-dropdown/options/#option-dropdown) and display the fields as a grid, however we can force to display [`checkboxes`](/hybrid-html-dropdown/options/#option-checkboxes) to make it more intuitive to a user.
+The plugin also has the ability to disable the [`dropdown`](/hybrid-html-dropdown/options/#option-dropdown) and display the fields as a grid, however we can force to display [`checkboxes`](/hybrid-html-dropdown/options/#option-checkboxes) to make it more intuitive to a user.
 ```html
 <select id="one-column"
   data-dropdown="none"
