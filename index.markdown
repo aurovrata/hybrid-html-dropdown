@@ -11,7 +11,7 @@ permalink: /
 This is an HTML dropdown widget that can replace a `<select/>` field or built using a JSON object which can be fully customised using css.  
 
 [Getting started](/hybrid-html-dropdown/#how-to-use-it){: .btn .btn-blue }
-[Get it on GitHub](/hybrid-html-dropdown/#how-to-use-it){: .btn }
+[Get it on GitHub](https://github.com/aurovrata/hybrid-html-dropdown){: .btn }
 
 The main features are
 
