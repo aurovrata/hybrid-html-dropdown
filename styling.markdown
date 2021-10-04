@@ -7,7 +7,7 @@ nav_order: 1
 
 # Styling
 
-** Important to note **
+**Important to NOTE**
 - The colours of the dropdown are programmatically set to those of the page, this is the default which can be overridden with the [`colourise`](/hybrid-html-dropdown/options/#option-negative) option setting (see below for more details).
 - The active/selected options in the list are by default set to blue highlight and white font, this can be overridden using CSS, see below for example.
 
