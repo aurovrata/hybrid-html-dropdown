@@ -794,8 +794,9 @@ class HybridDDError extends Error {
       }
       if(i){
         i.checked = (!i.checked);
+        if(!i.checked) i.classList.remove('mod-ctrl');
         i.dispatchEvent(new Event('hybrid-ddi-change', { 'bubbles': true}));
-        i.classList.add('mod-ctrl');
+        if(i.checked) i.classList.add('mod-ctrl');
       }
     }
   }
