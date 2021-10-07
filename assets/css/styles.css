@@ -5,6 +5,23 @@ details > summary {
 .nav-list-link.active {
 	color: #fe00fe;
 }
+.hdd-info {
+	background: white;
+	color: black;
+	z-index: 181;
+	position: absolute;
+	height: 2em;
+	line-height: normal;
+	padding-right: 5px;
+	margin-left: 8px;
+}
+.hdd-info::before {
+	content: '\21E6';
+	font-size: 170%;
+	font-weight: bold;
+	padding: 0 10px 5px 5px;
+	vertical-align: middle;
+}
 #short-menu-hdd .hybriddd-wrapper{max-height: calc(var(--hybriddd-item-height) * 2)}
 #grid-layout .hybriddd-wrapper.hybriddd-grid {
 	--hybriddd-gap: 2px;

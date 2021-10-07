@@ -7,6 +7,29 @@ nav_order: 2
 
 # Hybrid dropdown configuration
 
+The `HybridDropdown` object can be configured using settings parsed at the time of object instantiation or as `data-` attributes on the HTML element itself.  Optional functions need to be configured as object settings at the time of instantiation.  See the option page for a full list of configuration settings.
+
+For example, the following hybrid dropdown is configured to allow multiple selections limited to a maximum of 3,
+
+```javascript
+let hyd = new HybridDropdown(el,{
+  'limitSelection':3
+});
+```
+
+this can also be configured on the HTML element using `data-` attributes,
+
+```html
+<div id="my-list" data-limit-selection="3">
+   <script type="application/json">
+    {
+      "":"Select a value",
+     ...
+    }
+   </script>
+</div>
+```
+
 ## Options
 
 | option           | description                                                  |

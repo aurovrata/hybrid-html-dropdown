@@ -23,6 +23,9 @@ The main features are
 - restrain selection to any integer limit.
 - filter list displayed in the dropdown.
 
+See the YouTube videos,
+<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?controls=0&amp;list=PLblJwjs_dFBvtQ1k-lxNITq565u_sg23L" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## How to use it?
 
 Download the latest [release](https://github.com/aurovrata/hybrid-html-dropdown/releases) and uncompress the library into your project.
@@ -74,20 +77,43 @@ you can convert it to a hybrid dropdown,
   </script>
   ```
 
+  However, you can also
+
+  [build a hybrid field from a JSON object](/hybrid-html-dropdown/#creating-a-hybrid-dropdown-from-embedded-json-data-objects){: .btn .btn-blue }
+
+  allowing for
+
+  [multi-level nesting](/hybrid-html-dropdown/#nested-lists){: .btn .btn-blue }
+
+  You can further customise the hybrid with
+
+  [optional settings](/hybrid-html-dropdown/#configuring-the-hybrid-list-object){: .btn .btn-blue }
+
 ## Creating a hybrid dropdown from embedded JSON data objects.
 
 A hybrid dropdown can be instantiated from a JSON data object embedded within the element on which the dropdown will be created,
+### Simple lists
 
-```html
-<div id="json-field">
-  <script type="application/json">
-    {
-      "":"Select a dish",
-      "Sushi":{ "ps":"Pumpkin sushi","as":"Avocado sushi","tc":"Tomato sushi","cs":"Carrot sushi"},
-      "Dosa":{"pd":"Plain dosa","md":"Masala dosa","myd":"Mysore dosa","pr":"Paper roast"}
-    }
-   </script>
+<div id="json1" class="language-html highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight"><code><span class="nt">&lt;div</span><span class="na">id=</span><span class="s">"json-field"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"application/json"</span><span class="nt">&gt;</span>
+      <span class="p">{</span>
+        <span class="dl">""</span><span class="p">:</span><span class="dl">"</span><span class="s2">Select a dish</span><span class="dl">"</span><span class="p">,</span><span class="hdd-info">an option is made of a key:value pair by default</span>
+        <span class="dl">"</span><span class="s2">ps</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Pumpkin sushi</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">as</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Avocado sushi</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Tomato sushi</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">cs</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Carrot sushi</span><span class="dl">"</span>
+      <span class="p">}</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+      </code>
+    </pre>
+  </div>
 </div>
+
+and is initialised with,
+```html
 <script type="text/javascript">
   (function(){
     let el, hyd;
@@ -98,6 +124,52 @@ A hybrid dropdown can be instantiated from a JSON data object embedded within th
   })
 </script>
 ```
+
+NOTE: the plugin expects the JSON object to be embedded within the element on which it is intialised.  Alternatively, a JSON object can passed in the settings constructor using the dataSet option,
+
+```javascript
+new HybridDropdown(el,{
+  dataSet: {
+    "":"Select a dish",
+    "ps":"Pumpkin sushi",
+    "as":"Avocado sushi",
+    "tc":"Tomato sushi",
+    "cs":"Carrot sushi"
+  }
+});
+```
+which results in,
+<span id="json-field" class="hybrid-list">
+  <script type="application/json">
+  {"":"Select a dish","ps":"Pumpkin sushi","as":"Avocado sushi","tc":"Tomato sushi","cs":"Carrot sushi"}
+  </script>
+</span>
+
+### Grouped lists
+
+the plugin accepts the following JSON object for grouped lists, whereby the notion of grouping is the same as for `<select/>` fields, where a group has a title which is not itself an optoin,
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"json-field"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"application/json"</span><span class="nt">&gt;</span>
+    <span class="p">{</span>
+      <span class="dl">""</span><span class="p">:</span><span class="dl">"</span><span class="s2">Select a dish</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">Sushi</span><span class="dl">"</span><span class="p">:{</span><span class="hdd-info">this is a group title, it has no value so the key is assumed as the title.</span>
+        <span class="dl">"</span><span class="s2">ps</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Pumpkin sushi</span><span class="dl">"</span><span class="p">,</span><span class="hdd-info">these are listed as child options</span>
+        <span class="dl">"</span><span class="s2">as</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Avocado sushi</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Tomato sushi</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">cs</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Carrot sushi</span><span class="dl">"</span>
+      <span class="p">},</span>
+      <span class="dl">"</span><span class="s2">Dosa</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">pd</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Plain dosa</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">md</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Masala dosa</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">myd</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Mysore dosa</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pr</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Paper roast</span><span class="dl">"</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+   <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
 which results in,
 <span id="json-field" class="hybrid-list">
   <script type="application/json">
@@ -109,9 +181,31 @@ which results in,
    </script>
 </span>
 
-The Hybrid Dropdown field offers a very powerful way to display lists and as you can see JSON dataset lists are automatically listed with checkboxes, although this can be switched off in using the [option](/options.html) settings.
+### Nested lists
+nested lists are similar to grouped list, except that the a child parents are themselves options which can be selected.  To achieve this the plugin expects a group object to have `label` key, indicating that the group key is an option,
 
-The [examples](/methods.html) page shows how Hybrid Dropdown lists can have [multiple nested groups](/examples.html#hybrid-dropdown-with-multiple-nested-groups), as well treeview structures to ease selection.
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"json-field"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"application/json"</span><span class="nt">&gt;</span>
+    <span class="p">{</span>
+      <span class="dl">""</span><span class="p">:</span><span class="dl">"</span><span class="s2">Select a dish</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">Japan</span><span class="dl">"</span><span class="p">:{</span><span class="hdd-info">this is a group title as the previous construct</span>
+        <span class="dl">"</span><span class="s2">sushi</span><span class="dl">"</span><span class="p">:{</span><span class="hdd-info">this will not be interpreted as a parent option</span>
+          <span class="dl">"</span><span class="s2">label</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Sushi</span><span class="dl">"</span><span class="p">,</span><span class="hdd-info">the label key used for the sushi option</span>
+          <span class="dl">"</span><span class="s2">ps</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Pumpkin sushi</span><span class="dl">"</span><span class="p">,</span>
+          <span class="dl">"</span><span class="s2">as</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Avocado sushi</span><span class="dl">"</span><span class="p">,</span>
+          <span class="dl">"</span><span class="s2">tc</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Tomato sushi</span><span class="dl">"</span><span class="p">,</span>
+          <span class="dl">"</span><span class="s2">cs</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Carrot sushi</span><span class="dl">"</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+   <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+### More complex data constructs
+
+It is possible to construct more complex dataset structures such as including classes, data attributes or even images for each options, but this require the hybrid field to be initialised with a custom [`optionList`](/hybrid-html-dropdown/options/#option-optionLabel) function setting so as to instruct the plugin how to interpret the dataSet passed at initialisation.  For an example see the custom [image dropdown](/hybrid-html-dropdown/examples/#dropdown-list-with-with-custom-labels-with-images) field in the [Examples](/hybrid-html-dropdown/examples/) section.
+
 
 ## Configuring the hybrid list object.
 
