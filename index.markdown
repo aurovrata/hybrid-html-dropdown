@@ -125,7 +125,7 @@ and is initialised with,
 </script>
 ```
 
-NOTE: the plugin expects the JSON object to be embedded within the element on which it is intialised.  Alternatively, a JSON object can passed in the settings constructor using the dataSet option,
+NOTE: the plugin expects the JSON object to be embedded within the element on which it is initialised.  Alternatively, a JSON object can passed in the settings constructor using the dataSet option,
 
 ```javascript
 new HybridDropdown(el,{
@@ -147,7 +147,7 @@ which results in,
 
 ### Grouped lists
 
-the plugin accepts the following JSON object for grouped lists, whereby the notion of grouping is the same as for `<select/>` fields, where a group has a title which is not itself an optoin,
+the plugin accepts the following JSON object for grouped lists, whereby the notion of grouping is the same as for `<select/>` fields, where a group has a title which is not itself an option,
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"json-field"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"application/json"</span><span class="nt">&gt;</span>
@@ -209,7 +209,7 @@ It is possible to construct more complex dataset structures such as including cl
 
 ## Configuring the hybrid list object.
 
-The `HybridDropdown` object can be configured using settings parsed at the time of object instantiation or as `data-` attributes on the HTML element itself.  Optional functions need to be configured as object settings at the time of instantiation.  See the option page for a full list of configuration settings.
+The `HybridDropdown` object can be configured using [settings](/hybrid-html-dropdown/options/) parsed at the time of object instantiation or as `data-` attributes on the HTML element itself.  Optional functions need to be configured as object settings at the time of instantiation.  See the option page for a full list of configuration settings.
 
 For example, the following hybrid dropdown is configured to allow multiple selections limited to a maximum of 3,
 
