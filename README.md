@@ -8,7 +8,8 @@ For detailed documentation see the [GitHub Page](https://aurovrata.github.io/hyb
 
 ## Changelog
 ### v2.2.0
-* introduce placeholder option as replacement for defaultText
+* introduce placeholder option as replacement for defaultText.
+* give precedence to form colours.
 ### v2.1.1
 * fix mod-ctrl error for ctrl+click selections.
 ### v2.1.0
