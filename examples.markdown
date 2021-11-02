@@ -367,7 +367,7 @@ resulting in,
 
 ## Customise the selected text label and default option
 
-In the above example, you will note that the mulitple selection in the list results in a selected text being truncated in order to limit the size of the field.  This can be customised using the [`selectedLabel`](/hybrid-html-dropdown/options/#option-selectedLabel) option setting, while the default option can be set using the [`defaultText`](/hybrid-html-dropdown/options/#option-defaultText) option setting,
+In the above example, you will note that the mulitple selection in the list results in a selected text being truncated in order to limit the size of the field.  This can be customised using the [`selectedLabel`](/hybrid-html-dropdown/options/#option-selectedLabel) option setting, while the default option can be set using the [`placeholder`](/hybrid-html-dropdown/options/#option-placeholder) option setting,
 
 ```html
 <div id="defaults" style="max-width:200px">
@@ -391,7 +391,7 @@ new HybridDropdown(de,
   {
     'limitSelection': -1, //no limits
     'fieldName':'dishes-img',
-    'defaultText': '---dishes---',
+    'placeholder': '---dishes---',
     'selectedLabel':function(v){ //is a value=>label object.
       let k =  Object.keys(v),
           s='';
@@ -494,7 +494,7 @@ The plugin is built to provide flexible customisation of the dropdown list.  Con
  new HybridDropdown(wi,
    {
      'fieldName':'dishes-img',
-     'defaultText': '---Sushis---',
+     'placeholder': '---Sushis---',
      'checkboxes': false,
      'dropdown':'landscape',
      'optionLabel':function(lbl){ //is a value=>label object.

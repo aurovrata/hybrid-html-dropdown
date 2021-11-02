@@ -51,7 +51,7 @@
         {
           'limitSelection': -1,
           'fieldName':'dishes[]',
-          'defaultText': '---dishes---',
+          'placeholder': '---dishes---',
           'selectedLabel':function(v){ //is a value=>label object.
             let k =  Object.keys(v),
                 s='';
