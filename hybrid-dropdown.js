@@ -1,6 +1,6 @@
 /*
 Hybrid Dropdown JavaScript plugin insprired from an original idea by Sandrina Pereira (twitter:@a_sandrina_p)
-Version: 2.1.1
+Version: 2.2.0
 Authors: Aurovrata Venet
 Twitter: @aurovrata
 GitHub: https://github.com/aurovrata/hybrid-html-dropdown
@@ -170,6 +170,7 @@ class HybridDDError extends Error {
       _.hasDd = false;
       if(!Number.isInteger(_.opt.gridColumns) || _.opt.gridColumns<1) _.opt.gridColumns=1;
     }
+    if(_.opt.placeholder) _.opt.defaultText = _.opt.placeholder;
     //check if gridColumns is a ppositive integer.
     if(!Number.isInteger(_.opt.gridColumns) || _.opt.gridColumns<1) _.opt.gridColumns = false;
     //make sure selectedValues are strings...
