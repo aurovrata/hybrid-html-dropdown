@@ -52,14 +52,14 @@ class HybridDDError extends Error {
 	let HybridDropdown = (_window.HybridDropdown = function (elm, settings) {
     //verify we have an element and a source
     if(!elm || !(elm instanceof Element)){
-      throw new HybridDDError("HybridDropdown requires a DOM element to intialise.");
+      throw new HybridDDError("HybridDropdown requires a DOM element to initialise.");
     }
     if(elm.classList.contains('hybridddised') && elm._hybriddd){
-      console.log('WARNING: attempting instantiate element already converted to Hybrid Dropdown');
+      console.log('WARNING: attempting to instantiate element already converted to Hybrid Dropdown');
       return elm._hybriddd;
     }
     if(elm.classList.contains('hybrid-dropdown')){
-      console.log('WARNING: attempting instantiate Hybrid Dropdown element.');
+      console.log('WARNING: attempting to instantiate Hybrid Dropdown element.');
       return elm;
     }
 
@@ -326,7 +326,9 @@ class HybridDDError extends Error {
 
     if(!_window['hdd'] && (!_.opt.backgroundColor || !_.opt.color)){
       let found=false, p=_.hdd, s;
-      _window.hdd={};
+      _window.hdd={},
+      form = p.closest('form');
+      if(form) p = form;
       while(!found && p){
         s = _window.getComputedStyle( p, null);
         if(!_window.hdd['bgColor'] && !_.opt.backgroundColor){
