@@ -132,6 +132,10 @@ a[href^="#option-"], a[href^="#method-"] {
 h3 {
     color: #ffe100;
 }
+h4 {
+	color: #00ae00;
+	font-weight: bold;
+}
 #make-it-pink-hdd .hybriddd-option.active > label,
 #make-it-pink-hdd .hybriddd-option > label:hover {
     background: pink;
