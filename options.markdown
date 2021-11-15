@@ -57,3 +57,44 @@ this can also be configured on the HTML element using `data-` attributes,
 | method           | description                                                  |
 |:-----------------|:-------------------------------------------------------------|      
 | [`refresh({})`](#method-refresh)| used to refresh a dropdown field, destroys the option list and reconstructs it.  The method can have configuration options passed in order to modify the dropdown.  This is especially useful to filter the option list by passing a new filter function, see the example [Filtering list of options to display](/hybrid-html-dropdown/examples/#filtering-list-of-options-to-display), or [Visual styling change to reflect field update](/hybrid-html-dropdown/examples/#visual-styling-change-to-reflect-field-update).|
+
+### Accessing the HybridDropdown instance of a field.
+
+the methods need to be called in the HybridDropdown instance,
+
+```javascript
+let sel= document.querySelector('select#my-list');
+let hyd = new HybridDropdown(sel,{});
+
+hyd.refresh({...});
+```
+
+however, it may be that the initial object reference is not accessible, especially across scripts. It is still possible to access the hybrid object from the DOM HTML element which was hybridised, following the above example,
+
+#### Select fields that have been hybriddised.
+
+`<select/>` fields that have been converted will have the HybridDropdown object instace stored on the DOM element itself,
+
+```javascript
+//select the DOM select element already converted.
+let sel= document.querySelector('select#my-list.hybridddised');
+let hyd = sel._hybriddd;
+
+hyd.refresh({...});
+```
+#### Hybrid dropdown field created from a dataSet object.
+
+HybridDropdown fields created using dataSet objects, the object instance is also available on the original DOM element on which the plugin was called,
+
+```javascript
+//initially
+let d = document.querySelector('div#custom-list');
+let hyd = new HybridDropdown(sel,{});
+...
+//in another function or a different script.
+let d = document.querySelector('div#custom-list.hybrid-dropdown');
+let hyd = d._hybriddd;
+
+hyd.refresh({...});
+```
+NOTE: for dataSet instantiated elements, the class `.hybrid-dropdown` differentiates between the element before and after instantiation.
