@@ -7,6 +7,8 @@ see the [examples](https://aurovrata.github.io/hybrid-html-dropdown/examples/) o
 For detailed documentation see the [GitHub Page](https://aurovrata.github.io/hybrid-html-dropdown/)
 
 ## Changelog
+### v2.2.1
+* fix selectedValues for tree-view dropdown fields.
 ### v2.2.0
 * introduce placeholder option as replacement for defaultText.
 * give precedence to form colours.
